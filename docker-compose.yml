@@ -1,0 +1,23 @@
+version: '3.8'
+
+services:
+  postgres:
+    image: postgres:16-alpine
+    container_name: equa-postgres
+    environment:
+      POSTGRES_DB: equadb
+      POSTGRES_USER: equauser
+      POSTGRES_PASSWORD: equapass
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - equa-network
+
+volumes:
+  postgres_data:
+
+networks:
+  equa-network:
+    driver: bridge
