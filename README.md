@@ -21,7 +21,7 @@
 ### Tech Stack
 - **Java**: 21.0.9
 - **Spring Boot**: 3.2.1
-- **Maven**: 3.8.8 (personal installation)
+- **Maven**: 3.8.8 
 - **Database**: PostgreSQL 16
 - **Docker**: For containerized database
 - **Swagger/OpenAPI**: API documentation
@@ -45,11 +45,10 @@ sudo apt install openjdk-21-jdk -y
 ```
 
 ### 2. Maven 3.8.8+
-This project uses a **personal Maven installation** (`mvn-personal`) to avoid conflicts with company Maven configurations.
 
 Verify installation:
 ```bash
-mvn-personal --version
+mvn --version
 # Should show: Apache Maven 3.8.8
 ```
 
@@ -65,7 +64,6 @@ sudo apt update
 sudo apt install docker.io docker-compose -y
 sudo systemctl start docker
 sudo systemctl enable docker
-sudo usermod -aG docker $USER
 ```
 
 **Important**: After adding yourself to the docker group, **log out and log back in** for changes to take effect.
