@@ -3,8 +3,6 @@ name: Build
 on:
   push:
     branches: [ '**' ]  # triggers on push to any branch
-  pull_request:
-    branches: [ '**' ]  # triggers on PRs to any branch
   workflow_dispatch:    # allows manual trigger from GitHub
 
 jobs:
