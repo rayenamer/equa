@@ -522,7 +522,7 @@ docker ps
 
 ---
 
-## ✅ Checklist for New Developers
+## ✅ Checklist for First Time Dev
 
 - [ ] Install Java 21
 - [ ] Install Maven 3.8.8
