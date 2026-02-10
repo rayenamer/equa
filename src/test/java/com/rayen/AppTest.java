@@ -23,3 +23,4 @@ class ApplicationControllerTest {
                 .andExpect(content().string("Hello from Equa!"));
     }
 }
+//rayen added this while testing git workflow
