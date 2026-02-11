@@ -1,3 +1,4 @@
+[![Documentation](https://img.shields.io/badge/docs-GitHub%20Pages-blue)](https://rayenamer.github.io/equa/)
 # EQUA - Spring Boot Project Template
 
 ## 🎯 Project Overview
