@@ -1,10 +1,5 @@
 [![Documentation](https://img.shields.io/badge/docs-GitHub%20Pages-blue)](https://rayenamer.github.io/equa/)
-
-# EQUA - Spring Boot Project Template
-
 ## 🎯 Project Overview
-
-**Equa** is a Spring Boot 3.2.1 application built with a domain-driven design approach. Each business domain (e.g., User Management, Wallet Management, Payment Management) is organized in its own package with a complete set of layers.
 
 ### Tech Stack
 - **Java**: 21.0.9
@@ -32,7 +27,7 @@ sudo apt update
 sudo apt install openjdk-21-jdk -y
 ```
 
-### 2. Maven 3.8.8+
+### 2. Maven 3.8.8
 
 Verify installation:
 ```bash
@@ -54,8 +49,6 @@ sudo systemctl start docker
 sudo systemctl enable docker
 ```
 
-**Important**: After adding yourself to the docker group, **log out and log back in** for changes to take effect.
-
 ### 4. Git
 ```bash
 git --version
@@ -64,46 +57,6 @@ git --version
 If not installed:
 ```bash
 sudo apt install git -y
-```
-
----
-
-## 🏗️ Project Structure
-
-```
-equa/
-├── src/
-│   └── main/
-│       └── java/
-│           └── com/
-│               └── rayen/
-│                   ├── Application.java (Main Spring Boot application)
-│                   ├── config/
-│                   │   └── OpenApiConfig.java (Swagger configuration)
-│                   ├── blockChainManagement/
-│                   │   ├── controller/
-│                   │   ├── entity/
-│                   │   ├── model/
-│                   │   ├── repository/
-│                   │   └── service/
-│                   ├── financialMarketManagement/
-│                   │   ├── controller/
-│                   │   ├── entity/
-│                   │   ├── model/
-│                   │   ├── repository/
-│                   │   └── service/
-│                   ├── loanManagement/
-│                   │   ├── controller/
-│                   │   ├── entity/
-│                   │   ├── model/
-│                   │   ├── repository/
-│                   │   └── service/
-│                   └── ... (other domain modules)
-│       └── resources/
-│           └── application.properties
-├── docker-compose.yml
-├── pom.xml
-└── README.md
 ```
 
 ---
