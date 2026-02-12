@@ -1,4 +1,4 @@
-[![Documentation](https://img.shields.io/badge/docs-GitHub%20Pages-blue)](https://rayenamer.github.io/equa/index.html)
+[![Documentation](https://img.shields.io/badge/docs-GitHub%20Pages-blue)](https://rayenamer.github.io/equa/)
 ### Tech Stack
 - **Java**: 21.0.9
 - **Spring Boot**: 3.2.1
@@ -451,11 +451,7 @@ docker ps
 - Communicate with team before modifying `pom.xml` or `application.properties`
 
 ### Code Reviews
-- All Pull Requests must be reviewed before merging
-- Follow the coding standards
-- Write clean, readable code
-- Add comments for complex logic
-
+- Rayen will accept merge request only if build job was successful
 ---
 
 ## ✅ Checklist for First Time Dev
