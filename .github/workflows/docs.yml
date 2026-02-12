@@ -139,6 +139,64 @@ jobs:
           # Close tags
           echo "</div></body></html>" >> ./target/site/stats.html
 
+      - name: Copy Getting Started Guide
+        run: |
+          # Copy the README or guide markdown file
+          cp README.md ./target/site/guide.md
+          
+          # Convert to HTML with styling
+          cat > ./target/site/guide.html << 'EOF'
+          <!DOCTYPE html>
+          <html>
+          <head>
+            <meta charset="utf-8">
+            <title>Getting Started Guide - Equa</title>
+            <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/github-markdown-css/5.2.0/github-markdown.min.css">
+            <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github.min.css">
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+            <style>
+              body { 
+                max-width: 980px; 
+                margin: 0 auto; 
+                padding: 45px; 
+                background: #f6f8fa;
+              }
+              .markdown-body { 
+                box-sizing: border-box; 
+                min-width: 200px; 
+                max-width: 980px; 
+                margin: 0 auto; 
+                padding: 45px;
+                background: white;
+                border-radius: 6px;
+                box-shadow: 0 1px 3px rgba(0,0,0,0.12);
+              }
+              .back-link { 
+                display: inline-block; 
+                margin-bottom: 20px; 
+                color: #0366d6; 
+                text-decoration: none; 
+                font-weight: 600;
+              }
+              .back-link:hover { text-decoration: underline; }
+            </style>
+          </head>
+          <body>
+            <a class="back-link" href="index.html">← Back to Home</a>
+            <div class="markdown-body">
+          EOF
+          
+          # Convert markdown to HTML with code highlighting
+          pandoc ./target/site/guide.md -t html >> ./target/site/guide.html
+          
+          # Add syntax highlighting script and close tags
+          cat >> ./target/site/guide.html << 'EOF2'
+            </div>
+            <script>hljs.highlightAll();</script>
+          </body>
+          </html>
+          EOF2
+
       - name: Create Index Page
         run: |
           cat > ./target/site/index.html << 'EOF'
@@ -147,27 +205,87 @@ jobs:
           <head>
             <title>Equa Documentation</title>
             <style>
-              body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif; max-width: 800px; margin: 50px auto; padding: 20px; }
-              h1 { color: #24292e; }
-              .card { border: 1px solid #e1e4e8; border-radius: 6px; padding: 20px; margin: 20px 0; }
-              .card:hover { box-shadow: 0 3px 12px rgba(0,0,0,0.1); }
-              a { color: #0366d6; text-decoration: none; }
-              a:hover { text-decoration: underline; }
+              body { 
+                font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif; 
+                max-width: 900px; 
+                margin: 50px auto; 
+                padding: 20px;
+                background: #f6f8fa;
+              }
+              h1 { 
+                color: #24292e;
+                text-align: center;
+                margin-bottom: 40px;
+              }
+              .cards-container {
+                display: grid;
+                grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+                gap: 20px;
+                margin-top: 30px;
+              }
+              .card { 
+                background: white;
+                border: 1px solid #e1e4e8; 
+                border-radius: 8px; 
+                padding: 24px; 
+                transition: all 0.3s ease;
+              }
+              .card:hover { 
+                box-shadow: 0 8px 24px rgba(0,0,0,0.12);
+                transform: translateY(-2px);
+              }
+              .card h2 {
+                margin-top: 0;
+                color: #24292e;
+                font-size: 20px;
+              }
+              .card p {
+                color: #586069;
+                line-height: 1.6;
+                margin: 12px 0;
+              }
+              .card a { 
+                color: #0366d6; 
+                text-decoration: none;
+                font-weight: 600;
+                display: inline-flex;
+                align-items: center;
+                margin-top: 12px;
+              }
+              .card a:hover { 
+                text-decoration: underline; 
+              }
+              .emoji {
+                font-size: 32px;
+                display: block;
+                margin-bottom: 12px;
+              }
             </style>
           </head>
           <body>
-            <h1>📚 Equa Documentation</h1>
+            <h1>📚 Equa Documentation Hub</h1>
           
-            <div class="card">
-              <h2>📖 API Documentation</h2>
-              <p>Browse the complete JavaDoc API reference</p>
-              <a href="apidocs/index.html">→ View JavaDocs</a>
-            </div>
+            <div class="cards-container">
+              <div class="card">
+                <span class="emoji">🚀</span>
+                <h2>Getting Started Guide</h2>
+                <p>Complete setup instructions, architecture overview, and development workflow</p>
+                <a href="guide.html">→ Read the Guide</a>
+              </div>
           
-            <div class="card">
-              <h2>📊 Repository Statistics</h2>
-              <p>Contributor rankings, activity metrics, and code statistics</p>
-              <a href="stats.html">→ View Statistics</a>
+              <div class="card">
+                <span class="emoji">📖</span>
+                <h2>API Documentation</h2>
+                <p>Browse the complete JavaDoc API reference for all modules and classes</p>
+                <a href="apidocs/index.html">→ View JavaDocs</a>
+              </div>
+          
+              <div class="card">
+                <span class="emoji">📊</span>
+                <h2>Repository Statistics</h2>
+                <p>Contributor rankings, activity metrics, and detailed code statistics</p>
+                <a href="stats.html">→ View Statistics</a>
+              </div>
             </div>
           </body>
           </html>
