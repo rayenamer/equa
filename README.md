@@ -451,7 +451,7 @@ docker ps
 - Communicate with team before modifying `pom.xml` or `application.properties`
 
 ### Code Reviews
-- Rayen will accept merge request only if build job was successful
+- Si Rayen will accept merge request only if build job was successful
 ---
 
 ## ✅ Checklist for First Time Dev
