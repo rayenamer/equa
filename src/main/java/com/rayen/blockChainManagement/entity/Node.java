@@ -31,9 +31,6 @@ public class Node {
     @Column(name = "status", nullable = false, length = 20)
     private String status;
 
-    @Column(name = "port")
-    private Integer port;
-
     @Column(name = "public_key", length = 500)
     private String publicKey;
 

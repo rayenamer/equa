@@ -6,6 +6,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Entity
 @Table(name = "blocks")
@@ -28,20 +29,8 @@ public class Block {
     @Column(name = "timestamp", nullable = false)
     private LocalDateTime timestamp;
 
-    @Column(name = "nonce", nullable = false)
-    private Integer nonce;
-
-    @Column(name = "merkle_root", length = 64)
-    private String merkleRoot;
-
-    @Column(name = "difficulty")
-    private Integer difficulty;
-
     @Column(name = "block_size")
     private Long blockSize;
-
-    @Column(name = "block_height")
-    private Integer blockHeight;
 
     // One-to-One self-reference: This block knows the previous block
     @OneToOne(fetch = FetchType.LAZY)
@@ -53,8 +42,8 @@ public class Block {
     private Block nextBlock;
 
     // One-to-One relationship with Transaction (one block has one transaction)
-    @OneToOne(mappedBy = "block", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private Transaction transaction;
+    @OneToMany(mappedBy = "block", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<Transaction> transaction;
 
     @Column(name = "created_at", updatable = false)
     private LocalDateTime createdAt;
