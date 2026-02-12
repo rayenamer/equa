@@ -158,18 +158,3 @@ jobs:
             git commit -m "📊 Update git statistics [skip ci]"
             git push origin stats --force
           fi
-  ```
-
-## What Changed:
-
-The **last step** now:
-  1. ✅ Creates/switches to a `stats` branch
-  2. ✅ Commits the CONTRIBUTORS.md file there
-  3. ✅ Force pushes to `stats` (no conflicts, always fresh)
-  4. ✅ **Bypasses your main branch protection** completely!
-
-## How to View Stats:
-
-  **Option 1: Direct link**
-  ```
-  https://github.com/rayenamer/equa/blob/stats/CONTRIBUTORS.md
