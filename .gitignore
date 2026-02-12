@@ -1,28 +1,8 @@
-# Maven
 target/
-
-# Logs
-*.log
-
-# OS files
-.DS_Store
-Thumbs.db
-
-# IDEs
 .idea/
 .vscode/
-*.iml
-
-# Eclipse
-.project
-.classpath
 .settings/
-
-# IntelliJ out
 out/
-
-# Node (just in case)
 node_modules/
-
-# Env files
-.env
+External Libraries/
+Scratches and Consoles/
