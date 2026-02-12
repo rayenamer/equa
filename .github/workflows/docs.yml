@@ -33,7 +33,6 @@ jobs:
           echo "*Last updated: $(date '+%Y-%m-%d %H:%M:%S UTC')*" >> ./target/site/stats.md
           echo "" >> ./target/site/stats.md
           
-          # Top Contributors by Commits
           echo "## 🏆 Top Contributors" >> ./target/site/stats.md
           echo "" >> ./target/site/stats.md
           echo "| Rank | Contributor | Commits | Lines Added | Lines Removed |" >> ./target/site/stats.md
@@ -50,7 +49,6 @@ jobs:
           
           echo "" >> ./target/site/stats.md
           
-          # Most Changed Files
           echo "## 📝 Most Changed Files" >> ./target/site/stats.md
           echo "" >> ./target/site/stats.md
           echo "| File | Changes | Contributors |" >> ./target/site/stats.md
@@ -63,7 +61,6 @@ jobs:
           
           echo "" >> ./target/site/stats.md
           
-          # Code Statistics
           echo "## 💻 Code Statistics" >> ./target/site/stats.md
           echo "" >> ./target/site/stats.md
           
@@ -76,7 +73,6 @@ jobs:
           echo "- **Total Lines of Code:** $total_lines" >> ./target/site/stats.md
           echo "" >> ./target/site/stats.md
           
-          # Recent Activity
           echo "## 🔥 Recent Activity (Last 30 Days)" >> ./target/site/stats.md
           echo "" >> ./target/site/stats.md
           
@@ -89,12 +85,10 @@ jobs:
 
       - name: Convert Stats to HTML
         run: |
-          # Install pandoc
           sudo apt-get update
           sudo apt-get install -y pandoc
           
-          # Create HTML wrapper with styling
-          cat > ./target/site/stats.html << 'EOF'
+          cat > ./target/site/stats.html << 'STATSEOF'
           <!DOCTYPE html>
           <html>
           <head>
@@ -131,21 +125,17 @@ jobs:
           <body>
             <a class="back-link" href="index.html">← Back to Home</a>
             <div class="markdown-body">
-          EOF
+          STATSEOF
           
-          # Convert markdown to HTML and append
           pandoc ./target/site/stats.md -t html >> ./target/site/stats.html
           
-          # Close tags
           echo "</div></body></html>" >> ./target/site/stats.html
 
       - name: Copy Getting Started Guide
         run: |
-          # Copy the README or guide markdown file
           cp README.md ./target/site/guide.md
           
-          # Convert to HTML with styling
-          cat > ./target/site/guide.html << 'EOF'
+          cat > ./target/site/guide.html << 'GUIDEEOF'
           <!DOCTYPE html>
           <html>
           <head>
@@ -184,22 +174,20 @@ jobs:
           <body>
             <a class="back-link" href="index.html">← Back to Home</a>
             <div class="markdown-body">
-          EOF
+          GUIDEEOF
           
-          # Convert markdown to HTML with code highlighting
           pandoc ./target/site/guide.md -t html >> ./target/site/guide.html
           
-          # Add syntax highlighting script and close tags
-          cat >> ./target/site/guide.html << 'EOF2'
+          cat >> ./target/site/guide.html << 'GUIDEEOF2'
             </div>
             <script>hljs.highlightAll();</script>
           </body>
           </html>
-          EOF2
+          GUIDEEOF2
 
       - name: Create Index Page
         run: |
-          cat > ./target/site/index.html << 'EOF'
+          cat > ./target/site/index.html << 'INDEXEOF'
           <!DOCTYPE html>
           <html>
           <head>
@@ -289,7 +277,7 @@ jobs:
             </div>
           </body>
           </html>
-          EOF
+          INDEXEOF
 
       - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v4
