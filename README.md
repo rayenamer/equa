@@ -1,6 +1,4 @@
-[![Documentation](https://img.shields.io/badge/docs-GitHub%20Pages-blue)](https://rayenamer.github.io/equa/)
-## 🎯 Project Overview
-
+[![Documentation](https://img.shields.io/badge/docs-GitHub%20Pages-blue)](https://rayenamer.github.io/equa/index.html)
 ### Tech Stack
 - **Java**: 21.0.9
 - **Spring Boot**: 3.2.1
@@ -10,37 +8,30 @@
 - **Swagger/OpenAPI**: API documentation
 
 ---
-
 ## 📦 Prerequisites
-
 Before running this project, ensure you have the following installed:
 
 ### 1. Java 21
 ```bash
 java -version
-# Should show: openjdk version "21.0.9" or higher
+# Should show: openjdk version "21.0.9" 
 ```
-
 If not installed:
 ```bash
 sudo apt update
 sudo apt install openjdk-21-jdk -y
 ```
-
 ### 2. Maven 3.8.8
-
 Verify installation:
 ```bash
 mvn --version
 # Should show: Apache Maven 3.8.8
 ```
-
 ### 3. Docker & Docker Compose
 ```bash
 docker --version
 docker-compose --version
 ```
-
 If not installed:
 ```bash
 sudo apt update
@@ -48,38 +39,28 @@ sudo apt install docker.io docker-compose -y
 sudo systemctl start docker
 sudo systemctl enable docker
 ```
-
 ### 4. Git
 ```bash
 git --version
 ```
-
 If not installed:
 ```bash
 sudo apt install git -y
 ```
-
 ---
-
 ## 🧱 Architecture & Layers
-
 Each domain module follows a **layered architecture**. Here's what each layer does:
-
 ### 📂 **entity/** - Database Entities
 **Purpose**: Represents database tables using JPA annotations.
-
 **Rules**:
 - Maps directly to database tables
 - Uses `@Entity`, `@Table`, `@Id`, `@GeneratedValue` annotations
 - Contains only database-related fields
 - Includes getters and setters
-
 **Example**:
 ```java
 package com.rayen.usermanagement.entity;
-
 import jakarta.persistence.*;
-
 @Entity
 @Table(name = "users")
 public class User {
