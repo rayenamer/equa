@@ -1,9 +1,4 @@
-# EQUA - Spring Boot Project Template
-
-## 🎯 Project Overview
-
-**Equa** is a Spring Boot 3.2.1 application built with a domain-driven design approach. Each business domain (e.g., User Management, Wallet Management, Payment Management) is organized in its own package with a complete set of layers.
-
+[![Documentation](https://img.shields.io/badge/docs-GitHub%20Pages-blue)](https://rayenamer.github.io/equa/)
 ### Tech Stack
 - **Java**: 21.0.9
 - **Spring Boot**: 3.2.1
@@ -13,37 +8,30 @@
 - **Swagger/OpenAPI**: API documentation
 
 ---
-
 ## 📦 Prerequisites
-
 Before running this project, ensure you have the following installed:
 
 ### 1. Java 21
 ```bash
 java -version
-# Should show: openjdk version "21.0.9" or higher
+# Should show: openjdk version "21.0.9" 
 ```
-
 If not installed:
 ```bash
 sudo apt update
 sudo apt install openjdk-21-jdk -y
 ```
-
-### 2. Maven 3.8.8+
-
+### 2. Maven 3.8.8
 Verify installation:
 ```bash
 mvn --version
 # Should show: Apache Maven 3.8.8
 ```
-
 ### 3. Docker & Docker Compose
 ```bash
 docker --version
 docker-compose --version
 ```
-
 If not installed:
 ```bash
 sudo apt update
@@ -51,80 +39,28 @@ sudo apt install docker.io docker-compose -y
 sudo systemctl start docker
 sudo systemctl enable docker
 ```
-
-**Important**: After adding yourself to the docker group, **log out and log back in** for changes to take effect.
-
 ### 4. Git
 ```bash
 git --version
 ```
-
 If not installed:
 ```bash
 sudo apt install git -y
 ```
-
 ---
-
-## 🏗️ Project Structure
-
-```
-equa/
-├── src/
-│   └── main/
-│       └── java/
-│           └── com/
-│               └── rayen/
-│                   ├── Application.java (Main Spring Boot application)
-│                   ├── config/
-│                   │   └── OpenApiConfig.java (Swagger configuration)
-│                   ├── blockChainManagement/
-│                   │   ├── controller/
-│                   │   ├── entity/
-│                   │   ├── model/
-│                   │   ├── repository/
-│                   │   └── service/
-│                   ├── financialMarketManagement/
-│                   │   ├── controller/
-│                   │   ├── entity/
-│                   │   ├── model/
-│                   │   ├── repository/
-│                   │   └── service/
-│                   ├── loanManagement/
-│                   │   ├── controller/
-│                   │   ├── entity/
-│                   │   ├── model/
-│                   │   ├── repository/
-│                   │   └── service/
-│                   └── ... (other domain modules)
-│       └── resources/
-│           └── application.properties
-├── docker-compose.yml
-├── pom.xml
-└── README.md
-```
-
----
-
 ## 🧱 Architecture & Layers
-
 Each domain module follows a **layered architecture**. Here's what each layer does:
-
 ### 📂 **entity/** - Database Entities
 **Purpose**: Represents database tables using JPA annotations.
-
 **Rules**:
 - Maps directly to database tables
 - Uses `@Entity`, `@Table`, `@Id`, `@GeneratedValue` annotations
 - Contains only database-related fields
 - Includes getters and setters
-
 **Example**:
 ```java
 package com.rayen.usermanagement.entity;
-
 import jakarta.persistence.*;
-
 @Entity
 @Table(name = "users")
 public class User {
@@ -515,14 +451,10 @@ docker ps
 - Communicate with team before modifying `pom.xml` or `application.properties`
 
 ### Code Reviews
-- All Pull Requests must be reviewed before merging
-- Follow the coding standards
-- Write clean, readable code
-- Add comments for complex logic
-
+- Si Rayen will accept merge request only if build job was successful
 ---
 
-## ✅ Checklist for New Developers
+## ✅ Checklist for First Time Dev
 
 - [ ] Install Java 21
 - [ ] Install Maven 3.8.8
