@@ -190,7 +190,6 @@ docker ps
 ### Important URLs
 - **Application**: http://localhost:8080
 - **Swagger UI**: http://localhost:8080/swagger-ui/index.html
-- **API Docs JSON**: http://localhost:8080/v3/api-docs
 
 ---
 
