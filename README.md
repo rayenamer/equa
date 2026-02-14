@@ -14,19 +14,6 @@
 [![Angular Distributed Frontend](https://img.shields.io/badge/project-Distributed%20Angular-red?logo=angular&logoColor=white)](https://github.com/AzizBenIsmail/Appl.Web-Distribues-EcoExchange_FrontEndAngular/tree/main/src)
 
 
-## 📘 Class Diagram
-![Class Diagram](https://ik.imagekit.io/qypbatx8h/classDiagram.png)
-
-## Modules  🧩
-![Modules](https://ik.imagekit.io/qypbatx8h/modules.png)
-
-## 🔄 System Workflow
-![System Workflow](https://ik.imagekit.io/qypbatx8h/workflowDiagram.png)
-
-## 📅 Project Timeline
-![Project Timeline](https://ik.imagekit.io/qypbatx8h/equaTimeLine.png?updatedAt=1771099370415)
-
-
 ### Tech Stack
 - **Java**: 21.0.9
 - **Spring Boot**: 3.2.1
