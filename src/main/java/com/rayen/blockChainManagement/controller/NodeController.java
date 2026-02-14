@@ -49,33 +49,30 @@ public class NodeController {
         return ResponseEntity.ok(nodes);
     }
 
-    @GetMapping("/ip/{ipAddress}")
-    public ResponseEntity<Node> getNodeByIpAddress(@PathVariable String ipAddress) {
-        log.info("REST request to get node by IP: {}", ipAddress);
-        return nodeService.getNodeByIpAddress(ipAddress)
-                .map(ResponseEntity::ok)
-                .orElse(ResponseEntity.notFound().build());
-    }
+    // Unified search endpoint with all optional parameters
+    @GetMapping("/search")
+    public ResponseEntity<List<Node>> searchNodes(
+            @RequestParam(required = false) String status,
+            @RequestParam(required = false) String publicKey,
+            @RequestParam(required = false) String nodeType,
+            @RequestParam(required = false) String location,
+            @RequestParam(required = false) String ipAddress,
+            @RequestParam(required = false) Double minReputationScore,
+            @RequestParam(required = false) Double maxReputationScore,
+            @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime lastSeenAfter,
+            @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime lastSeenBefore,
+            @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime createdAfter,
+            @RequestParam(required = false) Boolean hasTransaction) {
 
-    @GetMapping("/public-key/{publicKey}")
-    public ResponseEntity<Node> getNodeByPublicKey(@PathVariable String publicKey) {
-        log.info("REST request to get node by public key");
-        return nodeService.getNodeByPublicKey(publicKey)
-                .map(ResponseEntity::ok)
-                .orElse(ResponseEntity.notFound().build());
-    }
+        log.info("REST request to search nodes with params - status: {}, nodeType: {}, location: {}, ipAddress: {}, minReputation: {}, maxReputation: {}, lastSeenAfter: {}, lastSeenBefore: {}, createdAfter: {}, hasTransaction: {}",
+                status, nodeType, location, ipAddress, minReputationScore, maxReputationScore, lastSeenAfter, lastSeenBefore, createdAfter, hasTransaction);
 
-    @GetMapping("/type/{nodeType}")
-    public ResponseEntity<List<Node>> getNodesByType(@PathVariable String nodeType) {
-        log.info("REST request to get nodes by type: {}", nodeType);
-        List<Node> nodes = nodeService.getNodesByType(nodeType);
-        return ResponseEntity.ok(nodes);
-    }
+        List<Node> nodes = nodeService.getNodesByOptionalParams(
+                status, publicKey, nodeType, location, ipAddress,
+                minReputationScore, maxReputationScore,
+                lastSeenAfter, lastSeenBefore, createdAfter, hasTransaction
+        );
 
-    @GetMapping("/status/{status}")
-    public ResponseEntity<List<Node>> getNodesByStatus(@PathVariable String status) {
-        log.info("REST request to get nodes by status: {}", status);
-        List<Node> nodes = nodeService.getNodesByStatus(status);
         return ResponseEntity.ok(nodes);
     }
 
@@ -86,100 +83,10 @@ public class NodeController {
         return ResponseEntity.ok(nodes);
     }
 
-    @GetMapping("/offline")
-    public ResponseEntity<List<Node>> getOfflineNodes() {
-        log.info("REST request to get offline nodes");
-        List<Node> nodes = nodeService.getOfflineNodes();
-        return ResponseEntity.ok(nodes);
-    }
-
-    @GetMapping("/location/{location}")
-    public ResponseEntity<List<Node>> getNodesByLocation(@PathVariable String location) {
-        log.info("REST request to get nodes by location: {}", location);
-        List<Node> nodes = nodeService.getNodesByLocation(location);
-        return ResponseEntity.ok(nodes);
-    }
-
-    @GetMapping("/filter")
-    public ResponseEntity<List<Node>> getNodesByStatusAndType(
-            @RequestParam(required = false) String status,
-            @RequestParam(required = false) String type,
-            @RequestParam(required = false) String location) {
-        log.info("REST request to get nodes by filters - status: {}, type: {}, location: {}",
-                status, type, location);
-
-        if (status != null && type != null) {
-            List<Node> nodes = nodeService.getNodesByStatusAndType(status, type);
-            return ResponseEntity.ok(nodes);
-        } else if (status != null && location != null) {
-            List<Node> nodes = nodeService.getNodesByStatusAndLocation(status, location);
-            return ResponseEntity.ok(nodes);
-        } else if (status != null) {
-            List<Node> nodes = nodeService.getNodesByStatus(status);
-            return ResponseEntity.ok(nodes);
-        } else if (type != null) {
-            List<Node> nodes = nodeService.getNodesByType(type);
-            return ResponseEntity.ok(nodes);
-        } else if (location != null) {
-            List<Node> nodes = nodeService.getNodesByLocation(location);
-            return ResponseEntity.ok(nodes);
-        }
-
-        return ResponseEntity.ok(nodeService.getAllNodes());
-    }
-
     @GetMapping("/top-reputation")
     public ResponseEntity<List<Node>> getTopNodesByReputation() {
         log.info("REST request to get top nodes by reputation");
         List<Node> nodes = nodeService.getTopNodesByReputation();
-        return ResponseEntity.ok(nodes);
-    }
-
-    @GetMapping("/reputation/min/{minScore}")
-    public ResponseEntity<List<Node>> getNodesByMinimumReputation(@PathVariable Double minScore) {
-        log.info("REST request to get nodes with minimum reputation: {}", minScore);
-        List<Node> nodes = nodeService.getNodesByMinimumReputation(minScore);
-        return ResponseEntity.ok(nodes);
-    }
-
-    @GetMapping("/reputation/range")
-    public ResponseEntity<List<Node>> getNodesByReputationRange(
-            @RequestParam Double min,
-            @RequestParam Double max) {
-        log.info("REST request to get nodes by reputation range: {} - {}", min, max);
-        List<Node> nodes = nodeService.getNodesByReputationRange(min, max);
-        return ResponseEntity.ok(nodes);
-    }
-
-    @GetMapping("/validators")
-    public ResponseEntity<List<Node>> getValidatorNodes() {
-        log.info("REST request to get validator nodes");
-        List<Node> nodes = nodeService.getValidatorNodes();
-        return ResponseEntity.ok(nodes);
-    }
-
-
-    @GetMapping("/active-after")
-    public ResponseEntity<List<Node>> getNodesActiveAfter(
-            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime date) {
-        log.info("REST request to get nodes active after: {}", date);
-        List<Node> nodes = nodeService.getNodesActiveAfter(date);
-        return ResponseEntity.ok(nodes);
-    }
-
-    @GetMapping("/inactive-before")
-    public ResponseEntity<List<Node>> getNodesInactiveBefore(
-            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime date) {
-        log.info("REST request to get nodes inactive before: {}", date);
-        List<Node> nodes = nodeService.getNodesInactiveBefore(date);
-        return ResponseEntity.ok(nodes);
-    }
-
-    @GetMapping("/created-after")
-    public ResponseEntity<List<Node>> getNodesCreatedAfter(
-            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime date) {
-        log.info("REST request to get nodes created after: {}", date);
-        List<Node> nodes = nodeService.getNodesCreatedAfter(date);
         return ResponseEntity.ok(nodes);
     }
 
@@ -196,7 +103,6 @@ public class NodeController {
             return ResponseEntity.notFound().build();
         }
     }
-
 
     @PatchMapping("/{id}/reputation")
     public ResponseEntity<Node> updateReputationScore(
