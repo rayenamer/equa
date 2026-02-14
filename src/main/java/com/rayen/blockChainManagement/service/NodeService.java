@@ -1,6 +1,8 @@
 package com.rayen.blockChainManagement.service;
 
-
+import com.rayen.blockChainManagement.model.NodeRequest;
+import com.rayen.blockChainManagement.model.NodeResponse;
+import com.rayen.blockChainManagement.model.NodeMapper;
 import com.rayen.blockChainManagement.entity.Node;
 import com.rayen.blockChainManagement.repository.NodeRepository;
 import lombok.RequiredArgsConstructor;
@@ -19,143 +21,112 @@ import java.util.Optional;
 public class NodeService {
 
     private final NodeRepository nodeRepository;
+    private final NodeMapper nodeMapper;
 
-    public Node createNode(Node node) {
-        log.info("Creating new node with IP: {}", node.getIpAddress());
+    public NodeResponse createNode(NodeRequest request) {
+        log.info("Creating new node with IP: {}", request.getIpAddress());
 
-        if (nodeRepository.findByIpAddress(node.getIpAddress()).isPresent()) {
-            throw new IllegalArgumentException("Node with IP address " + node.getIpAddress() + " already exists");
+        if (nodeRepository.existsByIpAddress(request.getIpAddress())) {
+            throw new IllegalArgumentException("Node with IP address " + request.getIpAddress() + " already exists");
         }
 
-        if (node.getPublicKey() != null && nodeRepository.findByPublicKey(node.getPublicKey()).isPresent()) {
+        if (request.getPublicKey() != null && nodeRepository.existsByPublicKey(request.getPublicKey())) {
             throw new IllegalArgumentException("Node with public key already exists");
         }
+
+        Node node = nodeMapper.toEntity(request);
 
         LocalDateTime now = LocalDateTime.now();
         node.setCreatedAt(now);
         node.setUpdatedAt(now);
         node.setLastSeen(now);
+        node.setReputationScore(0.0);
+        node.setStatus("ONLINE");
 
-        if (node.getReputationScore() == null) {
-            node.setReputationScore(0.0);
-        }
-        if (node.getStatus() == null) {
-            node.setStatus("ONLINE");
-        }
-
-        return nodeRepository.save(node);
+        Node savedNode = nodeRepository.save(node);
+        return nodeMapper.toResponse(savedNode);
     }
 
-
     @Transactional(readOnly = true)
-    public Optional<Node> getNodeById(Integer nodeId) {
+    public Optional<NodeResponse> getNodeById(Integer nodeId) {
         log.debug("Fetching node with ID: {}", nodeId);
-        return nodeRepository.findById(nodeId);
+        return nodeRepository.findById(nodeId)
+                .map(nodeMapper::toResponse);
     }
 
     @Transactional(readOnly = true)
-    public Optional<Node> getNodeByIpAddress(String ipAddress) {
-        log.debug("Fetching node with IP: {}", ipAddress);
-        return nodeRepository.findByIpAddress(ipAddress);
+    public List<NodeResponse> getNodesByOptionalParams(
+            String status,
+            String publicKey,
+            String nodeType,
+            String location,
+            String ipAddress,
+            Double minReputationScore,
+            Double maxReputationScore,
+            LocalDateTime lastSeenAfter,
+            LocalDateTime lastSeenBefore,
+            LocalDateTime createdAfter,
+            Boolean hasTransaction
+    ) {
+        log.debug("Fetching nodes with optional params");
+
+        List<Node> nodes;
+
+        // Handle hasTransaction separately
+        if (hasTransaction != null) {
+            if (hasTransaction) {
+                nodes = nodeRepository.findNodesWithTransaction();
+            } else {
+                nodes = nodeRepository.findNodesWithoutTransaction();
+            }
+
+            // Apply additional filters in memory if hasTransaction is specified
+            nodes = nodes.stream()
+                    .filter(n -> status == null || status.equals(n.getStatus()))
+                    .filter(n -> publicKey == null || publicKey.equals(n.getPublicKey()))
+                    .filter(n -> nodeType == null || nodeType.equals(n.getNodeType()))
+                    .filter(n -> location == null || location.equals(n.getLocation()))
+                    .filter(n -> ipAddress == null || ipAddress.equals(n.getIpAddress()))
+                    .filter(n -> minReputationScore == null || n.getReputationScore() >= minReputationScore)
+                    .filter(n -> maxReputationScore == null || n.getReputationScore() <= maxReputationScore)
+                    .filter(n -> lastSeenAfter == null || n.getLastSeen().isAfter(lastSeenAfter))
+                    .filter(n -> lastSeenBefore == null || n.getLastSeen().isBefore(lastSeenBefore))
+                    .filter(n -> createdAfter == null || n.getCreatedAt().isAfter(createdAfter))
+                    .toList();
+        } else {
+            // Use the main query when hasTransaction is not specified
+            nodes = nodeRepository.findNodesByOptionalParams(
+                    status, publicKey, nodeType, location, ipAddress,
+                    minReputationScore, maxReputationScore,
+                    lastSeenAfter, lastSeenBefore, createdAfter
+            );
+        }
+
+        return nodeMapper.toResponseList(nodes);
     }
 
     @Transactional(readOnly = true)
-    public Optional<Node> getNodeByPublicKey(String publicKey) {
-        log.debug("Fetching node with public key");
-        return nodeRepository.findByPublicKey(publicKey);
-    }
-
-    @Transactional(readOnly = true)
-    public List<Node> getAllNodes() {
+    public List<NodeResponse> getAllNodes() {
         log.debug("Fetching all nodes");
-        return nodeRepository.findAll();
+        List<Node> nodes = nodeRepository.findAll();
+        return nodeMapper.toResponseList(nodes);
     }
 
     @Transactional(readOnly = true)
-    public List<Node> getNodesByType(String nodeType) {
-        log.debug("Fetching nodes by type: {}", nodeType);
-        return nodeRepository.findByNodeType(nodeType);
-    }
-
-    @Transactional(readOnly = true)
-    public List<Node> getNodesByStatus(String status) {
-        log.debug("Fetching nodes by status: {}", status);
-        return nodeRepository.findByStatus(status);
-    }
-
-    @Transactional(readOnly = true)
-    public List<Node> getOnlineNodes() {
+    public List<NodeResponse> getOnlineNodes() {
         log.debug("Fetching online nodes");
-        return nodeRepository.findOnlineNodes();
+        List<Node> nodes = nodeRepository.findOnlineNodes();
+        return nodeMapper.toResponseList(nodes);
     }
 
     @Transactional(readOnly = true)
-    public List<Node> getOfflineNodes() {
-        log.debug("Fetching offline nodes");
-        return nodeRepository.findOfflineNodes();
-    }
-
-    @Transactional(readOnly = true)
-    public List<Node> getNodesByLocation(String location) {
-        log.debug("Fetching nodes by location: {}", location);
-        return nodeRepository.findByLocation(location);
-    }
-
-    @Transactional(readOnly = true)
-    public List<Node> getNodesByStatusAndType(String status, String nodeType) {
-        log.debug("Fetching nodes by status: {} and type: {}", status, nodeType);
-        return nodeRepository.findByStatusAndNodeType(status, nodeType);
-    }
-
-    @Transactional(readOnly = true)
-    public List<Node> getNodesByStatusAndLocation(String status, String location) {
-        log.debug("Fetching nodes by status: {} and location: {}", status, location);
-        return nodeRepository.findByStatusAndLocation(status, location);
-    }
-
-    @Transactional(readOnly = true)
-    public List<Node> getTopNodesByReputation() {
+    public List<NodeResponse> getTopNodesByReputation() {
         log.debug("Fetching top nodes by reputation");
-        return nodeRepository.findTopNodesByReputation();
+        List<Node> nodes = nodeRepository.findTopNodesByReputation();
+        return nodeMapper.toResponseList(nodes);
     }
 
-    @Transactional(readOnly = true)
-    public List<Node> getNodesByMinimumReputation(Double minScore) {
-        log.debug("Fetching nodes with minimum reputation: {}", minScore);
-        return nodeRepository.findNodesByMinimumReputation(minScore);
-    }
-
-    @Transactional(readOnly = true)
-    public List<Node> getNodesByReputationRange(Double minScore, Double maxScore) {
-        log.debug("Fetching nodes by reputation range: {} - {}", minScore, maxScore);
-        return nodeRepository.findByReputationScoreBetweenOrderByReputationScoreDesc(minScore, maxScore);
-    }
-
-    @Transactional(readOnly = true)
-    public List<Node> getValidatorNodes() {
-        log.debug("Fetching validator nodes");
-        return nodeRepository.findValidatorNodes();
-    }
-
-    @Transactional(readOnly = true)
-    public List<Node> getNodesActiveAfter(LocalDateTime dateTime) {
-        log.debug("Fetching nodes active after: {}", dateTime);
-        return nodeRepository.findByLastSeenAfter(dateTime);
-    }
-
-    @Transactional(readOnly = true)
-    public List<Node> getNodesInactiveBefore(LocalDateTime dateTime) {
-        log.debug("Fetching nodes inactive before: {}", dateTime);
-        return nodeRepository.findByLastSeenBefore(dateTime);
-    }
-
-    @Transactional(readOnly = true)
-    public List<Node> getNodesCreatedAfter(LocalDateTime date) {
-        log.debug("Fetching nodes created after: {}", date);
-        return nodeRepository.findByCreatedAtAfter(date);
-    }
-
-    public Node updateNodeStatus(Integer nodeId, String status) {
+    public NodeResponse updateNodeStatus(Integer nodeId, String status) {
         log.info("Updating node {} status to: {}", nodeId, status);
 
         Node node = nodeRepository.findById(nodeId)
@@ -168,10 +139,11 @@ public class NodeService {
             node.setLastSeen(LocalDateTime.now());
         }
 
-        return nodeRepository.save(node);
+        Node updatedNode = nodeRepository.save(node);
+        return nodeMapper.toResponse(updatedNode);
     }
 
-    public Node updateReputationScore(Integer nodeId, Double reputationScore) {
+    public NodeResponse updateReputationScore(Integer nodeId, Double reputationScore) {
         log.info("Updating node {} reputation score to: {}", nodeId, reputationScore);
 
         Node node = nodeRepository.findById(nodeId)
@@ -180,10 +152,11 @@ public class NodeService {
         node.setReputationScore(reputationScore);
         node.setUpdatedAt(LocalDateTime.now());
 
-        return nodeRepository.save(node);
+        Node updatedNode = nodeRepository.save(node);
+        return nodeMapper.toResponse(updatedNode);
     }
 
-    public Node updateLastSeen(Integer nodeId) {
+    public NodeResponse updateLastSeen(Integer nodeId) {
         log.debug("Updating last seen for node: {}", nodeId);
 
         Node node = nodeRepository.findById(nodeId)
@@ -192,7 +165,8 @@ public class NodeService {
         node.setLastSeen(LocalDateTime.now());
         node.setUpdatedAt(LocalDateTime.now());
 
-        return nodeRepository.save(node);
+        Node updatedNode = nodeRepository.save(node);
+        return nodeMapper.toResponse(updatedNode);
     }
 
     @Transactional(readOnly = true)
@@ -213,11 +187,11 @@ public class NodeService {
 
     @Transactional(readOnly = true)
     public boolean existsByIpAddress(String ipAddress) {
-        return nodeRepository.findByIpAddress(ipAddress).isPresent();
+        return nodeRepository.existsByIpAddress(ipAddress);
     }
 
     @Transactional(readOnly = true)
     public boolean existsByPublicKey(String publicKey) {
-        return nodeRepository.findByPublicKey(publicKey).isPresent();
+        return nodeRepository.existsByPublicKey(publicKey);
     }
 }
