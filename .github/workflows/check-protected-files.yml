@@ -32,10 +32,10 @@ jobs:
           echo "$CHANGED_FILES"
           echo ""
           
-          # Define protected files
+          # Define protected files (WITHOUT the equa/ prefix)
           PROTECTED_FILES=(
-            "equa/pom.xml"
-            "equa/src/main/resources/application.properties"
+            "pom.xml"
+            "src/main/resources/application.properties"
           )
           
           # Check if any protected file was modified
