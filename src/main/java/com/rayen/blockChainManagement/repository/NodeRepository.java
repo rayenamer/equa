@@ -12,7 +12,12 @@ import java.util.List;
 @Repository
 public interface NodeRepository extends JpaRepository<Node, Integer> {
 
+    // Simple existence checks
+    boolean existsByIpAddress(String ipAddress);
 
+    boolean existsByPublicKey(String publicKey);
+
+    // Unified method WITHOUT hasTransaction parameter - with COALESCE for type hints
     @Query("SELECT n FROM Node n WHERE " +
             "(:status IS NULL OR n.status = :status) AND " +
             "(:publicKey IS NULL OR n.publicKey = :publicKey) AND " +
@@ -21,10 +26,9 @@ public interface NodeRepository extends JpaRepository<Node, Integer> {
             "(:ipAddress IS NULL OR n.ipAddress = :ipAddress) AND " +
             "(:minReputationScore IS NULL OR n.reputationScore >= :minReputationScore) AND " +
             "(:maxReputationScore IS NULL OR n.reputationScore <= :maxReputationScore) AND " +
-            "(:lastSeenAfter IS NULL OR n.lastSeen > :lastSeenAfter) AND " +
-            "(:lastSeenBefore IS NULL OR n.lastSeen < :lastSeenBefore) AND " +
-            "(:createdAfter IS NULL OR n.createdAt > :createdAfter) AND " +
-            "(:hasTransaction IS NULL OR (:hasTransaction = true AND n.transaction IS NOT NULL) OR (:hasTransaction = false AND n.transaction IS NULL)) " +
+            "(COALESCE(:lastSeenAfter, n.lastSeen) = n.lastSeen OR n.lastSeen > :lastSeenAfter) AND " +
+            "(COALESCE(:lastSeenBefore, n.lastSeen) = n.lastSeen OR n.lastSeen < :lastSeenBefore) AND " +
+            "(COALESCE(:createdAfter, n.createdAt) = n.createdAt OR n.createdAt > :createdAfter) " +
             "ORDER BY n.reputationScore DESC, n.lastSeen DESC")
     List<Node> findNodesByOptionalParams(
             @Param("status") String status,
@@ -36,8 +40,7 @@ public interface NodeRepository extends JpaRepository<Node, Integer> {
             @Param("maxReputationScore") Double maxReputationScore,
             @Param("lastSeenAfter") LocalDateTime lastSeenAfter,
             @Param("lastSeenBefore") LocalDateTime lastSeenBefore,
-            @Param("createdAfter") LocalDateTime createdAfter,
-            @Param("hasTransaction") Boolean hasTransaction
+            @Param("createdAfter") LocalDateTime createdAfter
     );
 
     @Query("SELECT n FROM Node n ORDER BY n.reputationScore DESC")
@@ -47,4 +50,12 @@ public interface NodeRepository extends JpaRepository<Node, Integer> {
 
     @Query("SELECT n FROM Node n WHERE n.status = 'ONLINE' ORDER BY n.lastSeen DESC")
     List<Node> findOnlineNodes();
+
+    // Separate query for nodes WITH transactions
+    @Query("SELECT n FROM Node n WHERE n.transaction IS NOT NULL ORDER BY n.reputationScore DESC, n.lastSeen DESC")
+    List<Node> findNodesWithTransaction();
+
+    // Separate query for nodes WITHOUT transactions
+    @Query("SELECT n FROM Node n WHERE n.transaction IS NULL ORDER BY n.reputationScore DESC, n.lastSeen DESC")
+    List<Node> findNodesWithoutTransaction();
 }
