@@ -85,7 +85,7 @@ You should see the Swagger UI with all available API endpoints!
 - **main** branch is **protected**
 - **No one** can push directly to `main`
 - All changes must go through **Pull Requests**
-- Only the **repository owner** can approve and merge PRs
+- Only **RAYEN** can approve and merge PRs
 
 ### Development Workflow
 
@@ -189,7 +189,7 @@ docker ps
 - Communicate with team before modifying `pom.xml` or `application.properties`
 
 ### Code Reviews
-- Si Rayen will accept merge request only if build job was successful
+- RAYEN will accept merge request only if build job was successful
 ---
 
 ## 🧱 Architecture & Layers
