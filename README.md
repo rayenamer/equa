@@ -3,6 +3,16 @@
 [![Report](https://img.shields.io/badge/report-Google%20Docs-green)](https://docs.google.com/document/d/1SJ-QzxcbxZDwQ7bfMLdtrK59frejipB1qcXVu3yWqw8/edit?tab=t.0)
 [![Diagrams](https://img.shields.io/badge/diagrams-Miro-orange)](https://miro.com/app/board/uXjVGGvURDc=/)
 
+<!-- Projects -->
+[![Frontend App](https://img.shields.io/badge/project-Angular%20Client-red?logo=angular&logoColor=white)](https://github.com/rayenamer/SocialMediaProjectClient)
+
+[![Spring Microservice 1](https://img.shields.io/badge/project-Spring%20Boot%20Service-success?logo=springboot&logoColor=white)](https://github.com/psubhajit14/spring-boot-microservice)
+
+[![Spring Microservice 2](https://img.shields.io/badge/project-Candidats%20Service-success?logo=springboot&logoColor=white)](https://github.com/AzizBenIsmail/MicroserviceCandidats)
+
+[![Angular Distributed Frontend](https://img.shields.io/badge/project-Distributed%20Angular-red?logo=angular&logoColor=white)](https://github.com/AzizBenIsmail/Appl.Web-Distribues-EcoExchange_FrontEndAngular/tree/main/src)
+
+
 ## 📘 Class Diagram
 ![Class Diagram](https://ik.imagekit.io/qypbatx8h/classDiagram.png)
 
