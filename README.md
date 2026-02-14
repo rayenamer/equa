@@ -23,152 +23,11 @@
 
 ---
 
-## 🧱 Architecture & Layers
-Each domain module follows a **layered architecture**. Here's what each layer does:
-### 📂 **entity/** - Database Entities
-**Purpose**: Represents database tables using JPA annotations.
-**Rules**:
-- Maps directly to database tables
-- Uses `@Entity`, `@Table`, `@Id`, `@GeneratedValue` annotations
-- Contains only database-related fields
-- Includes getters and setters
-**Example**:
-```java
-package com.rayen.usermanagement.entity;
-import jakarta.persistence.*;
-@Entity
-@Table(name = "users")
-public class User {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-    
-    private String name;
-    private String email;
-    
-    // Getters and Setters
-}
-```
-
----
-
-### 📂 **repository/** - Database Access Layer
-**Purpose**: Direct communication with the database. **NO business logic here!**
-
-**Rules**:
-- Extends `JpaRepository<Entity, ID>`
-- Contains ONLY database queries
-- No business logic
-- Annotated with `@Repository`
-
-**Example**:
-```java
-package com.rayen.usermanagement.repository;
-
-import com.rayen.usermanagement.entity.User;
-import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.stereotype.Repository;
-
-@Repository
-public interface UserRepository extends JpaRepository<User, Long> {
-    // Custom queries can be added here
-    User findByEmail(String email);
-}
-```
-
----
-
-### 📂 **model/** - Data Transfer Objects (DTOs)
-**Purpose**: Objects used to transfer data between layers (API ↔ Service).
-
-**Rules**:
-- **Never** expose entities directly in APIs
-- Contains only fields needed for API requests/responses
-- No JPA annotations
-- Clean, simple POJOs
-
-**Example**:
-```java
-package com.rayen.usermanagement.model;
-
-public class UserDTO {
-    private Long id;
-    private String name;
-    private String email;
-    
-    // Getters and Setters
-}
-```
-
-**Why DTOs?**
-- Security: Hide internal database structure
-- Flexibility: API can have different fields than database
-- Versioning: Change API without changing database
-
----
-
-### 📂 **service/** - Business Logic Layer
-**Purpose**: Contains all business logic, validation, and data transformation.
-
-**Rules**:
-- Annotated with `@Service`
-- Uses repositories to access data
-- Converts between Entity ↔ DTO
-- Contains validation logic
-- Contains all business rules
-
-**Example**:
-```java
-package com.rayen.usermanagement.service;
-
-@Service
-public class UserService {
-    @Autowired
-    private UserRepository userRepository;
-
-    public List<UserDTO> getAllUsers() {
-        return userRepository.findAll().stream()
-            .map(this::convertToDTO)
-            .collect(Collectors.toList());
-    }
-}
-```
-
----
-
-### 📂 **controller/** - REST API Endpoints
-**Purpose**: Exposes REST endpoints to the outside world.
-
-**Rules**:
-- Annotated with `@RestController` and `@RequestMapping`
-- **NO business logic** - delegates to service layer
-- Uses DTOs (not entities) in request/response
-- Handles HTTP methods: `@GetMapping`, `@PostMapping`, `@PutMapping`, `@DeleteMapping`
-
-**Example**:
-```java
-package com.rayen.usermanagement.controller;
-
-@RestController
-@RequestMapping("/api/users")
-public class UserController {
-    @Autowired
-    private UserService userService;
-
-    @GetMapping
-    public List<UserDTO> getAllUsers() {
-        return userService.getAllUsers();
-    }
-}
-```
-
----
-
 ## 🚀 Getting Started
 
 ### 1. Clone the Repository
 ```bash
-git clone [<repository-url>](https://github.com/rayenamer/equa)
+git clone (https://github.com/rayenamer/equa)
 cd equa
 ```
 
@@ -331,6 +190,146 @@ docker ps
 
 ### Code Reviews
 - Si Rayen will accept merge request only if build job was successful
+---
+
+## 🧱 Architecture & Layers
+Each domain module follows a **layered architecture**. Here's what each layer does:
+### 📂 **entity/** - Database Entities
+**Purpose**: Represents database tables using JPA annotations.
+**Rules**:
+- Maps directly to database tables
+- Uses `@Entity`, `@Table`, `@Id`, `@GeneratedValue` annotations
+- Contains only database-related fields
+- Includes getters and setters
+**Example**:
+```java
+package com.rayen.usermanagement.entity;
+import jakarta.persistence.*;
+@Entity
+@Table(name = "users")
+public class User {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+    
+    private String name;
+    private String email;
+    
+    // Getters and Setters
+}
+```
+
+---
+
+### 📂 **repository/** - Database Access Layer
+**Purpose**: Direct communication with the database. **NO business logic here!**
+
+**Rules**:
+- Extends `JpaRepository<Entity, ID>`
+- Contains ONLY database queries
+- No business logic
+- Annotated with `@Repository`
+
+**Example**:
+```java
+package com.rayen.usermanagement.repository;
+
+import com.rayen.usermanagement.entity.User;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
+
+@Repository
+public interface UserRepository extends JpaRepository<User, Long> {
+    // Custom queries can be added here
+    User findByEmail(String email);
+}
+```
+
+---
+
+### 📂 **model/** - Data Transfer Objects (DTOs)
+**Purpose**: Objects used to transfer data between layers (API ↔ Service).
+
+**Rules**:
+- **Never** expose entities directly in APIs
+- Contains only fields needed for API requests/responses
+- No JPA annotations
+- Clean, simple POJOs
+
+**Example**:
+```java
+package com.rayen.usermanagement.model;
+
+public class UserDTO {
+    private Long id;
+    private String name;
+    private String email;
+    
+    // Getters and Setters
+}
+```
+
+**Why DTOs?**
+- Security: Hide internal database structure
+- Flexibility: API can have different fields than database
+- Versioning: Change API without changing database
+
+---
+
+### 📂 **service/** - Business Logic Layer
+**Purpose**: Contains all business logic, validation, and data transformation.
+
+**Rules**:
+- Annotated with `@Service`
+- Uses repositories to access data
+- Converts between Entity ↔ DTO
+- Contains validation logic
+- Contains all business rules
+
+**Example**:
+```java
+package com.rayen.usermanagement.service;
+
+@Service
+public class UserService {
+    @Autowired
+    private UserRepository userRepository;
+
+    public List<UserDTO> getAllUsers() {
+        return userRepository.findAll().stream()
+            .map(this::convertToDTO)
+            .collect(Collectors.toList());
+    }
+}
+```
+
+---
+
+### 📂 **controller/** - REST API Endpoints
+**Purpose**: Exposes REST endpoints to the outside world.
+
+**Rules**:
+- Annotated with `@RestController` and `@RequestMapping`
+- **NO business logic** - delegates to service layer
+- Uses DTOs (not entities) in request/response
+- Handles HTTP methods: `@GetMapping`, `@PostMapping`, `@PutMapping`, `@DeleteMapping`
+
+**Example**:
+```java
+package com.rayen.usermanagement.controller;
+
+@RestController
+@RequestMapping("/api/users")
+public class UserController {
+    @Autowired
+    private UserService userService;
+
+    @GetMapping
+    public List<UserDTO> getAllUsers() {
+        return userService.getAllUsers();
+    }
+}
+```
 ---
 
 ## ✅ Checklist for First Time Dev
