@@ -4,10 +4,10 @@
 [![Diagrams](https://img.shields.io/badge/diagrams-Miro-orange)](https://miro.com/app/board/uXjVGGvURDc=/)
 
 ## 📘 Class Diagram
-![Class Diagram](https://ik.imagekit.io/qypbatx8h/image.png)
+![Class Diagram]([https://ik.imagekit.io/qypbatx8h/image.png](https://ik.imagekit.io/qypbatx8h/classDiagram.png))
 
 ## 🔄 System Workflow
-![System Workflow](https://ik.imagekit.io/qypbatx8h/image.png?updatedAt=1771099546231)
+![System Workflow]([https://ik.imagekit.io/qypbatx8h/image.png?updatedAt=1771099546231](https://ik.imagekit.io/qypbatx8h/workflowDiagram.png))
 
 ## 📅 Project Timeline
 ![Project Timeline](https://ik.imagekit.io/qypbatx8h/equaTimeLine.png?updatedAt=1771099370415)
