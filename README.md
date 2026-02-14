@@ -17,6 +17,9 @@
 ## 📘 Class Diagram
 ![Class Diagram](https://ik.imagekit.io/qypbatx8h/classDiagram.png)
 
+## Modules  🧩
+![Modules](https://ik.imagekit.io/qypbatx8h/modules.png)
+
 ## 🔄 System Workflow
 ![System Workflow](https://ik.imagekit.io/qypbatx8h/workflowDiagram.png)
 
