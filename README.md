@@ -22,46 +22,7 @@
 - **Swagger/OpenAPI**: API documentation
 
 ---
-## 📦 Prerequisites
-Before running this project, ensure you have the following installed:
 
-### 1. Java 21
-```bash
-java -version
-# Should show: openjdk version "21.0.9" 
-```
-If not installed:
-```bash
-sudo apt update
-sudo apt install openjdk-21-jdk -y
-```
-### 2. Maven 3.8.8
-Verify installation:
-```bash
-mvn --version
-# Should show: Apache Maven 3.8.8
-```
-### 3. Docker & Docker Compose
-```bash
-docker --version
-docker-compose --version
-```
-If not installed:
-```bash
-sudo apt update
-sudo apt install docker.io docker-compose -y
-sudo systemctl start docker
-sudo systemctl enable docker
-```
-### 4. Git
-```bash
-git --version
-```
-If not installed:
-```bash
-sudo apt install git -y
-```
----
 ## 🧱 Architecture & Layers
 Each domain module follows a **layered architecture**. Here's what each layer does:
 ### 📂 **entity/** - Database Entities
@@ -160,14 +121,6 @@ public class UserDTO {
 ```java
 package com.rayen.usermanagement.service;
 
-import com.rayen.usermanagement.entity.User;
-import com.rayen.usermanagement.model.UserDTO;
-import com.rayen.usermanagement.repository.UserRepository;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-import java.util.List;
-import java.util.stream.Collectors;
-
 @Service
 public class UserService {
     @Autowired
@@ -177,29 +130,6 @@ public class UserService {
         return userRepository.findAll().stream()
             .map(this::convertToDTO)
             .collect(Collectors.toList());
-    }
-
-    public UserDTO createUser(UserDTO userDTO) {
-        // Business logic and validation here
-        User user = convertToEntity(userDTO);
-        User saved = userRepository.save(user);
-        return convertToDTO(saved);
-    }
-
-    // Conversion methods
-    private UserDTO convertToDTO(User user) {
-        UserDTO dto = new UserDTO();
-        dto.setId(user.getId());
-        dto.setName(user.getName());
-        dto.setEmail(user.getEmail());
-        return dto;
-    }
-
-    private User convertToEntity(UserDTO dto) {
-        User user = new User();
-        user.setName(dto.getName());
-        user.setEmail(dto.getEmail());
-        return user;
     }
 }
 ```
@@ -219,12 +149,6 @@ public class UserService {
 ```java
 package com.rayen.usermanagement.controller;
 
-import com.rayen.usermanagement.model.UserDTO;
-import com.rayen.usermanagement.service.UserService;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.*;
-import java.util.List;
-
 @RestController
 @RequestMapping("/api/users")
 public class UserController {
@@ -234,26 +158,6 @@ public class UserController {
     @GetMapping
     public List<UserDTO> getAllUsers() {
         return userService.getAllUsers();
-    }
-
-    @PostMapping
-    public UserDTO createUser(@RequestBody UserDTO userDTO) {
-        return userService.createUser(userDTO);
-    }
-
-    @GetMapping("/{id}")
-    public UserDTO getUserById(@PathVariable Long id) {
-        return userService.getUserById(id);
-    }
-
-    @PutMapping("/{id}")
-    public UserDTO updateUser(@PathVariable Long id, @RequestBody UserDTO userDTO) {
-        return userService.updateUser(id, userDTO);
-    }
-
-    @DeleteMapping("/{id}")
-    public void deleteUser(@PathVariable Long id) {
-        userService.deleteUser(id);
     }
 }
 ```
@@ -374,44 +278,23 @@ After your PR is merged:
 git checkout main
 git pull origin main
 ```
+#### in case you branch is behind 
+
+```bash
+# update you rlocal main 
+git pull origin main
+# switch to your branch
+git switch feat/yourBranch
+# pull code from main to your branch
+git merge main
+```
 
 ### Important Git Rules
 1. **Always pull from main before creating a new branch**
 2. **Never work directly on main**
-3. **One feature = One branch**
-4. **Keep commits small and focused**
-5. **Write descriptive commit messages**
+3. **Keep commits small and focused**
 
 ---
-## 📝 Quick Reference
-
-### Daily Development Workflow
-```bash
-# 1. Start database (once per day)
-docker-compose up -d
-
-# 2. Pull latest changes
-git checkout main
-git pull origin main
-
-# 3. Create feature branch
-git checkout -b feature/my-feature
-
-# 4. Develop your feature
-# ... code, code, code ...
-
-# 5. Run and test
-mvn spring-boot:run
-# Visit: http://localhost:8080/swagger-ui/index.html
-
-# 6. Commit and push
-git add .
-git commit -m "feat: add my feature"
-git push origin feature/my-feature
-
-# 7. Create Pull Request on GitHub/GitLab
-
-```
 
 ### Essential Commands
 ```bash
@@ -440,24 +323,6 @@ docker ps
 - **API Docs JSON**: http://localhost:8080/v3/api-docs
 
 ---
-
-## 🎓 Learning Resources
-
-### Spring Boot
-- [Official Spring Boot Documentation](https://spring.io/projects/spring-boot)
-- [Building REST APIs with Spring Boot](https://spring.io/guides/tutorials/rest/)
-
-### JPA & Hibernate
-- [Spring Data JPA Reference](https://docs.spring.io/spring-data/jpa/docs/current/reference/html/)
-
-### PostgreSQL
-- [PostgreSQL Documentation](https://www.postgresql.org/docs/)
-
-### Docker
-- [Docker Get Started](https://docs.docker.com/get-started/)
-
----
-
 
 ### Avoiding Conflicts
 - Work only in your assigned domain folder
