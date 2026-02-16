@@ -17,8 +17,6 @@ public interface BlockRepository extends JpaRepository<Block, Integer> {
 
     Optional<Block> findByBlockHash(String blockHash);
 
-    Optional<Block> findByPreviousHash(String previousHash);
-
     @Query("SELECT b FROM Block b ORDER BY b.timestamp DESC LIMIT 1")
     Optional<Block> findLatestBlock();
 
