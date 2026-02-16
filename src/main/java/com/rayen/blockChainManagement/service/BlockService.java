@@ -16,7 +16,6 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -26,9 +25,7 @@ public class BlockService {
 
     private final BlockRepository blockRepository;
     private final BlockMapper blockMapper;
-
     private static final String GENESIS_PREVIOUS_HASH = "0000000000000000000000000000000000000000000000000000000000000000";
-
     @Transactional
     public BlockResponse createBlock(BlockRequest request) {
         log.info("Creating new block with previousHash: {}", request.getPreviousHash());
@@ -45,15 +42,10 @@ public class BlockService {
             block.setPreviousHash(GENESIS_PREVIOUS_HASH);
             block.setPreviousBlock(null);
         } else {
-
-            String previousHash = request.getPreviousHash();
-            if (previousHash == null || previousHash.isEmpty()) {
-                Block latestBlock = blockRepository.findLatestBlock()
-                        .orElseThrow(() -> new IllegalStateException("No latest block found"));
-                previousHash = latestBlock.getBlockHash();
-                block.setPreviousBlock(latestBlock);
-            }
-            block.setPreviousHash(previousHash);
+            Block previousBlock = blockRepository.findLatestBlock()
+                    .orElseThrow(() -> new IllegalStateException("No blocks found in blockchain"));
+            block.setPreviousBlock(previousBlock);
+            block.setPreviousHash(previousBlock.getBlockHash());
         }
 
         String blockData = buildBlockData(block);
@@ -156,8 +148,6 @@ public class BlockService {
         data.append(block.getPreviousHash() != null ? block.getPreviousHash() : "");
         data.append(block.getTimestamp() != null ? block.getTimestamp().toString() : "");
 
-        // Transactions will be added to hash calculation later
-
         return data.toString();
     }
 
@@ -181,7 +171,8 @@ public class BlockService {
     }
 
     private Long calculateBlockSize(Block block) {
-        return (long) (2 + java.util.concurrent.ThreadLocalRandom.current().nextInt(5));
+        java.security.SecureRandom random = new java.security.SecureRandom();
+        return (long) (2 + random.nextInt(5));
     }
 
 
