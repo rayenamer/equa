@@ -181,7 +181,8 @@ public class BlockService {
     }
 
     private Long calculateBlockSize(Block block) {
-        return (long) (2 + (int)(Math.random() * 5));
+        return (long) (2 + java.util.concurrent.ThreadLocalRandom.current().nextInt(5));
     }
+
 
 }
