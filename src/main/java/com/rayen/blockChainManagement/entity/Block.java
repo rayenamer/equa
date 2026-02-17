@@ -41,7 +41,7 @@ public class Block {
     @OneToOne(mappedBy = "previousBlock", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private Block nextBlock;
 
-    // One-to-One relationship with Transaction (one block has one transaction)
+    // One-to-Many relationship with Transaction (one block has Many transaction)
     @OneToMany(mappedBy = "block", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Transaction> transaction;
 

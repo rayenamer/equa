@@ -1,0 +1,63 @@
+name: Check Protected Files
+
+on:
+  push:
+    branches:
+      - '**'  # Run on all branches
+
+jobs:
+  check-protected-files:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0  # Fetch all history for all branches and tags
+
+      - name: Check for modifications to protected files
+        run: |
+          echo "Checking for modifications to protected files..."
+          
+          # Get the list of changed files for push events
+          if [ "${{ github.event.before }}" == "0000000000000000000000000000000000000000" ]; then
+            # First push to a new branch
+            CHANGED_FILES=$(git diff-tree --no-commit-id --name-only -r ${{ github.sha }})
+          else
+            # Regular push - compare against the previous commit
+            CHANGED_FILES=$(git diff --name-only ${{ github.event.before }} ${{ github.sha }})
+          fi
+          
+          echo "Changed files:"
+          echo "$CHANGED_FILES"
+          echo ""
+          
+          # Define protected files (WITHOUT the equa/ prefix)
+          PROTECTED_FILES=(
+            "pom.xml"
+            "src/main/resources/application.properties"
+          )
+          
+          # Check if any protected file was modified
+          MODIFIED_PROTECTED_FILES=()
+          for file in "${PROTECTED_FILES[@]}"; do
+            if echo "$CHANGED_FILES" | grep -q "^${file}$"; then
+              MODIFIED_PROTECTED_FILES+=("$file")
+            fi
+          done
+          
+          # If any protected file was modified, fail the pipeline
+          if [ ${#MODIFIED_PROTECTED_FILES[@]} -gt 0 ]; then
+            echo "❌ ERROR: The following protected files were modified:"
+            for file in "${MODIFIED_PROTECTED_FILES[@]}"; do
+              echo "  - $file"
+            done
+            echo ""
+            echo "These files are protected and should not be modified."
+            echo "Pipeline failed."
+            exit 1
+          else
+            echo "✅ SUCCESS: No protected files were modified."
+            echo "Pipeline passed."
+            exit 0
+          fi
