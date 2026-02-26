@@ -7,5 +7,3 @@ node_modules/
 External Libraries/
 Scratches and Consoles/
 
-# Fichier de config local (contient mots de passe, clés OAuth, etc.)
-src/main/resources/application.properties
