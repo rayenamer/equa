@@ -10,12 +10,13 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 public class SignupRequestDTO {
-
     private String username;
     private String email;
     private String password;
-    /** "ASSISTANT" or "OBSERVER" */
+    /** ASSISTANT ou OBSERVER */
     private String userType;
-    /** Only for OBSERVER: list of permission codes */
+    /** Permissions si userType = OBSERVER (ex. VIEW_LOGS, AUDIT) */
     private List<String> permissions;
+    /** Token reCAPTCHA ("Je ne suis pas un robot") - requis si app.recaptcha.secret-key est configuré */
+    private String recaptchaToken;
 }

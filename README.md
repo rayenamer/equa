@@ -77,6 +77,73 @@ http://localhost:8080/swagger-ui/index.html
 
 You should see the Swagger UI with all available API endpoints!
 
+**Note:** Si le serveur tourne sur le port **8081**, utilisez : http://localhost:8081/swagger-ui.html
+
+---
+
+## 📋 Gestions et API (Authentication, User, Forum)
+
+Le projet expose trois groupes d’API documentés dans Swagger : **Authentication**, **User Management** et **Forum Management**. Voici ce que fait chaque gestion et la liste des endpoints.
+
+**En résumé** :  
+- **Auth** : inscription (signup) et connexion (signin) avec token JWT.  
+- **User** : CRUD, rôles/permissions, audit logs.  
+- **Forum** : sujets de discussion (topics) et messages ; **tous les utilisateurs** peuvent créer des sujets et envoyer des messages.
+
+### 1. Authentication (Authentification)
+
+**Rôle** : Inscription et connexion des utilisateurs. Retourne un **token JWT** utilisé pour accéder aux endpoints protégés.
+
+| Méthode | Endpoint | Description |
+|--------|----------|-------------|
+| POST | `/api/auth/signup` | Inscrire un nouvel utilisateur (username, email, password, userType, permissions si OBSERVER). Retourne token + infos user. |
+| POST | `/api/auth/signin` | Connexion avec email et mot de passe. Retourne token JWT. |
+
+**Fonctionnement** : Après **signup** ou **signin**, le client reçoit un `token`. Pour les appels protégés, il envoie l’en-tête : `Authorization: Bearer <token>`.
+
+---
+
+### 2. User Management (Gestion des utilisateurs)
+
+**Rôle** : CRUD utilisateurs (ASSISTANT / OBSERVER), rôles/permissions, et journaux d’audit.
+
+| Méthode | Endpoint | Description |
+|--------|----------|-------------|
+| GET | `/api/users` | Liste de tous les utilisateurs. |
+| GET | `/api/users/{id}` | Détail d’un utilisateur par ID. |
+| POST | `/api/users` | Créer un user (ASSISTANT ou OBSERVER). Body : username, email, userType, permissions (optionnel). |
+| PUT | `/api/users/{id}` | Modifier un utilisateur (username, email, etc.). |
+| DELETE | `/api/users/{id}` | Supprimer un utilisateur. |
+| GET | `/api/users/{id}/roles` | Obtenir le type et les permissions d’un user. |
+| PUT | `/api/users/{id}/roles` | Mettre à jour rôles et permissions (OBSERVER). |
+| GET | `/api/users/audit-logs` | Tous les journaux d’audit. |
+| GET | `/api/users/observers/{observerUserId}/audit-logs` | Journaux d’audit d’un observateur. |
+| POST | `/api/users/observers/{observerUserId}/audit-log` | Enregistrer une action d’audit (ObserverUser). |
+
+**Fonctionnement** : Les utilisateurs sont stockés en base (table `users` + `assistant_users` / `observer_users`). Les OBSERVER ont des permissions (VIEW_LOGS, AUDIT, etc.). Les audit logs lient une action à un observateur.
+
+---
+
+### 3. Forum Management (Gestion forum)
+
+**Rôle** : Sujets de discussion (topics) et messages. **Tous les utilisateurs** peuvent créer des sujets et envoyer des messages dans n’importe quel sujet.
+
+| Méthode | Endpoint | Description |
+|--------|----------|-------------|
+| GET | `/api/forum/topics` | Liste de tous les sujets. |
+| GET | `/api/forum/topics/{id}` | Détail d’un sujet (avec ses messages). |
+| GET | `/api/forum/topics/by-user/{userId}` | Sujets créés par un utilisateur. |
+| POST | `/api/forum/topics` | Créer un sujet. Body : createdById, title, description. |
+| PUT | `/api/forum/topics/{id}` | Modifier titre / description d’un sujet. |
+| DELETE | `/api/forum/topics/{id}` | Supprimer un sujet. |
+| POST | `/api/forum/topics/{id}/messages` | Envoyer un message dans un sujet. Body : authorId, messageText. |
+| GET | `/api/forum/topics/{id}/messages` | Liste des messages d’un sujet. |
+
+**Fonctionnement** : Un **sujet** (ForumTopic) a un titre, une description et un créateur (User). Les **messages** (ForumMessage) sont liés à un sujet et à un auteur (User). Tout utilisateur peut créer un sujet et poster dans n’importe quel sujet. En base : tables **forum_topics** et **forum_messages**.
+
+**Documentation détaillée** : [docs/FORUM_MANAGEMENT.md](docs/FORUM_MANAGEMENT.md).  
+**Guide de test Swagger** : [docs/SWAGGER_TEST_GUIDE.md](docs/SWAGGER_TEST_GUIDE.md).
+
 ---
 
 ## 🔀 Git Workflow
@@ -178,8 +245,8 @@ docker ps
 ```
 
 ### Important URLs
-- **Application**: http://localhost:8080
-- **Swagger UI**: http://localhost:8080/swagger-ui/index.html
+- **Application**: http://localhost:8081 (ou 8080 selon `server.port` dans `application.properties`)
+- **Swagger UI**: http://localhost:8081/swagger-ui.html
 
 ---
 
