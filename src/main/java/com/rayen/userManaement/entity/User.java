@@ -39,6 +39,45 @@ public abstract class User {
     @Column(name = "updated_at")
     private LocalDateTime updatedAt;
 
+    /** Nombre de tentatives de connexion échouées. Réinitialisé à 0 après succès. Nullable pour migration (lignes existantes). */
+    @Column(name = "failed_login_attempts")
+    private Integer failedLoginAttempts = 0;
+
+    /** Compte verrouillé jusqu'à cette date (après trop de tentatives). */
+    @Column(name = "locked_until")
+    private LocalDateTime lockedUntil;
+
+    /** Compte vérifié par email. Nullable pour migration (lignes existantes). */
+    @Column(name = "email_verified")
+    private Boolean emailVerified = false;
+
+    @Column(name = "email_verification_token", length = 255)
+    private String emailVerificationToken;
+
+    @Column(name = "email_verification_token_expiry")
+    private LocalDateTime emailVerificationTokenExpiry;
+
+    @Column(name = "password_reset_token", length = 255)
+    private String passwordResetToken;
+
+    @Column(name = "password_reset_token_expiry")
+    private LocalDateTime passwordResetTokenExpiry;
+
+    @Column(name = "last_login_at")
+    private LocalDateTime lastLoginAt;
+
+    /** LOCAL, GOOGLE, FACEBOOK, MICROSOFT. Nullable pour migration (lignes existantes). */
+    @Column(name = "auth_provider", length = 30)
+    private String authProvider = "LOCAL";
+
+    /** ID utilisateur fourni par le fournisseur OAuth (null si LOCAL). */
+    @Column(name = "provider_id", length = 255)
+    private String providerId;
+
+    /** Compte actif (false = désactivé, connexion refusée). Nullable pour migration. */
+    @Column(name = "enabled")
+    private Boolean enabled = true;
+
     @PrePersist
     protected void onCreate() {
         createdAt = LocalDateTime.now();
