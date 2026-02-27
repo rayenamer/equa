@@ -7,4 +7,5 @@ node_modules/
 External Libraries/
 Scratches and Consoles/
 resources/application.properties
+.env
 
