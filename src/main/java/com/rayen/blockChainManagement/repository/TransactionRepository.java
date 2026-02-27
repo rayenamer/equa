@@ -18,6 +18,9 @@ public interface TransactionRepository extends JpaRepository<Transaction, Intege
 
     List<Transaction> findByToWallet(String toWallet);
 
+    @Query("SELECT t FROM Transaction t WHERE t.status = :status")
+    List<Transaction> findBy_VALID_INVALID(@Param("status") String status);
+
     @Query("SELECT t FROM Transaction t WHERE t.fromWallet = :wallet OR t.toWallet = :wallet ORDER BY t.timestamp DESC")
     List<Transaction> findByWallet(@Param("wallet") String wallet);
 
@@ -28,15 +31,6 @@ public interface TransactionRepository extends JpaRepository<Transaction, Intege
     List<Transaction> findAllByOrderByTimestampDesc();
 
     List<Transaction> findAllByOrderByAmountDesc();
-
-    List<Transaction> findByAmountGreaterThanEqual(BigDecimal minAmount);
-
-    @Query("SELECT t FROM Transaction t WHERE t.confirmationCount = 0 OR t.confirmationCount IS NULL ORDER BY t.timestamp ASC")
-    List<Transaction> findUnconfirmedTransactions();
-
-    // Find confirmed transactions
-    @Query("SELECT t FROM Transaction t WHERE t.confirmationCount > 0 ORDER BY t.timestamp DESC")
-    List<Transaction> findConfirmedTransactions();
 
     // Find transactions without a block (pending)
     @Query("SELECT t FROM Transaction t WHERE t.block IS NULL ORDER BY t.timestamp ASC")
@@ -83,8 +77,4 @@ public interface TransactionRepository extends JpaRepository<Transaction, Intege
     // Get average transaction amount
     @Query("SELECT AVG(t.amount) FROM Transaction t WHERE t.status = 'CONFIRMED'")
     BigDecimal getAverageTransactionAmount();
-
-    // Get average transaction fee
-    @Query("SELECT AVG(t.fee) FROM Transaction t WHERE t.status = 'CONFIRMED' AND t.fee IS NOT NULL")
-    BigDecimal getAverageTransactionFee();
 }
