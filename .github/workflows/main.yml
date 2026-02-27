@@ -38,6 +38,8 @@ jobs:
       - name: Build with Maven
         env:
           DB_URL: jdbc:postgresql://127.0.0.1:5433/equadb
+          DB_USERNAME: equauser
+          DB_PASSWORD: equapass
           GOOGLE_CLIENT_ID: ${{ secrets.GOOGLE_CLIENT_ID }}
           GOOGLE_CLIENT_SECRET: ${{ secrets.GOOGLE_CLIENT_SECRET }}
           RECAPTCHA_SECRET_KEY: ${{ secrets.RECAPTCHA_SECRET_KEY }}
