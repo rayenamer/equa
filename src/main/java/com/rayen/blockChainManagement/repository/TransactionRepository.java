@@ -14,8 +14,6 @@ import java.util.Optional;
 @Repository
 public interface TransactionRepository extends JpaRepository<Transaction, Integer> {
 
-    Optional<Transaction> findByTransactionHash(String transactionHash);
-
     List<Transaction> findByFromWallet(String fromWallet);
 
     List<Transaction> findByToWallet(String toWallet);
@@ -25,11 +23,7 @@ public interface TransactionRepository extends JpaRepository<Transaction, Intege
 
     List<Transaction> findByStatus(String status);
 
-    List<Transaction> findByTransactionType(String transactionType);
-
-    List<Transaction> findByStatusAndTransactionType(String status, String transactionType);
-
-    List<Transaction> findByTimestampBetween(LocalDateTime startDate, LocalDateTime endDate);
+     List<Transaction> findByTimestampBetween(LocalDateTime startDate, LocalDateTime endDate);
 
     List<Transaction> findAllByOrderByTimestampDesc();
 
@@ -43,8 +37,6 @@ public interface TransactionRepository extends JpaRepository<Transaction, Intege
     // Find confirmed transactions
     @Query("SELECT t FROM Transaction t WHERE t.confirmationCount > 0 ORDER BY t.timestamp DESC")
     List<Transaction> findConfirmedTransactions();
-
-    boolean existsByTransactionHash(String transactionHash);
 
     // Find transactions without a block (pending)
     @Query("SELECT t FROM Transaction t WHERE t.block IS NULL ORDER BY t.timestamp ASC")
@@ -63,9 +55,6 @@ public interface TransactionRepository extends JpaRepository<Transaction, Intege
 
     // Count transactions by status
     long countByStatus(String status);
-
-    // Count transactions by type
-    long countByTransactionType(String transactionType);
 
     // Count transactions for a wallet
     @Query("SELECT COUNT(t) FROM Transaction t WHERE t.fromWallet = :wallet OR t.toWallet = :wallet")
