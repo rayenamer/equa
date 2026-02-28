@@ -1,8 +1,10 @@
 package com.rayen.blockChainManagement.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
@@ -13,6 +15,7 @@ import java.util.List;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
+@Getter
 public class Block {
 
     @Id
@@ -20,6 +23,7 @@ public class Block {
     @Column(name = "block_id")
     private Integer blockId;
 
+    @JsonIgnoreProperties({"previousBlock", "transactions", "createdAt", "updatedAt"})
     @Column(name = "previous_hash", length = 64)
     private String previousHash;
 
@@ -37,12 +41,8 @@ public class Block {
     @JoinColumn(name = "previous_block_id")
     private Block previousBlock;
 
-    // One-to-One: This block knows the next block (inverse side)
-    @OneToOne(mappedBy = "previousBlock", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private Block nextBlock;
-
-    // One-to-Many relationship with Transaction (one block has Many transaction)
-    @OneToMany(mappedBy = "block", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JoinColumn(name = "block_id")
     private List<Transaction> transaction;
 
     @Column(name = "created_at", updatable = false)

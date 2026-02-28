@@ -1,21 +1,23 @@
 package com.rayen.blockChainManagement.service;
 
 import com.rayen.blockChainManagement.entity.Block;
+import com.rayen.blockChainManagement.entity.Transaction;
 import com.rayen.blockChainManagement.model.BlockMapper;
 import com.rayen.blockChainManagement.model.BlockRequest;
 import com.rayen.blockChainManagement.model.BlockResponse;
 import com.rayen.blockChainManagement.model.BlockStats;
 import com.rayen.blockChainManagement.repository.BlockRepository;
+import com.rayen.blockChainManagement.repository.TransactionRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Random;
 import java.util.stream.Collectors;
 
 @Service
@@ -23,6 +25,7 @@ import java.util.stream.Collectors;
 @Slf4j
 public class BlockService {
 
+    private final TransactionRepository transactionRepository;
     private final BlockRepository blockRepository;
     private final BlockMapper blockMapper;
     private static final String GENESIS_PREVIOUS_HASH = "0000000000000000000000000000000000000000000000000000000000000000";
@@ -173,6 +176,45 @@ public class BlockService {
     private Long calculateBlockSize(Block block) {
         java.security.SecureRandom random = new java.security.SecureRandom();
         return (long) (2 + random.nextInt(5));
+    }
+
+    @Transactional
+    public Block generateBlock() {
+        Block block = new Block();
+        LocalDateTime now = LocalDateTime.now();
+
+        block.setTimestamp(now);
+        block.setCreatedAt(now);
+        block.setUpdatedAt(now);
+
+        boolean isGenesisBlock = blockRepository.countTotalBlocks() == 0;
+
+        if (isGenesisBlock) {
+            block.setPreviousHash(GENESIS_PREVIOUS_HASH);
+            block.setPreviousBlock(null);
+        } else {
+            Block previousBlock = blockRepository.findLatestBlock()
+                    .orElseThrow(() -> new IllegalStateException("No blocks found in blockchain"));
+            block.setPreviousBlock(previousBlock);
+            block.setPreviousHash(previousBlock.getBlockHash());
+        }
+
+        String blockData = buildBlockData(block);
+        block.setBlockHash(calculateHash(blockData));
+        block.setBlockSize((long) (new Random().nextInt(5) + 2)); // random 2-6
+
+        return blockRepository.save(block);
+    }
+
+    public void addTransactionToBlock(Integer blockId, Integer transactionId) {
+        Block block = blockRepository.findById(blockId)
+                .orElseThrow(() -> new RuntimeException("Block not found"));
+
+        Transaction transaction = transactionRepository.findById(transactionId)
+                .orElseThrow(() -> new RuntimeException("Transaction not found"));
+
+        block.getTransaction().add(transaction);
+        blockRepository.save(block);
     }
 
 

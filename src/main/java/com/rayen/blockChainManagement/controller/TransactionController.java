@@ -88,12 +88,6 @@ public class TransactionController {
         return ResponseEntity.ok(transactionService.getPendingTransactions());
     }
 
-    @GetMapping("/blockchain")
-    public ResponseEntity<List<TransactionResponse>> getBlockchainTransactions() {
-        log.info("REST request to get blockchain transactions");
-        return ResponseEntity.ok(transactionService.getBlockchainTransactions());
-    }
-
     @GetMapping("/validator/{nodeId}")
     public ResponseEntity<List<TransactionResponse>> getByValidatorNodeId(@PathVariable Integer nodeId) {
         log.info("REST request to get transactions by validator node: {}", nodeId);
@@ -128,13 +122,6 @@ public class TransactionController {
         return transactionService.updateStatus(id, status)
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
-    }
-
-    @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteTransaction(@PathVariable Integer id) {
-        log.info("REST request to delete transaction: {}", id);
-        transactionService.deleteTransaction(id);
-        return ResponseEntity.noContent().build();
     }
 
     @GetMapping("/stats/count/wallet/{wallet}")

@@ -31,12 +31,8 @@ public interface TransactionRepository extends JpaRepository<Transaction, Intege
     List<Transaction> findAllByOrderByAmountDesc();
 
     // Find transactions without a block (pending)
-    @Query("SELECT t FROM Transaction t WHERE t.block IS NULL ORDER BY t.timestamp ASC")
+    @Query(value = "SELECT * FROM transactions WHERE block_id IS NULL ORDER BY timestamp ASC", nativeQuery = true)
     List<Transaction> findPendingTransactions();
-
-    // Find transactions with a block (confirmed in blockchain)
-    @Query("SELECT t FROM Transaction t WHERE t.block IS NOT NULL ORDER BY t.timestamp DESC")
-    List<Transaction> findBlockchainTransactions();
 
     // Find transactions by validator node
     @Query("SELECT t FROM Transaction t WHERE t.validatorNode.nodeId = :nodeId")

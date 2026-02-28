@@ -1,13 +1,17 @@
 package com.rayen.blockChainManagement.entity;
 
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -15,6 +19,7 @@ import java.util.Set;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
+@Getter
 public class Node {
 
     @Id
@@ -43,23 +48,18 @@ public class Node {
     @Column(name = "location", length = 100)
     private String location;
 
-    @ManyToMany(fetch = FetchType.LAZY)
-    @JoinTable(
-            name = "node_connections",
-            joinColumns = @JoinColumn(name = "node_id"),
-            inverseJoinColumns = @JoinColumn(name = "connected_node_id")
-    )
-    private Set<Node> connectedNodes = new HashSet<>();
-
-
-
-    // One-to-One relationship with Transaction (winning node validates the transaction)
-    @OneToOne(mappedBy = "validatorNode", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private Transaction transaction;
-
     @Column(name = "created_at", updatable = false)
     private LocalDateTime createdAt;
 
     @Column(name = "updated_at")
     private LocalDateTime updatedAt;
+
+    @ElementCollection
+    @CollectionTable(name = "node_blockchain_records", joinColumns = @JoinColumn(name = "node_id"))
+    @Column(name = "block_record", columnDefinition = "TEXT")
+    private List<String> blockchainRecord = new ArrayList<>();
+
+    @JsonIgnore
+    @OneToMany(mappedBy = "validatorNode", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<Transaction> transactions;
 }

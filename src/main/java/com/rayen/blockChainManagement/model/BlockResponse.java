@@ -21,7 +21,6 @@ public class BlockResponse{
 
     // Navigation info
     private Integer previousBlockId;
-    private Integer nextBlockId;
 
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
