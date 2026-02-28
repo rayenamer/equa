@@ -1,9 +1,6 @@
 package com.rayen.blockChainManagement.model;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import com.rayen.blockChainManagement.entity.TransactionStatus;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -22,7 +19,7 @@ public class TransactionResponse {
      private String toWallet;
      private BigDecimal amount;
      private LocalDateTime timestamp;
-     private String status;
+     private TransactionStatus status; //enum
      private String transactionHash;
      private BigDecimal fee;
 }
