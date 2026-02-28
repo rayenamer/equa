@@ -1,6 +1,7 @@
 package com.rayen.blockChainManagement.repository;
 
 import com.rayen.blockChainManagement.entity.Transaction;
+import com.rayen.blockChainManagement.entity.TransactionStatus;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -18,13 +19,10 @@ public interface TransactionRepository extends JpaRepository<Transaction, Intege
 
     List<Transaction> findByToWallet(String toWallet);
 
-    @Query("SELECT t FROM Transaction t WHERE t.status = :status")
-    List<Transaction> findBy_VALID_INVALID(@Param("status") String status);
-
     @Query("SELECT t FROM Transaction t WHERE t.fromWallet = :wallet OR t.toWallet = :wallet ORDER BY t.timestamp DESC")
     List<Transaction> findByWallet(@Param("wallet") String wallet);
 
-    List<Transaction> findByStatus(String status);
+    List<Transaction> findByStatus(TransactionStatus status);
 
      List<Transaction> findByTimestampBetween(LocalDateTime startDate, LocalDateTime endDate);
 
@@ -45,26 +43,15 @@ public interface TransactionRepository extends JpaRepository<Transaction, Intege
     List<Transaction> findByValidatorNodeId(@Param("nodeId") Integer nodeId);
 
     // Find transactions created after a specific date
-    List<Transaction> findByCreatedAtAfter(LocalDateTime date);
+    @Query("SELECT t FROM Transaction t WHERE t.timestamp > :date ORDER BY t.timestamp DESC")
+    List<Transaction> findByCreatedAtAfter(@Param("date") LocalDateTime date);
 
     // Count transactions by status
-    long countByStatus(String status);
+    long countByStatus(TransactionStatus status);
 
     // Count transactions for a wallet
     @Query("SELECT COUNT(t) FROM Transaction t WHERE t.fromWallet = :wallet OR t.toWallet = :wallet")
     long countByWallet(@Param("wallet") String wallet);
-
-    // Get total transaction amount by wallet (sent)
-    @Query("SELECT SUM(t.amount) FROM Transaction t WHERE t.fromWallet = :wallet AND t.status = 'CONFIRMED'")
-    BigDecimal getTotalSentByWallet(@Param("wallet") String wallet);
-
-    // Get total transaction amount by wallet (received)
-    @Query("SELECT SUM(t.amount) FROM Transaction t WHERE t.toWallet = :wallet AND t.status = 'CONFIRMED'")
-    BigDecimal getTotalReceivedByWallet(@Param("wallet") String wallet);
-
-    // Get total fees collected
-    @Query("SELECT SUM(t.fee) FROM Transaction t WHERE t.status = 'CONFIRMED'")
-    BigDecimal getTotalFeesCollected();
 
     // Find high-value transactions
     @Query("SELECT t FROM Transaction t WHERE t.amount >= :threshold ORDER BY t.amount DESC")
@@ -74,7 +61,16 @@ public interface TransactionRepository extends JpaRepository<Transaction, Intege
     @Query("SELECT t FROM Transaction t WHERE (t.fromWallet = :wallet1 AND t.toWallet = :wallet2) OR (t.fromWallet = :wallet2 AND t.toWallet = :wallet1) ORDER BY t.timestamp DESC")
     List<Transaction> findTransactionsBetweenWallets(@Param("wallet1") String wallet1, @Param("wallet2") String wallet2);
 
-    // Get average transaction amount
-    @Query("SELECT AVG(t.amount) FROM Transaction t WHERE t.status = 'CONFIRMED'")
+
+    @Query("SELECT SUM(t.amount) FROM Transaction t WHERE t.fromWallet = :wallet AND t.status = com.rayen.blockChainManagement.entity.TransactionStatus.VALID")
+    BigDecimal getTotalSentByWallet(@Param("wallet") String wallet);
+
+    @Query("SELECT SUM(t.amount) FROM Transaction t WHERE t.toWallet = :wallet AND t.status = com.rayen.blockChainManagement.entity.TransactionStatus.VALID")
+    BigDecimal getTotalReceivedByWallet(@Param("wallet") String wallet);
+
+    @Query("SELECT SUM(t.fee) FROM Transaction t WHERE t.status = com.rayen.blockChainManagement.entity.TransactionStatus.VALID")
+    BigDecimal getTotalFeesCollected();
+
+    @Query("SELECT AVG(t.amount) FROM Transaction t WHERE t.status = com.rayen.blockChainManagement.entity.TransactionStatus.VALID")
     BigDecimal getAverageTransactionAmount();
 }

@@ -24,21 +24,4 @@ public class TransactionMapper {
                 .build();
     }
 
-    public TransactionResponse toResponseWithoutRelations(Transaction transaction) {
-        if (transaction == null) {
-            return null;
-        }
-
-        return TransactionResponse.builder()
-                .transactionId(transaction.getTransactionId())
-                .fromWallet(transaction.getFromWallet())
-                .toWallet(transaction.getToWallet())
-                .amount(transaction.getAmount())
-                .timestamp(transaction.getTimestamp())
-                .status(transaction.getStatus())
-                .transactionHash(transaction.getTransactionHash())
-                .fee(transaction.getFee())
-                .build();
-    }
-
 }
