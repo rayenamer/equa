@@ -51,11 +51,4 @@ public interface NodeRepository extends JpaRepository<Node, Integer> {
     @Query("SELECT n FROM Node n WHERE n.status = 'ONLINE' ORDER BY n.lastSeen DESC")
     List<Node> findOnlineNodes();
 
-    // Separate query for nodes WITH transactions
-    @Query("SELECT n FROM Node n WHERE n.transaction IS NOT NULL ORDER BY n.reputationScore DESC, n.lastSeen DESC")
-    List<Node> findNodesWithTransaction();
-
-    // Separate query for nodes WITHOUT transactions
-    @Query("SELECT n FROM Node n WHERE n.transaction IS NULL ORDER BY n.reputationScore DESC, n.lastSeen DESC")
-    List<Node> findNodesWithoutTransaction();
 }

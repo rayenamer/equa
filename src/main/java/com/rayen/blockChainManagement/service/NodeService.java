@@ -40,7 +40,7 @@ public class NodeService {
         node.setCreatedAt(now);
         node.setUpdatedAt(now);
         node.setLastSeen(now);
-        node.setReputationScore(0.0);
+        node.setReputationScore(20.0);
         node.setStatus("ONLINE");
 
         Node savedNode = nodeRepository.save(node);
@@ -65,42 +65,26 @@ public class NodeService {
             Double maxReputationScore,
             LocalDateTime lastSeenAfter,
             LocalDateTime lastSeenBefore,
-            LocalDateTime createdAfter,
-            Boolean hasTransaction
+            LocalDateTime createdAfter
     ) {
         log.debug("Fetching nodes with optional params");
 
         List<Node> nodes;
 
-        // Handle hasTransaction separately
-        if (hasTransaction != null) {
-            if (hasTransaction) {
-                nodes = nodeRepository.findNodesWithTransaction();
-            } else {
-                nodes = nodeRepository.findNodesWithoutTransaction();
-            }
+        nodes = nodeRepository.findAll();
+        nodes = nodes.stream()
+                .filter(n -> status == null || status.equals(n.getStatus()))
+                .filter(n -> publicKey == null || publicKey.equals(n.getPublicKey()))
+                .filter(n -> nodeType == null || nodeType.equals(n.getNodeType()))
+                .filter(n -> location == null || location.equals(n.getLocation()))
+                .filter(n -> ipAddress == null || ipAddress.equals(n.getIpAddress()))
+                .filter(n -> minReputationScore == null || n.getReputationScore() >= minReputationScore)
+                .filter(n -> maxReputationScore == null || n.getReputationScore() <= maxReputationScore)
+                .filter(n -> lastSeenAfter == null || n.getLastSeen().isAfter(lastSeenAfter))
+                .filter(n -> lastSeenBefore == null || n.getLastSeen().isBefore(lastSeenBefore))
+                .filter(n -> createdAfter == null || n.getCreatedAt().isAfter(createdAfter))
+                .toList();
 
-            // Apply additional filters in memory if hasTransaction is specified
-            nodes = nodes.stream()
-                    .filter(n -> status == null || status.equals(n.getStatus()))
-                    .filter(n -> publicKey == null || publicKey.equals(n.getPublicKey()))
-                    .filter(n -> nodeType == null || nodeType.equals(n.getNodeType()))
-                    .filter(n -> location == null || location.equals(n.getLocation()))
-                    .filter(n -> ipAddress == null || ipAddress.equals(n.getIpAddress()))
-                    .filter(n -> minReputationScore == null || n.getReputationScore() >= minReputationScore)
-                    .filter(n -> maxReputationScore == null || n.getReputationScore() <= maxReputationScore)
-                    .filter(n -> lastSeenAfter == null || n.getLastSeen().isAfter(lastSeenAfter))
-                    .filter(n -> lastSeenBefore == null || n.getLastSeen().isBefore(lastSeenBefore))
-                    .filter(n -> createdAfter == null || n.getCreatedAt().isAfter(createdAfter))
-                    .toList();
-        } else {
-            // Use the main query when hasTransaction is not specified
-            nodes = nodeRepository.findNodesByOptionalParams(
-                    status, publicKey, nodeType, location, ipAddress,
-                    minReputationScore, maxReputationScore,
-                    lastSeenAfter, lastSeenBefore, createdAfter
-            );
-        }
 
         return nodeMapper.toResponseList(nodes);
     }

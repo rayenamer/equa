@@ -10,6 +10,7 @@ import com.rayen.blockChainManagement.repository.TransactionRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
@@ -29,12 +30,11 @@ public class TransactionService {
     //26 letters × 10 digits = **260 possible combinations**
     private String generateHash() {
         Random random = new Random();
-        char letter = (char) ('a' + random.nextInt(26));
-        int number = random.nextInt(10);
-        return String.valueOf(letter) + number;
+        char letter = (char) ('a' + random.nextInt(6)); // a, b, c, d, e, f
+        return String.valueOf(letter);
     }
 
-    // Create
+    @Transactional
     public TransactionResponse createTransaction(TransactionRequest request) {
         Transaction transaction = Transaction.builder()
                 .fromWallet(request.getFromWallet())
@@ -112,12 +112,6 @@ public class TransactionService {
                 .collect(Collectors.toList());
     }
 
-    // Get confirmed blockchain transactions
-    public List<TransactionResponse> getBlockchainTransactions() {
-        return transactionRepository.findBlockchainTransactions()
-                .stream().map(transactionMapper::toResponse)
-                .collect(Collectors.toList());
-    }
 
     // Get by validator node
     public List<TransactionResponse> getByValidatorNodeId(Integer nodeId) {
