@@ -19,5 +19,9 @@ public class ForumTopicDTO {
     private String createdByUsername;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
+    /**
+     * Indique si le sujet est masqué (auto-hide ou modération).
+     */
+    private boolean hidden;
     private List<ForumMessageDTO> messages;
 }

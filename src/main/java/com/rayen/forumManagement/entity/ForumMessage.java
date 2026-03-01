@@ -31,6 +31,18 @@ public class ForumMessage {
     @Column(name = "message_text", nullable = false, columnDefinition = "TEXT")
     private String messageText;
 
+    /**
+     * URL d'un GIF associé au message (optionnel).
+     */
+    @Column(name = "gif_url", length = 500)
+    private String gifUrl;
+
+    /**
+     * Indique si le message est masqué suite aux signalements ou à une action de modération.
+     */
+    @Column(name = "hidden", nullable = false)
+    private boolean hidden = false;
+
     @Column(name = "created_at", updatable = false)
     private LocalDateTime createdAt;
 

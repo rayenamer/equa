@@ -9,7 +9,13 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class CreateForumMessageRequest {
 
-    /** ID de l'utilisateur qui envoie le message */
-    private Long authorId;
+    /**
+     * Contenu du message.
+     */
     private String messageText;
+
+    /**
+     * URL d'un GIF à afficher avec le message (optionnel).
+     */
+    private String gifUrl;
 }
