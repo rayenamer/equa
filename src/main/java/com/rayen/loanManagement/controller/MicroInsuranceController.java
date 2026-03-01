@@ -1,7 +1,9 @@
 package com.rayen.loanManagement.controller;
 
 import com.rayen.loanManagement.entity.MicroInsurance;
+import com.rayen.loanManagement.model.MicroInsuranceResponse;
 import com.rayen.loanManagement.service.IMicroInsuranceService;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -39,5 +41,29 @@ public class MicroInsuranceController {
     @PutMapping("/modify-micro-insurance")
     public MicroInsurance modifyMicroInsurance(@RequestBody MicroInsurance microInsurance) {
         return microInsuranceService.modifyMicroInsurance(microInsurance);
+    }
+
+    @PostMapping("/subscribe/{loanId}")
+    @ResponseStatus(HttpStatus.CREATED)
+    public MicroInsuranceResponse subscribe(
+            @PathVariable Long loanId,
+            @RequestParam String type,
+            @RequestParam Long userId) {
+        return microInsuranceService.subscribe(loanId, type, userId);
+    }
+
+    @GetMapping("/loan/{loanId}")
+    public List<MicroInsuranceResponse> getByLoan(@PathVariable Long loanId) {
+        return microInsuranceService.getByLoan(loanId);
+    }
+
+    @GetMapping("/user/{userId}")
+    public List<MicroInsuranceResponse> getByUser(@PathVariable Long userId) {
+        return microInsuranceService.getByUser(userId);
+    }
+
+    @DeleteMapping("/cancel/{insuranceId}")
+    public MicroInsuranceResponse cancelInsurance(@PathVariable Long insuranceId) {
+        return microInsuranceService.cancelInsurance(insuranceId);
     }
 }

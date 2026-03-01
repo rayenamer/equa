@@ -16,6 +16,12 @@ public class MicroInsurance {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long insuranceId;
 
+    private Long userId;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "loan_id")
+    private Loan loan;
+
     private String type;
     private Double coverageAmount;
     private Double premium;
