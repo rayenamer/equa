@@ -4,6 +4,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.rayen.blockChainManagement.entity.Node;
 import com.rayen.blockChainManagement.model.TransactionRequest;
 import com.rayen.blockChainManagement.model.TransactionResponse;
+import com.rayen.blockChainManagement.service.BlockchainAnalysisService;
 import com.rayen.blockChainManagement.service.SmartContract;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -12,6 +13,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.ExecutionException;
 
 @RestController
@@ -20,6 +22,8 @@ import java.util.concurrent.ExecutionException;
 @Slf4j
 public class SmartContractController {
     private final SmartContract smartContract;
+    private final BlockchainAnalysisService blockchainAnalysisService;
+
 
     @PostMapping("/process")
     public ResponseEntity<TransactionResponse> processTransaction(@RequestBody TransactionRequest request)
@@ -34,4 +38,11 @@ public class SmartContractController {
         return ResponseEntity.ok(smartContract.getAllNodesWithBlockchain());
     }
 
+    @GetMapping("/analyze")
+    public ResponseEntity<Map<String, String>> analyze() {
+        String analysis = blockchainAnalysisService.analyzeBlockchainState();
+        return ResponseEntity.ok(Map.of("analysis", analysis));
+    }
 }
+
+
