@@ -7,15 +7,13 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class CreateForumTopicRequest {
+public class UpdateForumMessageRequest {
+
+    private String messageText;
 
     /**
-     * Titre du sujet.
+     * Nouvelle URL de GIF (optionnel). Si null, on ne change pas la valeur.
      */
-    private String title;
-
-    /**
-     * Description / texte initial du sujet.
-     */
-    private String description;
+    private String gifUrl;
 }
+

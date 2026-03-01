@@ -17,4 +17,12 @@ public class ForumMessageDTO {
     private String authorUsername;
     private String messageText;
     private LocalDateTime createdAt;
+    /**
+     * URL d'un GIF associé au message (optionnel).
+     */
+    private String gifUrl;
+    /**
+     * Indique si le message est masqué (auto-hide ou modération).
+     */
+    private boolean hidden;
 }
