@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 
 @Entity
@@ -21,6 +22,11 @@ public class Loan {
     private float interestRate;
     private String status;
     private LocalDate dueDate;
+    private Integer durationMonths;
+    private LocalDate startDate;
+
+    @Column(precision = 18, scale = 2)
+    private BigDecimal monthlyPayment;
 
     public void approveLoan() {
         this.status = "APPROVED";

@@ -1,6 +1,7 @@
 package com.rayen.loanManagement.controller;
 
 import com.rayen.loanManagement.entity.CreditScore;
+import com.rayen.loanManagement.model.CreditScoreResponse;
 import com.rayen.loanManagement.service.ICreditScoreService;
 import org.springframework.web.bind.annotation.*;
 
@@ -49,5 +50,15 @@ public class CreditScoreController {
             return creditScoreService.modifyCreditScore(creditScore);
         }
         return null;
+    }
+
+    @PostMapping("/evaluate/{userId}")
+    public CreditScoreResponse evaluateCreditScore(@PathVariable Long userId) {
+        return creditScoreService.evaluateCreditScore(userId);
+    }
+
+    @GetMapping("/user/{userId}")
+    public CreditScoreResponse getScoreByUserId(@PathVariable Long userId) {
+        return creditScoreService.getScoreByUserId(userId);
     }
 }
