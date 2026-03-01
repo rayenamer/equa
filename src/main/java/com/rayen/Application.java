@@ -22,6 +22,3 @@ public class Application {
         return "Hello from Equa!";
     }
 }
-//test
-//test2
-//teeeeeeeeeeeeeeeeeeeeeeeeest

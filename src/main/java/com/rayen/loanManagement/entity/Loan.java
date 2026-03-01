@@ -1,16 +1,15 @@
 package com.rayen.loanManagement.entity;
 
 import jakarta.persistence.*;
-import lombok.*;
+import lombok.Getter;
+import lombok.Setter;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 
-@Data
-@AllArgsConstructor
-@NoArgsConstructor
+@Entity
 @Getter
 @Setter
-@Entity
 @Table(name = "loans")
 public class Loan {
 
@@ -19,26 +18,21 @@ public class Loan {
     private Long loanId;
 
     private Long userId;
-    private Double amount;
-    private Double interestRate;
-    private String status; // PENDING, APPROVED, REJECTED, PAID
+    private float amount;
+    private float interestRate;
+    private String status;
     private LocalDate dueDate;
+    private Integer durationMonths;
+    private LocalDate startDate;
 
-    @OneToOne
-    @JoinColumn(name = "insurance_id")
-    private MicroInsurance insurance;
-
-    @ManyToOne
-    @JoinColumn(name = "credit_score_id")
-    private CreditScore creditScore;
+    @Column(precision = 18, scale = 2)
+    private BigDecimal monthlyPayment;
 
     public void approveLoan() {
         this.status = "APPROVED";
     }
 
-    public Double calculateInterest() {
-        return amount * interestRate;
+    public float calculateInterest() {
+        return amount * interestRate / 100;
     }
-
 }
-
