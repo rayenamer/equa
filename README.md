@@ -42,8 +42,7 @@ docker-compose up -d
 **What this does**:
 - Downloads PostgreSQL 16 Alpine image (if not already downloaded)
 - Creates a container named `equa-postgres`
-- Starts PostgreSQL on port `5432`
-- Creates database `equadb` with user `equauser` and password `equapass`
+- Starts PostgreSQL on port `5433`
 - Runs in detached mode (background)
 
 **Verify it's running**:
@@ -52,109 +51,29 @@ docker ps
 ```
 
 You should see `equa-postgres` in the list.
+### 4. add this file (.env) to your project
+```bash
+CONTACT RAYEN FOR FILE
+```
 
-### 3. Build the Project
+### 4. Build the Project
 ```bash
 mvn clean install
 ```
 
-### 4. Run the Application
+### 5. Run the Application
 ```bash
 mvn spring-boot:run
 ```
 
-**Expected output**:
-```
-Started Application in X.XXX seconds
-Tomcat started on port 8080 (http)
-```
-
-### 5. Verify the Application
+### 6. Verify the Application
 Open your browser and visit:
 ```
-http://localhost:8080/swagger-ui/index.html
+http://localhost:8081/swagger-ui/index.html
 ```
-
-You should see the Swagger UI with all available API endpoints!
-
-**Note:** Si le serveur tourne sur le port **8081**, utilisez : http://localhost:8081/swagger-ui.html
-
----
-
-## 📋 Gestions et API (Authentication, User, Forum)
-
-Le projet expose trois groupes d’API documentés dans Swagger : **Authentication**, **User Management** et **Forum Management**. Voici ce que fait chaque gestion et la liste des endpoints.
-
-**En résumé** :  
-- **Auth** : inscription (signup) et connexion (signin) avec token JWT.  
-- **User** : CRUD, rôles/permissions, audit logs.  
-- **Forum** : sujets de discussion (topics) et messages ; **tous les utilisateurs** peuvent créer des sujets et envoyer des messages.
-
-### 1. Authentication (Authentification)
-
-**Rôle** : Inscription et connexion des utilisateurs. Retourne un **token JWT** utilisé pour accéder aux endpoints protégés.
-
-| Méthode | Endpoint | Description |
-|--------|----------|-------------|
-| POST | `/api/auth/signup` | Inscrire un nouvel utilisateur (username, email, password, userType, permissions si OBSERVER). Retourne token + infos user. |
-| POST | `/api/auth/signin` | Connexion avec email et mot de passe. Retourne token JWT. |
-
-**Fonctionnement** : Après **signup** ou **signin**, le client reçoit un `token`. Pour les appels protégés, il envoie l’en-tête : `Authorization: Bearer <token>`.
-
----
-
-### 2. User Management (Gestion des utilisateurs)
-
-**Rôle** : CRUD utilisateurs (ASSISTANT / OBSERVER), rôles/permissions, et journaux d’audit.
-
-| Méthode | Endpoint | Description |
-|--------|----------|-------------|
-| GET | `/api/users` | Liste de tous les utilisateurs. |
-| GET | `/api/users/{id}` | Détail d’un utilisateur par ID. |
-| POST | `/api/users` | Créer un user (ASSISTANT ou OBSERVER). Body : username, email, userType, permissions (optionnel). |
-| PUT | `/api/users/{id}` | Modifier un utilisateur (username, email, etc.). |
-| DELETE | `/api/users/{id}` | Supprimer un utilisateur. |
-| GET | `/api/users/{id}/roles` | Obtenir le type et les permissions d’un user. |
-| PUT | `/api/users/{id}/roles` | Mettre à jour rôles et permissions (OBSERVER). |
-| GET | `/api/users/audit-logs` | Tous les journaux d’audit. |
-| GET | `/api/users/observers/{observerUserId}/audit-logs` | Journaux d’audit d’un observateur. |
-| POST | `/api/users/observers/{observerUserId}/audit-log` | Enregistrer une action d’audit (ObserverUser). |
-
-**Fonctionnement** : Les utilisateurs sont stockés en base (table `users` + `assistant_users` / `observer_users`). Les OBSERVER ont des permissions (VIEW_LOGS, AUDIT, etc.). Les audit logs lient une action à un observateur.
-
----
-
-### 3. Forum Management (Gestion forum)
-
-**Rôle** : Sujets de discussion (topics) et messages. **Tous les utilisateurs** peuvent créer des sujets et envoyer des messages dans n’importe quel sujet.
-
-| Méthode | Endpoint | Description |
-|--------|----------|-------------|
-| GET | `/api/forum/topics` | Liste de tous les sujets. |
-| GET | `/api/forum/topics/{id}` | Détail d’un sujet (avec ses messages). |
-| GET | `/api/forum/topics/by-user/{userId}` | Sujets créés par un utilisateur. |
-| POST | `/api/forum/topics` | Créer un sujet. Body : createdById, title, description. |
-| PUT | `/api/forum/topics/{id}` | Modifier titre / description d’un sujet. |
-| DELETE | `/api/forum/topics/{id}` | Supprimer un sujet. |
-| POST | `/api/forum/topics/{id}/messages` | Envoyer un message dans un sujet. Body : authorId, messageText. |
-| GET | `/api/forum/topics/{id}/messages` | Liste des messages d’un sujet. |
-
-**Fonctionnement** : Un **sujet** (ForumTopic) a un titre, une description et un créateur (User). Les **messages** (ForumMessage) sont liés à un sujet et à un auteur (User). Tout utilisateur peut créer un sujet et poster dans n’importe quel sujet. En base : tables **forum_topics** et **forum_messages**.
-
-**Documentation détaillée** : [docs/FORUM_MANAGEMENT.md](docs/FORUM_MANAGEMENT.md).  
-**Guide de test Swagger** : [docs/SWAGGER_TEST_GUIDE.md](docs/SWAGGER_TEST_GUIDE.md).
-
----
 
 ## 🔀 Git Workflow
 
-### Branch Protection Rules
-- **main** branch is **protected**
-- **No one** can push directly to `main`
-- All changes must go through **Pull Requests**
-- Only **RAYEN** can approve and merge PRs
-
-### Development Workflow
 
 #### Step 1: Create a New Branch
 Before starting any work, create a feature branch:
@@ -259,145 +178,6 @@ docker ps
 - RAYEN will accept merge request only if build job was successful
 ---
 
-## 🧱 Architecture & Layers
-Each domain module follows a **layered architecture**. Here's what each layer does:
-### 📂 **entity/** - Database Entities
-**Purpose**: Represents database tables using JPA annotations.
-**Rules**:
-- Maps directly to database tables
-- Uses `@Entity`, `@Table`, `@Id`, `@GeneratedValue` annotations
-- Contains only database-related fields
-- Includes getters and setters
-**Example**:
-```java
-package com.rayen.usermanagement.entity;
-import jakarta.persistence.*;
-@Entity
-@Table(name = "users")
-public class User {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-    
-    private String name;
-    private String email;
-    
-    // Getters and Setters
-}
-```
-
----
-
-### 📂 **repository/** - Database Access Layer
-**Purpose**: Direct communication with the database. **NO business logic here!**
-
-**Rules**:
-- Extends `JpaRepository<Entity, ID>`
-- Contains ONLY database queries
-- No business logic
-- Annotated with `@Repository`
-
-**Example**:
-```java
-package com.rayen.usermanagement.repository;
-
-import com.rayen.usermanagement.entity.User;
-import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.stereotype.Repository;
-
-@Repository
-public interface UserRepository extends JpaRepository<User, Long> {
-    // Custom queries can be added here
-    User findByEmail(String email);
-}
-```
-
----
-
-### 📂 **model/** - Data Transfer Objects (DTOs)
-**Purpose**: Objects used to transfer data between layers (API ↔ Service).
-
-**Rules**:
-- **Never** expose entities directly in APIs
-- Contains only fields needed for API requests/responses
-- No JPA annotations
-- Clean, simple POJOs
-
-**Example**:
-```java
-package com.rayen.usermanagement.model;
-
-public class UserDTO {
-    private Long id;
-    private String name;
-    private String email;
-    
-    // Getters and Setters
-}
-```
-
-**Why DTOs?**
-- Security: Hide internal database structure
-- Flexibility: API can have different fields than database
-- Versioning: Change API without changing database
-
----
-
-### 📂 **service/** - Business Logic Layer
-**Purpose**: Contains all business logic, validation, and data transformation.
-
-**Rules**:
-- Annotated with `@Service`
-- Uses repositories to access data
-- Converts between Entity ↔ DTO
-- Contains validation logic
-- Contains all business rules
-
-**Example**:
-```java
-package com.rayen.usermanagement.service;
-
-@Service
-public class UserService {
-    @Autowired
-    private UserRepository userRepository;
-
-    public List<UserDTO> getAllUsers() {
-        return userRepository.findAll().stream()
-            .map(this::convertToDTO)
-            .collect(Collectors.toList());
-    }
-}
-```
-
----
-
-### 📂 **controller/** - REST API Endpoints
-**Purpose**: Exposes REST endpoints to the outside world.
-
-**Rules**:
-- Annotated with `@RestController` and `@RequestMapping`
-- **NO business logic** - delegates to service layer
-- Uses DTOs (not entities) in request/response
-- Handles HTTP methods: `@GetMapping`, `@PostMapping`, `@PutMapping`, `@DeleteMapping`
-
-**Example**:
-```java
-package com.rayen.usermanagement.controller;
-
-@RestController
-@RequestMapping("/api/users")
-public class UserController {
-    @Autowired
-    private UserService userService;
-
-    @GetMapping
-    public List<UserDTO> getAllUsers() {
-        return userService.getAllUsers();
-    }
-}
-```
----
 
 ## ✅ Checklist for First Time Dev
 
@@ -405,10 +185,11 @@ public class UserController {
 - [ ] Install Maven 3.8.8
 - [ ] Install Docker and Docker Compose
 - [ ] Clone the repository
+- [ ] Create the .env file locally
 - [ ] Start PostgreSQL: `docker-compose up -d`
 - [ ] Build project: `mvn clean install`
 - [ ] Run application: `mvn spring-boot:run`
-- [ ] Access Swagger: http://localhost:8080/swagger-ui/index.html
+- [ ] Access Swagger: http://localhost:8081/swagger-ui/index.html
 - [ ] Create your first feature branch
 - [ ] Read the architecture section
 - [ ] Understand the layer responsibilities

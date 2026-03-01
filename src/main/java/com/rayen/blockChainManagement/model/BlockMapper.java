@@ -22,8 +22,6 @@ public class BlockMapper {
                 .blockSize(block.getBlockSize())
                 .previousBlockId(block.getPreviousBlock() != null ?
                         block.getPreviousBlock().getBlockId() : null)
-                .nextBlockId(block.getNextBlock() != null ?
-                        block.getNextBlock().getBlockId() : null)
                 .createdAt(block.getCreatedAt())
                 .updatedAt(block.getUpdatedAt())
                 .build();

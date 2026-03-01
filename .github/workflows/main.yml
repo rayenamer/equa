@@ -2,13 +2,13 @@ name: Build
 
 on:
   push:
-    branches: [ '**' ]  # triggers on push to any branch
-  workflow_dispatch:    # allows manual trigger from GitHub
+    branches: [ '**' ]
 
 jobs:
   build:
     runs-on: ubuntu-latest
 
+    # Spin up a Postgres service container for tests
     services:
       postgres:
         image: postgres:16-alpine
@@ -17,7 +17,7 @@ jobs:
           POSTGRES_USER: equauser
           POSTGRES_PASSWORD: equapass
         ports:
-          - 5432:5432
+          - 5433:5432
         options: >-
           --health-cmd pg_isready
           --health-interval 10s
@@ -36,7 +36,15 @@ jobs:
           cache: maven
 
       - name: Build with Maven
-        run: mvn clean install --batch-mode --no-transfer-progress
+        env:
+          DB_URL: jdbc:postgresql://127.0.0.1:5433/equadb
+          DB_USERNAME: equauser
+          DB_PASSWORD: equapass
+          GOOGLE_CLIENT_ID: ${{ secrets.GOOGLE_CLIENT_ID }}
+          GOOGLE_CLIENT_SECRET: ${{ secrets.GOOGLE_CLIENT_SECRET }}
+          RECAPTCHA_SECRET_KEY: ${{ secrets.RECAPTCHA_SECRET_KEY }}
+          OAUTH2_REDIRECT_URI: http://localhost:8081/swagger-ui.html
+          PASSWORD_RESET_BASE_URL: http://localhost:8081/swagger-ui.html
+        run: mvn clean verify
 
-      - name: Run tests
-        run: mvn test --batch-mode --no-transfer-progress
+

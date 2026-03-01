@@ -37,8 +37,7 @@ public class NodeMapper {
                 .reputationScore(node.getReputationScore())
                 .lastSeen(node.getLastSeen())
                 .location(node.getLocation())
-                .connectedNodesCount(node.getConnectedNodes() != null ? node.getConnectedNodes().size() : 0)
-                .hasTransaction(node.getTransaction() != null)
+                .hasTransaction(node.getTransactions() != null)
                 .createdAt(node.getCreatedAt())
                 .updatedAt(node.getUpdatedAt())
                 .build();
