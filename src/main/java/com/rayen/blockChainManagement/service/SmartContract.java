@@ -137,7 +137,7 @@ public class SmartContract {
 
     public TransactionResponse processTransaction(TransactionRequest request) throws BadRequestException, JsonProcessingException, ExecutionException, InterruptedException {
         TransactionResponse response = transactionService.createTransaction(request);
-        //TODO : VALIDATE TOKENS NUMBER FROM WALLETS
+        //TODO : VALIDATE TOKEN BALANCE FROM WALLETS
         validateTransaction(response.getTransactionId());
         addToBlock(response.getTransactionId());
         updateNodes();
