@@ -12,6 +12,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.concurrent.ExecutionException;
 
 @RestController
 @RequestMapping("/api/v1/smartContract")
@@ -22,7 +23,7 @@ public class SmartContractController {
 
     @PostMapping("/process")
     public ResponseEntity<TransactionResponse> processTransaction(@RequestBody TransactionRequest request)
-            throws BadRequestException, JsonProcessingException {
+            throws BadRequestException, JsonProcessingException, ExecutionException, InterruptedException {
         log.info("Processing transaction from wallet: {}", request.getFromWallet());
         TransactionResponse response = smartContract.processTransaction(request);
         return ResponseEntity.ok(response);
