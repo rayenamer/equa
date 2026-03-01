@@ -2,15 +2,27 @@
 
 ## 🎯 Project Overview
 
-**Equa** is a Spring Boot 3.2.1 application built with a domain-driven design approach. Each business domain (e.g., User Management, Wallet Management, Payment Management) is organized in its own package with a complete set of layers.
+**Equa** is a microservices-based Spring Boot application built with a domain-driven design approach. The platform includes a Wallet Management service with advanced business rules, a Python AI risk scoring microservice, Eureka service discovery, and an API Gateway — all orchestrated via Docker Compose.
 
 ### Tech Stack
-- **Java**: 21.0.9
+- **Java**: 21
 - **Spring Boot**: 3.2.1
-- **Maven**: 3.8.8 
+- **Spring Cloud**: 2023.0.0 (Eureka, Gateway)
+- **Maven**: 3.8.8
 - **Database**: PostgreSQL 16
-- **Docker**: For containerized database
+- **Python**: 3.11 (Flask + scikit-learn AI service)
+- **Docker / Docker Compose**: Full stack orchestration
 - **Swagger/OpenAPI**: API documentation
+- **WebSocket (STOMP)**: Real-time notifications
+
+### Microservices Architecture
+| Service | Port | Technology |
+|---------|------|------------|
+| Eureka Server | 8761 | Spring Cloud Netflix |
+| API Gateway | 8088 | Spring Cloud Gateway |
+| Wallet Service | 8080 | Spring Boot + JPA |
+| AI Service | 5000 | Python Flask + scikit-learn |
+| PostgreSQL | 5432 | PostgreSQL 16 |
 
 ---
 
@@ -18,10 +30,10 @@
 
 Before running this project, ensure you have the following installed:
 
-### 1. Java 21
+### 1. Java 21+
 ```bash
 java -version
-# Should show: openjdk version "21.0.9" or higher
+# Should show: openjdk version "21.x" or higher
 ```
 
 If not installed:
@@ -78,6 +90,31 @@ equa/
 │                   ├── Application.java (Main Spring Boot application)
 │                   ├── config/
 │                   │   └── OpenApiConfig.java (Swagger configuration)
+│                   ├── walletManagement/
+│                   │   ├── controller/
+│                   │   │   ├── WalletController.java
+│                   │   │   ├── TokenController.java
+│                   │   │   ├── AssetController.java
+│                   │   │   └── GlobalExceptionHandler.java
+│                   │   ├── entity/
+│                   │   │   ├── Wallet.java
+│                   │   │   ├── Token.java
+│                   │   │   └── Asset.java
+│                   │   ├── model/
+│                   │   │   ├── WalletDTO.java
+│                   │   │   ├── TokenDTO.java
+│                   │   │   ├── AssetDTO.java
+│                   │   │   ├── TransferRequest.java
+│                   │   │   └── RiskAssessmentDTO.java
+│                   │   ├── repository/
+│                   │   │   ├── WalletRepository.java
+│                   │   │   ├── TokenRepository.java
+│                   │   │   └── AssetRepository.java
+│                   │   └── service/
+│                   │       ├── WalletService.java
+│                   │       ├── TokenService.java
+│                   │       ├── AssetService.java
+│                   │       └── RiskAssessmentService.java
 │                   ├── blockChainManagement/
 │                   │   ├── controller/
 │                   │   ├── entity/
@@ -99,6 +136,7 @@ equa/
 │                   └── ... (other domain modules)
 │       └── resources/
 │           └── application.properties
+├── Dockerfile
 ├── docker-compose.yml
 ├── pom.xml
 └── README.md
@@ -310,7 +348,156 @@ public class UserController {
 
 ---
 
-## 🚀 Getting Started
+## � Wallet Management Module (Safwen)
+
+### Description
+
+Le module **walletManagement** gère la partie financière du système. Le wallet est l'équivalent d'un compte bancaire interne. Il gère le solde, les entrées/sorties de tokens, la disponibilité de la valeur, et la traçabilité complète des opérations.
+
+> **Finance = règles de débit/crédit, pas blockchain.**
+
+### Entités & Relations
+
+```
+User (1) ──────── (1) Wallet
+                        │
+                   (1) ──── (*) Token
+                        │
+                   (1) ──── (*) Asset
+```
+
+| Entité | Table | Description |
+|--------|-------|-------------|
+| **Wallet** | `wallets` | Compte principal : solde, clé publique, statut, historique des transactions |
+| **Token** | `tokens` | Unité de valeur interne avec taux de conversion fixe (anti-volatilité) |
+| **Asset** | `assets` | Bien enregistré (immobilier, véhicule, équipement, digital) avec collatéral |
+
+### Règles Métiers Avancées
+
+#### 1. Finance dans le Wallet
+- **Dépôt / Retrait** : avec limites par transaction (max 50 000) et seuil minimum de solde (10)
+- **Transfert** : entre wallets via ID ou clé publique, avec validation croisée
+- **Historique** : chaque opération (SEND, RECEIVE, DEPOSIT, WITHDRAW) est tracée avec timestamp
+
+#### 2. Gestion du Risque
+- **Règles métiers** : validation du statut wallet (ACTIVE/SUSPENDED/CLOSED), vérification de solde
+- **Indicateurs financiers** : ratio couverture d'actifs, taux de remboursement, nombre de retards
+- **Scoring simple** : calcul automatique basé sur l'historique des transactions
+
+#### 3. Stabilité de la Valeur (Anti-Volatilité)
+- Le token a une **valeur fixe ou encadrée** (taux de conversion entre 0.5 et 2.0)
+- **Logique de conversion interne** : `valeur convertie = valeur × taux de conversion`
+- **Aucune spéculation** : le taux est borné et contrôlé
+
+#### 4. Traçabilité & Audit Financier
+- Chaque wallet maintient un `transactionHistory` complet
+- Enregistrement automatique de : dépôts, retraits, transferts, enregistrement d'actifs, revaluations
+- Format : `timestamp | TYPE_OPÉRATION | montant | détails`
+
+### Modèle IA — Scoring & Prédiction
+
+Le service `RiskAssessmentService` implémente un **modèle de scoring de crédit** simulant une régression logistique :
+
+| Composant | Description |
+|-----------|-------------|
+| **Credit Score** | Score 300–850 (type FICO) avec facteurs pondérés |
+| **Prédiction de défaut** | Fonction sigmoïde avec coefficients entraînés simulés |
+| **Classification du risque** | LOW / MEDIUM / HIGH / CRITICAL |
+| **Recommandation** | APPROVE / REVIEW / DENY avec justification |
+
+**Facteurs du score :**
+- Stabilité du solde (25%)
+- Couverture d'actifs (25%)
+- Historique de transactions (20%)
+- Retards de paiement (20%)
+- Taux de remboursement (10%)
+
+**Endpoint :** `GET /api/wallets/risk/{customerId}`
+
+### API Endpoints
+
+#### Wallet (`/api/wallets`)
+
+| Méthode | Endpoint | Description |
+|---------|----------|-------------|
+| GET | `/api/wallets` | Lister tous les wallets |
+| GET | `/api/wallets/{id}` | Wallet par ID |
+| GET | `/api/wallets/customer/{customerId}` | Wallet par customer |
+| POST | `/api/wallets` | Créer un wallet |
+| PUT | `/api/wallets/{id}` | Modifier un wallet |
+| DELETE | `/api/wallets/{id}` | Supprimer un wallet (solde doit être 0) |
+| POST | `/api/wallets/{id}/deposit?amount=X` | Déposer des fonds |
+| POST | `/api/wallets/{id}/withdraw?amount=X` | Retirer des fonds |
+| POST | `/api/wallets/{id}/transfer` | Transférer des tokens (body: TransferRequest) |
+| PUT | `/api/wallets/{id}/suspend` | Suspendre un wallet |
+| PUT | `/api/wallets/{id}/activate` | Activer un wallet |
+| GET | `/api/wallets/low-balance?threshold=X` | Wallets à solde faible |
+| GET | `/api/wallets/risk/{customerId}` | Évaluation de risque IA |
+
+#### Token (`/api/tokens`)
+
+| Méthode | Endpoint | Description |
+|---------|----------|-------------|
+| GET | `/api/tokens` | Lister tous les tokens |
+| GET | `/api/tokens/{id}` | Token par ID |
+| GET | `/api/tokens/wallet/{walletId}` | Tokens par wallet |
+| GET | `/api/tokens/customer/{customerId}` | Tokens par customer |
+| POST | `/api/tokens` | Créer un token |
+| PUT | `/api/tokens/{id}` | Modifier un token |
+| DELETE | `/api/tokens/{id}` | Supprimer un token |
+| POST | `/api/tokens/{tokenId}/transfer?recipientCustomerId=X&amount=Y` | Transférer avec conversion |
+| GET | `/api/tokens/wallet/{walletId}/total-value` | Valeur totale convertie |
+
+#### Asset (`/api/assets`)
+
+| Méthode | Endpoint | Description |
+|---------|----------|-------------|
+| GET | `/api/assets` | Lister tous les assets |
+| GET | `/api/assets/{id}` | Asset par ID |
+| GET | `/api/assets/wallet/{walletId}` | Assets par wallet |
+| GET | `/api/assets/owner/{ownerId}` | Assets par propriétaire |
+| GET | `/api/assets/type/{assetType}` | Assets par type |
+| POST | `/api/assets` | Enregistrer un asset (crédite 10% en collatéral) |
+| PUT | `/api/assets/{id}/value?newValue=X` | Revaloriser (ajuste le collatéral) |
+| PUT | `/api/assets/{id}/transfer?newOwnerId=X` | Transférer la propriété |
+| DELETE | `/api/assets/{id}` | Supprimer un asset |
+| GET | `/api/assets/wallet/{walletId}/total-value` | Valeur totale des assets |
+
+### Dockerisation
+
+L'application est entièrement dockerisée avec un build multi-stage :
+
+```bash
+# Lancer PostgreSQL seul (développement local)
+docker-compose up -d postgres
+
+# Lancer toute la stack (PostgreSQL + Spring Boot)
+docker-compose up --build
+
+# Arrêter
+docker-compose down
+```
+
+Le `Dockerfile` utilise :
+- **Stage 1** : `maven:3.8.8-eclipse-temurin-21` pour compiler
+- **Stage 2** : `eclipse-temurin:21-jre-alpine` pour l'exécution (image légère)
+
+### Exemple Concret
+
+```
+1. User crée un wallet    → POST /api/wallets { "customerId": 1 }
+2. User dépose des fonds  → POST /api/wallets/1/deposit?amount=5000
+3. User enregistre un bien → POST /api/assets { "ownerId": "1", "assetType": "REAL_ESTATE", "value": 100000, "walletId": 1 }
+   → Le wallet reçoit 10 000 en collatéral (10% de la valeur)
+4. User crée des tokens   → POST /api/tokens { "value": 1000, "customerId": 1, "walletId": 1 }
+5. User transfère         → POST /api/wallets/1/transfer { "amount": 500, "recipientWalletId": 2 }
+6. Évaluation de risque   → GET /api/wallets/risk/1
+   → Retourne : creditScore, riskLevel, defaultProbability, recommendation
+```
+
+---
+
+## �🚀 Getting Started
 
 ### 1. Clone the Repository
 ```bash

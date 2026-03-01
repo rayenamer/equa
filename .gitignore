@@ -26,3 +26,27 @@ node_modules/
 
 # Env files
 .env
+
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+dist/
+venv/
+.venv/
+ai-service/models/
+
+# Docker
+docker-compose.override.yml
+
+# Eureka / Gateway build
+eureka-server/target/
+gateway/target/
+
+# Compiled classes
+*.class
+
+# Package files
+*.jar
+*.war
+*.ear

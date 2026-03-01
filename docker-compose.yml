@@ -1,6 +1,8 @@
 version: '3.8'
 
 services:
+
+  # ==================== DATABASE ====================
   postgres:
     image: postgres:16-alpine
     container_name: equa-postgres
@@ -12,6 +14,103 @@ services:
       - "5432:5432"
     volumes:
       - postgres_data:/var/lib/postgresql/data
+    networks:
+      - equa-network
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U equauser -d equadb"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # ==================== EUREKA DISCOVERY SERVER ====================
+  eureka-server:
+    build:
+      context: ./eureka-server
+      dockerfile: Dockerfile
+    container_name: equa-eureka
+    ports:
+      - "8761:8761"
+    networks:
+      - equa-network
+    healthcheck:
+      test: ["CMD-SHELL", "curl -f http://localhost:8761/actuator/health || exit 1"]
+      interval: 15s
+      timeout: 10s
+      retries: 10
+      start_period: 40s
+
+  # ==================== WALLET SERVICE (Spring Boot) ====================
+  wallet-service:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: equa-wallet
+    ports:
+      - "8080:8080"
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/equadb
+      SPRING_DATASOURCE_USERNAME: equauser
+      SPRING_DATASOURCE_PASSWORD: equapass
+      SPRING_JPA_HIBERNATE_DDL_AUTO: update
+      EUREKA_CLIENT_SERVICE_URL_DEFAULTZONE: http://eureka-server:8761/eureka/
+      SPRING_APPLICATION_NAME: wallet-service
+      AI_SERVICE_URL: http://ai-service:5000
+    depends_on:
+      postgres:
+        condition: service_healthy
+      eureka-server:
+        condition: service_healthy
+    networks:
+      - equa-network
+    healthcheck:
+      test: ["CMD-SHELL", "curl -f http://localhost:8080/actuator/health || exit 1"]
+      interval: 15s
+      timeout: 10s
+      retries: 10
+      start_period: 60s
+
+  # ==================== AI SERVICE (Python Flask) ====================
+  ai-service:
+    build:
+      context: ./ai-service
+      dockerfile: Dockerfile
+    container_name: equa-ai
+    ports:
+      - "5000:5000"
+    environment:
+      EUREKA_SERVER_URL: http://eureka-server:8761/eureka/
+      APP_NAME: AI-SERVICE
+      INSTANCE_HOST: ai-service
+      INSTANCE_PORT: 5000
+    depends_on:
+      eureka-server:
+        condition: service_healthy
+    networks:
+      - equa-network
+    healthcheck:
+      test: ["CMD-SHELL", "python -c \"import urllib.request; urllib.request.urlopen('http://localhost:5000/health')\" || exit 1"]
+      interval: 15s
+      timeout: 10s
+      retries: 8
+      start_period: 45s
+
+  # ==================== API GATEWAY ====================
+  gateway:
+    build:
+      context: ./gateway
+      dockerfile: Dockerfile
+    container_name: equa-gateway
+    ports:
+      - "8088:8088"
+    environment:
+      EUREKA_CLIENT_SERVICE_URL_DEFAULTZONE: http://eureka-server:8761/eureka/
+    depends_on:
+      eureka-server:
+        condition: service_healthy
+      wallet-service:
+        condition: service_healthy
+      ai-service:
+        condition: service_healthy
     networks:
       - equa-network
 
