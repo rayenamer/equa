@@ -7,6 +7,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
@@ -41,9 +42,12 @@ public class ForumController {
     }
 
     @PostMapping("/topics")
-    @Operation(summary = "Create a new topic (any user)")
-    public ResponseEntity<ForumTopicDTO> createTopic(@RequestBody CreateForumTopicRequest request) {
-        ForumTopicDTO created = forumService.createTopic(request);
+    @Operation(summary = "Create a new topic (any authenticated user)")
+    public ResponseEntity<ForumTopicDTO> createTopic(
+            @RequestBody CreateForumTopicRequest request,
+            Authentication authentication) {
+        String email = authentication != null ? (String) authentication.getPrincipal() : null;
+        ForumTopicDTO created = forumService.createTopic(request, email);
         return ResponseEntity.status(HttpStatus.CREATED).body(created);
     }
 
@@ -61,11 +65,13 @@ public class ForumController {
     }
 
     @PostMapping("/topics/{id}/messages")
-    @Operation(summary = "Add a message to a topic (any user)")
+    @Operation(summary = "Add a message to a topic (any authenticated user)")
     public ResponseEntity<ForumMessageDTO> addMessage(
             @PathVariable Long id,
-            @RequestBody CreateForumMessageRequest request) {
-        ForumMessageDTO message = forumService.addMessage(id, request);
+            @RequestBody CreateForumMessageRequest request,
+            Authentication authentication) {
+        String email = authentication != null ? (String) authentication.getPrincipal() : null;
+        ForumMessageDTO message = forumService.addMessage(id, request, email);
         return ResponseEntity.status(HttpStatus.CREATED).body(message);
     }
 
@@ -73,6 +79,73 @@ public class ForumController {
     @Operation(summary = "Get all messages of a topic")
     public List<ForumMessageDTO> getMessages(@PathVariable Long id) {
         return forumService.getMessages(id);
+    }
+
+    @PutMapping("/messages/{id}")
+    @Operation(summary = "Update a message", description = "Met à jour le texte d'un message. Le filtrage de langage inapproprié est réappliqué.")
+    public ForumMessageDTO updateMessage(
+            @PathVariable Long id,
+            @RequestBody UpdateForumMessageRequest request) {
+        return forumService.updateMessage(id, request);
+    }
+
+    @DeleteMapping("/messages/{id}")
+    @Operation(summary = "Delete a message")
+    public ResponseEntity<Void> deleteMessage(@PathVariable Long id) {
+        forumService.deleteMessage(id);
+        return ResponseEntity.noContent().build();
+    }
+
+    // --- Reports & moderation ---
+
+    @PostMapping("/topics/{id}/reports")
+    @Operation(summary = "Report a topic", description = "Signaler un sujet inapproprié. Au-delà d'un certain nombre de signalements, le sujet est automatiquement masqué.")
+    public ResponseEntity<ForumReportDTO> reportTopic(
+            @PathVariable Long id,
+            @RequestBody CreateForumReportRequest request,
+            Authentication authentication) {
+        String email = authentication != null ? (String) authentication.getPrincipal() : null;
+        ForumReportDTO report = forumService.reportTopic(id, request, email);
+        return ResponseEntity.status(HttpStatus.CREATED).body(report);
+    }
+
+    @PostMapping("/messages/{id}/reports")
+    @Operation(summary = "Report a message", description = "Signaler un message inapproprié. Au-delà d'un certain nombre de signalements, le message est automatiquement masqué.")
+    public ResponseEntity<ForumReportDTO> reportMessage(
+            @PathVariable Long id,
+            @RequestBody CreateForumReportRequest request,
+            Authentication authentication) {
+        String email = authentication != null ? (String) authentication.getPrincipal() : null;
+        ForumReportDTO report = forumService.reportMessage(id, request, email);
+        return ResponseEntity.status(HttpStatus.CREATED).body(report);
+    }
+
+    @GetMapping("/reports/pending")
+    @Operation(summary = "Get all pending reports", description = "Liste des signalements en attente, pour la modération par les assistants.")
+    public List<ForumReportDTO> getPendingReports() {
+        return forumService.getPendingReports();
+    }
+
+    @GetMapping("/topics/{id}/reports")
+    @Operation(summary = "Get all reports for a topic")
+    public List<ForumReportDTO> getReportsForTopic(@PathVariable Long id) {
+        return forumService.getReportsForTopic(id);
+    }
+
+    @GetMapping("/messages/{id}/reports")
+    @Operation(summary = "Get all reports for a message")
+    public List<ForumReportDTO> getReportsForMessage(@PathVariable Long id) {
+        return forumService.getReportsForMessage(id);
+    }
+
+    @PostMapping("/reports/{id}/moderate")
+    @Operation(summary = "Moderate a report", description = "Action de modération par un ASSISTANT. Action = HIDE (masquer sujet/message) ou IGNORE (rejeter).")
+    public ForumReportDTO moderateReport(
+            @PathVariable Long id,
+            @RequestBody ModerateForumReportRequest request,
+            Authentication authentication) {
+        String email = authentication != null ? (String) authentication.getPrincipal() : null;
+        return forumService.moderateReport(id, request, email);
     }
 
     @ExceptionHandler(IllegalArgumentException.class)

@@ -38,6 +38,12 @@ public class ForumTopic {
     @Column(name = "updated_at")
     private LocalDateTime updatedAt;
 
+    /**
+     * Indique si le sujet est masqué suite aux signalements ou à une action de modération.
+     */
+    @Column(name = "hidden", nullable = false)
+    private boolean hidden = false;
+
     @OneToMany(mappedBy = "topic", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     private List<ForumMessage> messages = new ArrayList<>();
 
