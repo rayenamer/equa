@@ -47,7 +47,7 @@ public class AssetValuationService {
         int totalBought = asset.getTotalBought() != null ? asset.getTotalBought() : 0;
         int totalSold = asset.getTotalSold() != null ? asset.getTotalSold() : 0;
 
-        float initialValue = asset.getValue() != null ? asset.getValue() : 0f;
+        float initialValue = asset.getInitialValue() != null ? asset.getInitialValue() : (asset.getValue() != null ? asset.getValue() : 0f);
 
         float baseValue = initialValue + (demand * 0.4f) + (totalBought * 0.4f) - (totalSold * 0.3f) - (quantity * 0.3f);
 

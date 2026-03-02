@@ -38,4 +38,14 @@ public class Asset {
 
     @Column(name = "total_sold")
     private Integer totalSold;
+
+    @Column(name = "initial_value")
+    private Float initialValue;
+
+    @PrePersist
+    public void onCreate() {
+        if (this.initialValue == null) {
+            this.initialValue = this.value;
+        }
+    }
 }
