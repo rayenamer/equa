@@ -42,8 +42,7 @@ docker-compose up -d
 **What this does**:
 - Downloads PostgreSQL 16 Alpine image (if not already downloaded)
 - Creates a container named `equa-postgres`
-- Starts PostgreSQL on port `5432`
-- Creates database `equadb` with user `equauser` and password `equapass`
+- Starts PostgreSQL on port `5433`
 - Runs in detached mode (background)
 
 **Verify it's running**:
@@ -52,42 +51,29 @@ docker ps
 ```
 
 You should see `equa-postgres` in the list.
+### 4. add this file (.env) to your project
+```bash
+CONTACT RAYEN FOR FILE
+```
 
-### 3. Build the Project
+### 4. Build the Project
 ```bash
 mvn clean install
 ```
 
-### 4. Run the Application
+### 5. Run the Application
 ```bash
 mvn spring-boot:run
 ```
 
-**Expected output**:
-```
-Started Application in X.XXX seconds
-Tomcat started on port 8080 (http)
-```
-
-### 5. Verify the Application
+### 6. Verify the Application
 Open your browser and visit:
 ```
-http://localhost:8080/swagger-ui/index.html
+http://localhost:8081/swagger-ui/index.html
 ```
-
-You should see the Swagger UI with all available API endpoints!
-
----
 
 ## 🔀 Git Workflow
 
-### Branch Protection Rules
-- **main** branch is **protected**
-- **No one** can push directly to `main`
-- All changes must go through **Pull Requests**
-- Only **RAYEN** can approve and merge PRs
-
-### Development Workflow
 
 #### Step 1: Create a New Branch
 Before starting any work, create a feature branch:
@@ -178,8 +164,8 @@ docker ps
 ```
 
 ### Important URLs
-- **Application**: http://localhost:8080
-- **Swagger UI**: http://localhost:8080/swagger-ui/index.html
+- **Application**: http://localhost:8081 (ou 8080 selon `server.port` dans `application.properties`)
+- **Swagger UI**: http://localhost:8081/swagger-ui.html
 
 ---
 
@@ -192,145 +178,6 @@ docker ps
 - RAYEN will accept merge request only if build job was successful
 ---
 
-## 🧱 Architecture & Layers
-Each domain module follows a **layered architecture**. Here's what each layer does:
-### 📂 **entity/** - Database Entities
-**Purpose**: Represents database tables using JPA annotations.
-**Rules**:
-- Maps directly to database tables
-- Uses `@Entity`, `@Table`, `@Id`, `@GeneratedValue` annotations
-- Contains only database-related fields
-- Includes getters and setters
-**Example**:
-```java
-package com.rayen.usermanagement.entity;
-import jakarta.persistence.*;
-@Entity
-@Table(name = "users")
-public class User {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-    
-    private String name;
-    private String email;
-    
-    // Getters and Setters
-}
-```
-
----
-
-### 📂 **repository/** - Database Access Layer
-**Purpose**: Direct communication with the database. **NO business logic here!**
-
-**Rules**:
-- Extends `JpaRepository<Entity, ID>`
-- Contains ONLY database queries
-- No business logic
-- Annotated with `@Repository`
-
-**Example**:
-```java
-package com.rayen.usermanagement.repository;
-
-import com.rayen.usermanagement.entity.User;
-import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.stereotype.Repository;
-
-@Repository
-public interface UserRepository extends JpaRepository<User, Long> {
-    // Custom queries can be added here
-    User findByEmail(String email);
-}
-```
-
----
-
-### 📂 **model/** - Data Transfer Objects (DTOs)
-**Purpose**: Objects used to transfer data between layers (API ↔ Service).
-
-**Rules**:
-- **Never** expose entities directly in APIs
-- Contains only fields needed for API requests/responses
-- No JPA annotations
-- Clean, simple POJOs
-
-**Example**:
-```java
-package com.rayen.usermanagement.model;
-
-public class UserDTO {
-    private Long id;
-    private String name;
-    private String email;
-    
-    // Getters and Setters
-}
-```
-
-**Why DTOs?**
-- Security: Hide internal database structure
-- Flexibility: API can have different fields than database
-- Versioning: Change API without changing database
-
----
-
-### 📂 **service/** - Business Logic Layer
-**Purpose**: Contains all business logic, validation, and data transformation.
-
-**Rules**:
-- Annotated with `@Service`
-- Uses repositories to access data
-- Converts between Entity ↔ DTO
-- Contains validation logic
-- Contains all business rules
-
-**Example**:
-```java
-package com.rayen.usermanagement.service;
-
-@Service
-public class UserService {
-    @Autowired
-    private UserRepository userRepository;
-
-    public List<UserDTO> getAllUsers() {
-        return userRepository.findAll().stream()
-            .map(this::convertToDTO)
-            .collect(Collectors.toList());
-    }
-}
-```
-
----
-
-### 📂 **controller/** - REST API Endpoints
-**Purpose**: Exposes REST endpoints to the outside world.
-
-**Rules**:
-- Annotated with `@RestController` and `@RequestMapping`
-- **NO business logic** - delegates to service layer
-- Uses DTOs (not entities) in request/response
-- Handles HTTP methods: `@GetMapping`, `@PostMapping`, `@PutMapping`, `@DeleteMapping`
-
-**Example**:
-```java
-package com.rayen.usermanagement.controller;
-
-@RestController
-@RequestMapping("/api/users")
-public class UserController {
-    @Autowired
-    private UserService userService;
-
-    @GetMapping
-    public List<UserDTO> getAllUsers() {
-        return userService.getAllUsers();
-    }
-}
-```
----
 
 ## ✅ Checklist for First Time Dev
 
@@ -338,10 +185,11 @@ public class UserController {
 - [ ] Install Maven 3.8.8
 - [ ] Install Docker and Docker Compose
 - [ ] Clone the repository
+- [ ] Create the .env file locally
 - [ ] Start PostgreSQL: `docker-compose up -d`
 - [ ] Build project: `mvn clean install`
 - [ ] Run application: `mvn spring-boot:run`
-- [ ] Access Swagger: http://localhost:8080/swagger-ui/index.html
+- [ ] Access Swagger: http://localhost:8081/swagger-ui/index.html
 - [ ] Create your first feature branch
 - [ ] Read the architecture section
 - [ ] Understand the layer responsibilities

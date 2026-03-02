@@ -8,7 +8,8 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class SigninRequestDTO {
-
     private String email;
     private String password;
+    /** Token reCAPTCHA ("Je ne suis pas un robot") - requis si app.recaptcha.secret-key est configuré */
+    private String recaptchaToken;
 }

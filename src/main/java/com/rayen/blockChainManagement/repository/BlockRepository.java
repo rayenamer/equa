@@ -1,7 +1,10 @@
 package com.rayen.blockChainManagement.repository;
 
 import com.rayen.blockChainManagement.entity.Block;
+import com.rayen.blockChainManagement.entity.Transaction;
+import jakarta.transaction.Transactional;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
@@ -65,4 +68,8 @@ public interface BlockRepository extends JpaRepository<Block, Integer> {
     Block findGenesisBlock();
 
     List<Block> findAllByOrderByTimestampDesc();
+
+    // Get all blocks with their transaction list eagerly loaded
+    @Query("SELECT DISTINCT b FROM Block b LEFT JOIN FETCH b.transaction ORDER BY b.timestamp DESC")
+    List<Block> findAllBlocksWithTransactions();
 }

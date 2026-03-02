@@ -68,7 +68,7 @@ public class NodeController {
         List<NodeResponse> nodes = nodeService.getNodesByOptionalParams(
                 status, publicKey, nodeType, location, ipAddress,
                 minReputationScore, maxReputationScore,
-                lastSeenAfter, lastSeenBefore, createdAfter, hasTransaction
+                lastSeenAfter, lastSeenBefore, createdAfter
         );
 
         return ResponseEntity.ok(nodes);
