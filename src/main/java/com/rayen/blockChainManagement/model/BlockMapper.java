@@ -1,77 +1,44 @@
 package com.rayen.blockChainManagement.model;
 
-
 import com.rayen.blockChainManagement.entity.Block;
-import com.rayen.blockChainManagement.model.BlockResponse;
-import com.rayen.blockChainManagement.model.BlockStats;
-import org.springframework.stereotype.Component;
+import com.rayen.blockChainManagement.entity.Transaction; // ← fix #1: your entity, not jakarta
 
-@Component
-public class BlockMapper {
+import java.util.Collections;
+import java.util.List;
+import java.util.stream.Collectors;
 
-    public BlockResponse toResponse(Block block) {
-        if (block == null) {
-            return null;
-        }
+public class BlockMAPPER {
 
-        return BlockResponse.builder()
-                .blockId(block.getBlockId())
-                .previousHash(block.getPreviousHash())
-                .blockHash(block.getBlockHash())
-                .timestamp(block.getTimestamp())
-                .blockSize(block.getBlockSize())
-                .previousBlockId(block.getPreviousBlock() != null ?
-                        block.getPreviousBlock().getBlockId() : null)
-                .createdAt(block.getCreatedAt())
-                .updatedAt(block.getUpdatedAt())
-                .build();
+    public static TransactionDTO toTransactionDTO(Transaction t) {
+        return new TransactionDTO(
+                t.getTransactionId(),
+                t.getFromWallet(),
+                t.getToWallet(),
+                t.getAmount(),
+                t.getTimestamp(),
+                t.getStatus(),
+                t.getTransactionHash(),
+                t.getFee()
+        );
     }
 
-    public BlockResponse toResponseWithoutNavigation(Block block) {
-        if (block == null) {
-            return null;
-        }
+    public static BlockDTO toBlockDTO(Block block) {
+        List<TransactionDTO> txDTOs = block.getTransaction() == null
+                ? Collections.emptyList()
+                : block.getTransaction().stream()
+                .map(BlockMAPPER::toTransactionDTO)
+                .collect(Collectors.toList());
 
-        return BlockResponse.builder()
-                .blockId(block.getBlockId())
-                .previousHash(block.getPreviousHash())
-                .blockHash(block.getBlockHash())
-                .timestamp(block.getTimestamp())
-                .blockSize(block.getBlockSize())
-                .createdAt(block.getCreatedAt())
-                .updatedAt(block.getUpdatedAt())
-                .build();
-    }
-
-    public BlockStats toStats(Long totalBlocks, Double averageBlockSize,
-                              BlockResponse latestBlock, BlockResponse genesisBlock) {
-        return BlockStats.builder()
-                .totalBlocks(totalBlocks)
-                .averageBlockSize(averageBlockSize)
-                .latestBlock(latestBlock)
-                .genesisBlock(genesisBlock)
-                .build();
-    }
-
-    public void updateBlockFromRequest(Block target, Block source) {
-        if (source == null || target == null) {
-            return;
-        }
-
-        if (source.getPreviousHash() != null) {
-            target.setPreviousHash(source.getPreviousHash());
-        }
-        if (source.getBlockHash() != null) {
-            target.setBlockHash(source.getBlockHash());
-        }
-        if (source.getTimestamp() != null) {
-            target.setTimestamp(source.getTimestamp());
-        }
-        if (source.getBlockSize() != null) {
-            target.setBlockSize(source.getBlockSize());
-        }
-        if (source.getPreviousBlock() != null) {
-            target.setPreviousBlock(source.getPreviousBlock());
-        }
+        return new BlockDTO(
+                block.getBlockId(),
+                block.getPreviousHash(),
+                block.getBlockHash(),
+                block.getTimestamp(),
+                block.getBlockSize(),
+                block.getPreviousBlock() != null ? block.getPreviousBlock().getBlockId() : null,
+                txDTOs,
+                block.getCreatedAt(),
+                block.getUpdatedAt()
+        );
     }
 }
