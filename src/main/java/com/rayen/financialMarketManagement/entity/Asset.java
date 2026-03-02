@@ -25,4 +25,16 @@ public class Asset {
 
     @Column(name = "value", nullable = false)
     private Float value;
+
+    @Column(name = "demand")
+    private Integer demand;
+
+    @Column(name = "quantity")
+    private Integer quantity;
+
+    @Column(name = "total_bought")
+    private Integer totalBought;
+
+    @Column(name = "total_sold")
+    private Integer totalSold;
 }

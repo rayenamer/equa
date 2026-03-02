@@ -19,6 +19,7 @@ public class AssetService {
     @Transactional
     public Asset createAsset(Asset asset) {
         log.info("Creating new asset of type: {}", asset.getAssetType());
+        asset.setValue(null);
         return assetRepository.save(asset);
     }
 
@@ -50,7 +51,10 @@ public class AssetService {
 
         existing.setOwnerId(updatedAsset.getOwnerId());
         existing.setAssetType(updatedAsset.getAssetType());
-        existing.setValue(updatedAsset.getValue());
+        existing.setDemand(updatedAsset.getDemand());
+        existing.setQuantity(updatedAsset.getQuantity());
+        existing.setTotalBought(updatedAsset.getTotalBought());
+        existing.setTotalSold(updatedAsset.getTotalSold());
 
         log.info("Updating asset with ID: {}", assetId);
         return assetRepository.save(existing);
