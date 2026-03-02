@@ -62,4 +62,8 @@ public class Node {
     @JsonIgnore
     @OneToMany(mappedBy = "validatorNode", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Transaction> transactions;
+
+    @OneToMany(mappedBy = "storageNode", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JsonIgnore
+    private List<Dinar> storedDinars = new ArrayList<>();
 }
