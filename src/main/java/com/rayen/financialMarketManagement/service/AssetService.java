@@ -20,7 +20,6 @@ public class AssetService {
     @Transactional
     public Asset createAsset(Asset asset) {
         log.info("Creating new asset of type: {}", asset.getAssetType());
-        asset.setValue(null);
         return assetRepository.save(asset);
     }
 
