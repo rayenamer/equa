@@ -4,6 +4,7 @@ import com.rayen.blockChainManagement.entity.*;
 import com.rayen.blockChainManagement.repository.*;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.coyote.BadRequestException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -89,6 +90,49 @@ public class DinarWalletService {
 
         log.info("----------------------------------------------------------------");
         log.info("✅ Deposit complete | New balance: {} TND", saved.getBalance());
+        log.info("================================================================");
+
+        return saved;
+    }
+
+    @Transactional
+    public DinarWallet withdraw(String walletId, int amount) throws BadRequestException {
+        DinarWallet wallet = dinarWalletRepository.findById(walletId)
+                .orElseThrow(() -> new IllegalArgumentException("Wallet not found"));
+
+        if (wallet.getStatus() != DinarWalletStatus.ACTIVE)
+            throw new IllegalStateException("Wallet is not active");
+
+        if (wallet.getBalance().compareTo(BigDecimal.valueOf(amount)) < 0)
+            throw new BadRequestException(String.format(
+                    "Insufficient balance. Required: %d TND | Available: %.3f TND",
+                    amount, wallet.getBalance()
+            ));
+
+        List<Dinar> walletDinars = dinarRepository.findAllByWallet_WalletId(walletId);
+
+        if (walletDinars.size() < amount)
+            throw new BadRequestException("Not enough dinar units to withdraw");
+
+        log.info("================================================================");
+        log.info("🏧 Withdrawing {} dinars from wallet {}", amount, walletId);
+        log.info("----------------------------------------------------------------");
+
+        for (int i = 0; i < amount; i++) {
+            Dinar dinar = walletDinars.get(i);
+            log.info("🗑️ Dinar {} leaving system | was on Node {} | {}",
+                    dinar.getDinarId(),
+                    dinar.getStorageNode().getNodeId(),
+                    dinar.getStorageNode().getLocation());
+            dinarRepository.delete(dinar); // ← dinar leaves the system entirely
+        }
+
+        wallet.setBalance(wallet.getBalance().subtract(BigDecimal.valueOf(amount)));
+        wallet.setUpdatedAt(LocalDateTime.now());
+        DinarWallet saved = dinarWalletRepository.save(wallet);
+
+        log.info("----------------------------------------------------------------");
+        log.info("✅ Withdrawal complete | New balance: {} TND", saved.getBalance());
         log.info("================================================================");
 
         return saved;

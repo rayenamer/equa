@@ -5,6 +5,7 @@ import com.rayen.blockChainManagement.entity.DinarWallet;
 import com.rayen.blockChainManagement.service.DinarWalletService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.coyote.BadRequestException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -42,5 +43,11 @@ public class DinarWalletController {
     @GetMapping("/node/{nodeId}/dinars")
     public ResponseEntity<List<Dinar>> getNodeDinars(@PathVariable Integer nodeId) {
         return ResponseEntity.ok(dinarWalletService.getNodeDinars(nodeId));
+    }
+
+    @PostMapping("/{walletId}/withdraw/{amount}")
+    public ResponseEntity<DinarWallet> withdraw(@PathVariable String walletId,
+                                                @PathVariable int amount) throws BadRequestException {
+        return ResponseEntity.ok(dinarWalletService.withdraw(walletId, amount));
     }
 }
