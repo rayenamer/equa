@@ -3,21 +3,20 @@ package com.rayen.blockChainManagement.service;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
-import com.rayen.blockChainManagement.entity.Block;
-import com.rayen.blockChainManagement.entity.Node;
-import com.rayen.blockChainManagement.entity.Transaction;
-import com.rayen.blockChainManagement.entity.TransactionStatus;
+import com.rayen.blockChainManagement.entity.*;
 import com.rayen.blockChainManagement.model.BlockDTO;
 import com.rayen.blockChainManagement.model.BlockMAPPER;
 import com.rayen.blockChainManagement.model.TransactionRequest;
 import com.rayen.blockChainManagement.model.TransactionResponse;
-import com.rayen.blockChainManagement.repository.BlockRepository;
-import com.rayen.blockChainManagement.repository.NodeRepository;
-import com.rayen.blockChainManagement.repository.TransactionRepository;
+import com.rayen.blockChainManagement.repository.*;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.coyote.BadRequestException;
 import org.springframework.stereotype.Service;
+
+import java.math.BigDecimal;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Random;
 import java.util.concurrent.*;
@@ -30,10 +29,11 @@ import java.util.stream.Collectors;
 public class SmartContract {
     private final NodeRepository nodeRepository;
     private final TransactionRepository transactionRepository;
-    private  final BlockRepository blockRepository;
+    private final BlockRepository blockRepository;
     private final BlockService blockService;
-    private  final TransactionService transactionService;
-
+    private final TransactionService transactionService;
+    private final DinarWalletRepository dinarWalletRepository;
+    private final DinarRepository dinarRepository;
     private String guessHash() {
         Random random = new Random();
         char letter = (char) ('a' + random.nextInt(6)); // a, b, c, d, e, f
@@ -135,10 +135,75 @@ public class SmartContract {
         nodeRepository.saveAll(nodes);
     }
 
+    @Transactional
+    public void validateSufficientBalance(String walletId, BigDecimal amount) throws BadRequestException {
+        DinarWallet wallet = dinarWalletRepository.findById(walletId)
+                .orElseThrow(() -> new BadRequestException("Sender wallet not found: " + walletId));
+
+        if (wallet.getStatus() != DinarWalletStatus.ACTIVE)
+            throw new BadRequestException("Sender wallet is not active");
+
+        if (wallet.getBalance().compareTo(amount) < 0)
+            throw new BadRequestException(String.format(
+                    "Insufficient balance. Required: %.3f TND | Available: %.3f TND",
+                    amount, wallet.getBalance()
+            ));
+
+        log.info("✅ Balance validated | Wallet {} | Required: {} | Available: {}",
+                walletId, amount, wallet.getBalance());
+    }
+    @Transactional
+    public void deductAndCredit(String fromWalletId, String toWalletId, BigDecimal amount) throws BadRequestException {
+        DinarWallet fromWallet = dinarWalletRepository.findById(fromWalletId)
+                .orElseThrow(() -> new BadRequestException("Sender wallet not found: " + fromWalletId));
+
+        DinarWallet toWallet = dinarWalletRepository.findById(toWalletId)
+                .orElseThrow(() -> new BadRequestException("Receiver wallet not found: " + toWalletId));
+
+        List<Dinar> senderDinars = dinarRepository.findAllByWallet_WalletId(fromWalletId);
+        int dinarsToMove = amount.intValue();
+
+        if (senderDinars.size() < dinarsToMove)
+            throw new BadRequestException("Sender does not have enough dinar units");
+
+        log.info("================================================================");
+        log.info("💸 Transfer: {} TND | {} → {}", amount, fromWalletId, toWalletId);
+        log.info("----------------------------------------------------------------");
+
+        // just change ownership — dinars stay on their nodes, no reallocation
+        for (int i = 0; i < dinarsToMove; i++) {
+            Dinar dinar = senderDinars.get(i);
+
+            log.info("🔄 Dinar {} | Node {} (stays) | ownership {} → {}",
+                    dinar.getDinarId(),
+                    dinar.getStorageNode().getNodeId(),
+                    fromWalletId,
+                    toWalletId);
+
+            dinar.setWallet(toWallet); // ← only ownership changes, node stays the same
+            dinarRepository.save(dinar);
+        }
+
+        fromWallet.setBalance(fromWallet.getBalance().subtract(amount));
+        fromWallet.setUpdatedAt(LocalDateTime.now());
+        toWallet.setBalance(toWallet.getBalance().add(amount));
+        toWallet.setUpdatedAt(LocalDateTime.now());
+
+        dinarWalletRepository.save(fromWallet);
+        dinarWalletRepository.save(toWallet);
+
+        log.info("----------------------------------------------------------------");
+        log.info("✅ Transfer complete");
+        log.info("👛 Sender {} | new balance: {} TND", fromWalletId, fromWallet.getBalance());
+        log.info("👛 Receiver {} | new balance: {} TND", toWalletId, toWallet.getBalance());
+        log.info("================================================================");
+    }
+
     public TransactionResponse processTransaction(TransactionRequest request) throws BadRequestException, JsonProcessingException, ExecutionException, InterruptedException {
+        validateSufficientBalance(request.getFromWallet(), request.getAmount());
         TransactionResponse response = transactionService.createTransaction(request);
-        //TODO : VALIDATE TOKEN BALANCE FROM WALLETS
         validateTransaction(response.getTransactionId());
+        deductAndCredit(request.getFromWallet(), request.getToWallet(), request.getAmount());
         addToBlock(response.getTransactionId());
         updateNodes();
         return response;
@@ -146,7 +211,4 @@ public class SmartContract {
     public List<Node> getAllNodesWithBlockchain() {
         return nodeRepository.findAll();
     }
-
-
-
 }
