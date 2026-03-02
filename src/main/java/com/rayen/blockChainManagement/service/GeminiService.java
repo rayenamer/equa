@@ -6,6 +6,7 @@ import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestClient;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -43,6 +44,35 @@ public class GeminiService {
         } catch (Exception e) {
             log.error("Gemini API error", e);
             return "Unable to analyze blockchain at this time.";
+        }
+    }
+
+    public String chat(List<String> history) {
+        if (apiKey == null || apiKey.isBlank()) return "Gemini API key not configured.";
+
+        String url = GEMINI_URL + "?key=" + apiKey;
+
+        List<Map<String, Object>> contents = new ArrayList<>();
+        for (int i = 0; i < history.size(); i++) {
+            contents.add(Map.of(
+                    "role", i % 2 == 0 ? "user" : "model",
+                    "parts", List.of(Map.of("text", history.get(i)))
+            ));
+        }
+
+        Map<String, Object> body = Map.of("contents", contents);
+
+        try {
+            Map response = restClient.post()
+                    .uri(url)
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .body(body)
+                    .retrieve()
+                    .body(Map.class);
+            return extractText(response);
+        } catch (Exception e) {
+            log.error("Gemini chat error", e);
+            return "Unable to respond at this time.";
         }
     }
 
