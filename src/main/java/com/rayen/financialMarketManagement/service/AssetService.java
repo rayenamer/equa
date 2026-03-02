@@ -1,6 +1,7 @@
 package com.rayen.financialMarketManagement.service;
 
 import com.rayen.financialMarketManagement.entity.Asset;
+import com.rayen.financialMarketManagement.entity.AssetType;
 import com.rayen.financialMarketManagement.repository.AssetRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -40,7 +41,7 @@ public class AssetService {
     }
 
     @Transactional(readOnly = true)
-    public List<Asset> getAssetsByType(String assetType) {
+    public List<Asset> getAssetsByType(AssetType assetType) {
         return assetRepository.findByAssetType(assetType);
     }
 

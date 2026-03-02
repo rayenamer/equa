@@ -1,6 +1,7 @@
 package com.rayen.financialMarketManagement.controller;
 
 import com.rayen.financialMarketManagement.entity.Asset;
+import com.rayen.financialMarketManagement.entity.AssetType;
 import com.rayen.financialMarketManagement.service.AssetService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -47,7 +48,7 @@ public class AssetController {
     }
 
     @GetMapping("/type/{assetType}")
-    public ResponseEntity<List<Asset>> getAssetsByType(@PathVariable String assetType) {
+    public ResponseEntity<List<Asset>> getAssetsByType(@PathVariable AssetType assetType) {
         log.info("REST request to get assets by type: {}", assetType);
         List<Asset> assets = assetService.getAssetsByType(assetType);
         return ResponseEntity.ok(assets);

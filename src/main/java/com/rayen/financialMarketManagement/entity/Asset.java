@@ -20,8 +20,9 @@ public class Asset {
     @Column(name = "owner_id", nullable = false)
     private String ownerId;
 
+    @Enumerated(EnumType.STRING)
     @Column(name = "asset_type", nullable = false)
-    private String assetType;
+    private AssetType assetType;
 
     @Column(name = "value", nullable = false)
     private Float value;
