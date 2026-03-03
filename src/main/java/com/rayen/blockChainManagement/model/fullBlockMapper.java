@@ -7,7 +7,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class BlockMAPPER {
+public class fullBlockMapper {
 
     public static TransactionDTO toTransactionDTO(Transaction t) {
         return new TransactionDTO(
@@ -26,7 +26,7 @@ public class BlockMAPPER {
         List<TransactionDTO> txDTOs = block.getTransaction() == null
                 ? Collections.emptyList()
                 : block.getTransaction().stream()
-                .map(BlockMAPPER::toTransactionDTO)
+                .map(fullBlockMapper::toTransactionDTO)
                 .collect(Collectors.toList());
 
         return new BlockDTO(
