@@ -5,7 +5,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.rayen.blockChainManagement.entity.*;
 import com.rayen.blockChainManagement.model.BlockDTO;
-import com.rayen.blockChainManagement.model.BlockMAPPER;
+import com.rayen.blockChainManagement.model.fullBlockMapper;
 import com.rayen.blockChainManagement.model.TransactionRequest;
 import com.rayen.blockChainManagement.model.TransactionResponse;
 import com.rayen.blockChainManagement.repository.*;
@@ -34,6 +34,7 @@ public class SmartContract {
     private final TransactionService transactionService;
     private final DinarWalletRepository dinarWalletRepository;
     private final DinarRepository dinarRepository;
+
     private String guessHash() {
         Random random = new Random();
         char letter = (char) ('a' + random.nextInt(6)); // a, b, c, d, e, f
@@ -122,7 +123,7 @@ public class SmartContract {
         List<String> blockchainJson = blockchainRecord.stream()
                 .map(block -> {
                     try {
-                        BlockDTO blockDTO = BlockMAPPER.toBlockDTO(block);
+                        BlockDTO blockDTO = fullBlockMapper.toBlockDTO(block);
                         return objectMapper.writeValueAsString(blockDTO);
                     } catch (JsonProcessingException e) {
                         throw new RuntimeException("Failed to serialize block: " + block.getBlockId(), e);
