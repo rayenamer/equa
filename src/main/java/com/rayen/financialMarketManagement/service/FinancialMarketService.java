@@ -46,7 +46,7 @@ public class FinancialMarketService {
         existing.setMarketName(updatedMarket.getMarketName());
         existing.setExchangeRate(updatedMarket.getExchangeRate());
         existing.setAvailableAssets(updatedMarket.getAvailableAssets());
-        existing.setTransactionHistory(updatedMarket.getTransactionHistory());
+        
 
         log.info("Updating financial market with ID: {}", marketId);
         return financialMarketRepository.save(existing);
