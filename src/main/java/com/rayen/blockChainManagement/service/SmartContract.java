@@ -138,73 +138,18 @@ public class SmartContract {
 
     @Transactional
     public void validateSufficientBalance(String walletId, BigDecimal amount) throws BadRequestException {
-        DinarWallet wallet = dinarWalletRepository.findById(walletId)
-                .orElseThrow(() -> new BadRequestException("Sender wallet not found: " + walletId));
-
-        if (wallet.getStatus() != DinarWalletStatus.ACTIVE)
-            throw new BadRequestException("Sender wallet is not active");
-
-        if (wallet.getBalance().compareTo(amount) < 0)
-            throw new BadRequestException(String.format(
-                    "Insufficient balance. Required: %.3f TND | Available: %.3f TND",
-                    amount, wallet.getBalance()
-            ));
-
-        log.info("✅ Balance validated | Wallet {} | Required: {} | Available: {}",
-                walletId, amount, wallet.getBalance());
+        // TODO : check sender balance
     }
     @Transactional
     public void deductAndCredit(String fromWalletId, String toWalletId, BigDecimal amount) throws BadRequestException {
-        DinarWallet fromWallet = dinarWalletRepository.findById(fromWalletId)
-                .orElseThrow(() -> new BadRequestException("Sender wallet not found: " + fromWalletId));
-
-        DinarWallet toWallet = dinarWalletRepository.findById(toWalletId)
-                .orElseThrow(() -> new BadRequestException("Receiver wallet not found: " + toWalletId));
-
-        List<Dinar> senderDinars = dinarRepository.findAllByWallet_WalletId(fromWalletId);
-        int dinarsToMove = amount.intValue();
-
-        if (senderDinars.size() < dinarsToMove)
-            throw new BadRequestException("Sender does not have enough dinar units");
-
-        log.info("================================================================");
-        log.info("💸 Transfer: {} TND | {} → {}", amount, fromWalletId, toWalletId);
-        log.info("----------------------------------------------------------------");
-
-        // just change ownership — dinars stay on their nodes, no reallocation
-        for (int i = 0; i < dinarsToMove; i++) {
-            Dinar dinar = senderDinars.get(i);
-
-            log.info("🔄 Dinar {} | Node {} (stays) | ownership {} → {}",
-                    dinar.getDinarId(),
-                    dinar.getStorageNode().getNodeId(),
-                    fromWalletId,
-                    toWalletId);
-
-            dinar.setWallet(toWallet); // ← only ownership changes, node stays the same
-            dinarRepository.save(dinar);
-        }
-
-        fromWallet.setBalance(fromWallet.getBalance().subtract(amount));
-        fromWallet.setUpdatedAt(LocalDateTime.now());
-        toWallet.setBalance(toWallet.getBalance().add(amount));
-        toWallet.setUpdatedAt(LocalDateTime.now());
-
-        dinarWalletRepository.save(fromWallet);
-        dinarWalletRepository.save(toWallet);
-
-        log.info("----------------------------------------------------------------");
-        log.info("✅ Transfer complete");
-        log.info("👛 Sender {} | new balance: {} TND", fromWalletId, fromWallet.getBalance());
-        log.info("👛 Receiver {} | new balance: {} TND", toWalletId, toWallet.getBalance());
-        log.info("================================================================");
+        //TODO : deduct sender credit
     }
 
     public TransactionResponse processTransaction(TransactionRequest request) throws BadRequestException, JsonProcessingException, ExecutionException, InterruptedException {
-        validateSufficientBalance(request.getFromWallet(), request.getAmount());
+        //validateSufficientBalance(request.getFromWallet(), request.getAmount());
         TransactionResponse response = transactionService.createTransaction(request);
         validateTransaction(response.getTransactionId());
-        deductAndCredit(request.getFromWallet(), request.getToWallet(), request.getAmount());
+        //deductAndCredit(request.getFromWallet(), request.getToWallet(), request.getAmount());
         addToBlock(response.getTransactionId());
         updateNodes();
         return response;
