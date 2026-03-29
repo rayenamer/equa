@@ -1,3 +1,6 @@
+# Esprit-PIDEV-4INFINI -2026-EquaToken
+This project was developed as part of the PIDEV – 4th Year Engineering Program at Esprit 
+School of Engineering (Academic Year 2025–2026).
 
 [![Presentation](https://img.shields.io/badge/presentation-Canva-purple)](https://www.canva.com/design/DAG__gdQ8Zk/Pnvcg-baYSi5G3TQ7o7i-g/edit?utm_content=DAG__gdQ8Zk&utm_campaign=designshare&utm_medium=link2&utm_source=sharebutton)
 
