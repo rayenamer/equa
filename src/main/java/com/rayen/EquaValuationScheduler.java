@@ -17,8 +17,8 @@ public class EquaValuationScheduler {
     // Runs every 1 seconds
     @Scheduled(fixedRate = 1_000)
     public void refreshRate() {
-        log.info("[Scheduler] Refreshing EQUA/Dinar rate...");
+        //log.info("[Scheduler] Refreshing EQUA/Dinar rate...");
         BigDecimal rate = equaValuationEngine.equaEngine();
-        log.info("[Scheduler] Current EQUA/Dinar rate: {} Dinar", rate);
+        //log.info("[Scheduler] Current EQUA/Dinar rate: {} Dinar", rate);
     }
 }
