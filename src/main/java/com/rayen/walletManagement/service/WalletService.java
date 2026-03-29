@@ -96,8 +96,9 @@ public class WalletService {
                 .orElseThrow(() -> new RuntimeException("Wallet not found for userId: " + userId));
 
         wallet.setEquaAmount(wallet.getEquaAmount() + equaReceived.floatValue());
-
+        wallet.setBalance(wallet.getBalance() + equaReceived.floatValue());
         log.info("[WalletService] userId:{} converted {} DT → {} EQUA @ rate={}", userId, amountInDinars, equaReceived, rate);
+        
         return walletRepository.save(wallet);
     }
 }
