@@ -1,29 +1,94 @@
-# Esprit-PIDEV-4INFINI -2026-EquaToken
+# EQUA
+## Esprit-PIDEV-4INFINI -2026-EquaToken
 This project was developed as part of the PIDEV – 4th Year Engineering Program at Esprit 
 School of Engineering (Academic Year 2025–2026).
 
-[![Presentation](https://img.shields.io/badge/presentation-Canva-purple)](https://www.canva.com/design/DAG__gdQ8Zk/Pnvcg-baYSi5G3TQ7o7i-g/edit?utm_content=DAG__gdQ8Zk&utm_campaign=designshare&utm_medium=link2&utm_source=sharebutton)
+## Overview
+EQUA is a decentralized microfinance ecosystem designed to deliver accessible, secure, and low-cost financial services to underserved populations.
 
-[![Report](https://img.shields.io/badge/report-Google%20Docs-green)](https://docs.google.com/document/d/1SJ-QzxcbxZDwQ7bfMLdtrK59frejipB1qcXVu3yWqw8/edit?tab=t.0)
+The platform leverages tokenization and blockchain technology to provide:
 
-[![Diagrams](https://img.shields.io/badge/diagrams-Miro-orange)](https://miro.com/app/board/uXjVGGvURDc=/)
+Micro-loans
+Savings solutions
+Peer-to-peer payments
+Investment opportunities
 
-[![Frontend App](https://img.shields.io/badge/project-Angular%20Client-red?logo=angular&logoColor=white)](https://github.com/rayenamer/SocialMediaProjectClient)
+Unlike traditional financial systems, EQUA focuses on financial inclusion, enabling users without access to banks to participate in a transparent and efficient digital economy.
 
-[![Spring Microservice 1](https://img.shields.io/badge/project-Spring%20Boot%20Service-success?logo=springboot&logoColor=white)](https://github.com/psubhajit14/spring-boot-microservice)
+A key innovation of the platform is the dual-wallet system, allowing users to interact with both:
 
-[![Spring Microservice 2](https://img.shields.io/badge/project-Candidats%20Service-success?logo=springboot&logoColor=white)](https://github.com/AzizBenIsmail/MicroserviceCandidats)
+EQUA Token Wallet
+Dinar Wallet (Fiat Wallet)
 
-[![Angular Distributed Frontend](https://img.shields.io/badge/project-Distributed%20Angular-red?logo=angular&logoColor=white)](https://github.com/AzizBenIsmail/Appl.Web-Distribues-EcoExchange_FrontEndAngular/tree/main/src)
+### Features
+User Authentication & Management
+- Secure registration and login
+- Role-based access control
+Dual Wallet System
+- EQUA Token Wallet for blockchain operations
+- Dinar Wallet for fiat (TND) storage and conversion
+Token Conversion
+- Convert TND ↔ EQUA tokens seamlessly
+- Stable entry point for non-crypto users
+Micro-Loans
+- Request and receive loans via smart contracts
+- Automated repayment tracking
+Savings Management
+- Secure digital savings
+- Protection against theft and loss
+P2P Transactions
+- Instant, low-cost transfers between users
+- Blockchain Transparency
+- Immutable transaction history
+- Public transaction observation
+Investment Access
+- Tokenized assets (real estate, equities, etc.)
+Smart Contract Automation
+- Loan issuance and repayment enforcement
+- Transparent financial logic
 
-
-### Tech Stack
+## Tech Stack
 - **Java**: 21.0.9
 - **Spring Boot**: 3.2.1
 - **Maven**: 3.8.8 
 - **Database**: PostgreSQL 16
 - **Docker**: For containerized database
 - **Swagger/OpenAPI**: API documentation
+
+## Architecture
+EQUA follows a modular microservices-inspired architecture within a single project, combining the simplicity of a monolith with the scalability of microservices.
+**Shared Components**
+- Shared Database
+- Single database instance
+-Shared Kernel
+-Common utilities (DTOs, enums, helpers)
+-Cross-cutting concerns (logging, validation, exceptions)
+**Layered Design (Inside Each Service)**
+Each module follows clean architecture principles:
+
+-Presentation Layer:REST API controllers (per service)
+-Application Layer:Use cases, services
+-Domain Layer:Core business models and rules
+-Infrastructure Layer:Data access, external APIs, repositories
+
+**Communication**
+Intra-service communication
+-Direct method calls (since same project)
+Inter-service communication
+-Through interfaces / service contracts
+
+**Benefits**
+-Microservices mindset without deployment complexity-
+-Scalable: can be split into real microservices later
+-Clear separation of concerns
+-Optimized performance (no network overhead)
+
+### Contributors
+RAYEN AMEUR
+NADHMI ROUISSI
+CHAHINE SAADELLAOUI
+SEMER REBHI
+SAFWEN HABOUBI
 
 ---
 
@@ -75,74 +140,6 @@ Open your browser and visit:
 http://localhost:8081/swagger-ui/index.html
 ```
 
-## 🔀 Git Workflow
-
-
-#### Step 1: Create a New Branch
-Before starting any work, create a feature branch:
-
-```bash
-# Make sure you're on main and up to date
-git checkout main
-git pull origin main
-
-# Create and switch to a new feature branch
-git checkout -b feature/your-feature-name
-```
-
-#### Step 2: Make Your Changes
-Work on your assigned domain module (e.g., `blockChainManagement`, `loanManagement`).
-
-```bash
-# Create your entities, repositories, services, controllers, models
-# Test your code locally
-```
-
-#### Step 3: Commit Your Changes
-```bash
-git add .
-git commit -m "feat: add user authentication endpoints"
-```
-#### Step 4: Push to Remote
-```bash
-git push origin feature/your-feature-name
-```
-
-#### Step 5: Create a merge Request
-1. Go to GitHub
-2. Click **"New merge Request"**
-3. Select your branch (`feature/your-feature-name`) → `main`
-4. Add a clear description of your changes
-5. Submit the PR
-
-#### Step 6: Code Review & Merge
-- The repository owner will review your code
-- Address any requested changes
-- Once approved, the owner will merge your PR into `main`
-
-#### Step 7: Update Your Local Main
-After your PR is merged:
-
-```bash
-git checkout main
-git pull origin main
-```
-#### in case you branch is behind 
-
-```bash
-# update you rlocal main 
-git pull origin main
-# switch to your branch
-git switch feat/yourBranch
-# pull code from main to your branch
-git merge main
-```
-
-### Important Git Rules
-1. **Always pull from main before creating a new branch**
-2. **Never work directly on main**
-3. **Keep commits small and focused**
-
 ---
 
 ### Essential Commands
@@ -167,18 +164,13 @@ docker ps
 ```
 
 ### Important URLs
-- **Application**: http://localhost:8081 (ou 8080 selon `server.port` dans `application.properties`)
+- **Application**: http://localhost:8081 
 - **Swagger UI**: http://localhost:8081/swagger-ui.html
 
 ---
 
-### Avoiding Conflicts
-- Work only in your assigned domain folder
-- Don't modify `Application.java` or shared configuration files without discussion
-- Communicate with team before modifying `pom.xml` or `application.properties`
-
 ### Code Reviews
-- RAYEN will accept merge request only if build job was successful
+- Rayen will accept merge requests only if the build job is successful and the code does not negatively impact the project’s quality or performance.
 ---
 
 
@@ -196,6 +188,17 @@ docker ps
 - [ ] Create your first feature branch
 - [ ] Read the architecture section
 - [ ] Understand the layer responsibilities
-
 **Happy Coding! 🚀**
+
+## Acknowledgment
+We would like to thank:
+
+* **Esprit School of Engineering** for providing the academic framework.
+* Our instructors and mentors, **Mr. Aymen Esselmi, Mr. Mohamed Rjab, and Mr. Saadaoui Skander**, for their guidance, support, and passion in coaching us throughout this project.
+
+## Final Note
+EQUA was more than an academic project; it is a proof of our relentless pursuit of growth, of showing up with discipline and clarity.
+We thank our future selves for the glimpses of the vision that keeps us going.
+
+
 
