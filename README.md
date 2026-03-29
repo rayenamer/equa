@@ -124,10 +124,17 @@ Each module follows clean architecture principles:
 
 ## 📚 Project Resources
 
-- **Miro Board**: [https://miro.com/app/board/uXjVGGvURDc=/?share_link_id=969033901344](https://miro.com/app/board/uXjVGGvURDc=/?share_link_id=969033901344)
-- **Canva Presentation**: [https://www.canva.com/design/DAG__gdQ8Zk/Pnvcg-baYSi5G3TQ7o7i-g/edit?utm_content=DAG__gdQ8Zk&utm_campaign=designshare&utm_medium=link2&utm_source=sharebutton](https://www.canva.com/design/DAG__gdQ8Zk/Pnvcg-baYSi5G3TQ7o7i-g/edit?utm_content=DAG__gdQ8Zk&utm_campaign=designshare&utm_medium=link2&utm_source=sharebutton)
-- **Report (Google Docs)**: [https://docs.google.com/document/d/1SJ-QzxcbxZDwQ7bfMLdtrK59frejipB1qcXVu3yWqw8/edit?usp=sharing](https://docs.google.com/document/d/1SJ-QzxcbxZDwQ7bfMLdtrK59frejipB1qcXVu3yWqw8/edit?usp=sharing)
-
+<p align="left">
+  <a href="https://miro.com/app/board/uXjVGGvURDc=/?share_link_id=969033901344" target="_blank">
+    <img src="https://img.shields.io/badge/Miro-FFC900?style=for-the-badge&logo=miro&logoColor=black" alt="Miro Board" height="30">
+  </a>
+  <a href="https://www.canva.com/design/DAG__gdQ8Zk/Pnvcg-baYSi5G3TQ7o7i-g/edit?utm_content=DAG__gdQ8Zk&utm_campaign=designshare&utm_medium=link2&utm_source=sharebutton" target="_blank">
+    <img src="https://img.shields.io/badge/Canva%20Presentation-00C4CC?style=for-the-badge&logo=canva&logoColor=white" alt="Canva Presentation" height="30">
+  </a>
+  <a href="https://docs.google.com/document/d/1SJ-QzxcbxZDwQ7bfMLdtrK59frejipB1qcXVu3yWqw8/edit?usp=sharing" target="_blank">
+    <img src="https://img.shields.io/badge/Google%20Docs-4285F4?style=for-the-badge&logo=googledocs&logoColor=white" alt="Google Docs Report" height="30">
+  </a>
+</p>
 ---
 
 ## 🚀 Getting Started
