@@ -3,20 +3,21 @@ package com.rayen.blockChainManagement.service;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
-import com.rayen.blockChainManagement.entity.*;
+import com.rayen.blockChainManagement.entity.Block;
+import com.rayen.blockChainManagement.entity.Node;
+import com.rayen.blockChainManagement.entity.Transaction;
+import com.rayen.blockChainManagement.entity.TransactionStatus;
 import com.rayen.blockChainManagement.model.BlockDTO;
-import com.rayen.blockChainManagement.model.fullBlockMapper;
+import com.rayen.blockChainManagement.model.BlockDTOMapper;
 import com.rayen.blockChainManagement.model.TransactionRequest;
 import com.rayen.blockChainManagement.model.TransactionResponse;
-import com.rayen.blockChainManagement.repository.*;
-import jakarta.transaction.Transactional;
+import com.rayen.blockChainManagement.repository.BlockRepository;
+import com.rayen.blockChainManagement.repository.NodeRepository;
+import com.rayen.blockChainManagement.repository.TransactionRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.coyote.BadRequestException;
 import org.springframework.stereotype.Service;
-
-import java.math.BigDecimal;
-import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Random;
 import java.util.concurrent.*;
@@ -29,11 +30,9 @@ import java.util.stream.Collectors;
 public class SmartContract {
     private final NodeRepository nodeRepository;
     private final TransactionRepository transactionRepository;
-    private final BlockRepository blockRepository;
+    private  final BlockRepository blockRepository;
     private final BlockService blockService;
-    private final TransactionService transactionService;
-    private final DinarWalletRepository dinarWalletRepository;
-    private final DinarRepository dinarRepository;
+    private  final TransactionService transactionService;
 
     private String guessHash() {
         Random random = new Random();
@@ -123,7 +122,7 @@ public class SmartContract {
         List<String> blockchainJson = blockchainRecord.stream()
                 .map(block -> {
                     try {
-                        BlockDTO blockDTO = fullBlockMapper.toBlockDTO(block);
+                        BlockDTO blockDTO = BlockDTOMapper.toBlockDTO(block);
                         return objectMapper.writeValueAsString(blockDTO);
                     } catch (JsonProcessingException e) {
                         throw new RuntimeException("Failed to serialize block: " + block.getBlockId(), e);
@@ -136,20 +135,10 @@ public class SmartContract {
         nodeRepository.saveAll(nodes);
     }
 
-    @Transactional
-    public void validateSufficientBalance(String walletId, BigDecimal amount) throws BadRequestException {
-        // TODO : check sender balance
-    }
-    @Transactional
-    public void deductAndCredit(String fromWalletId, String toWalletId, BigDecimal amount) throws BadRequestException {
-        //TODO : deduct sender credit
-    }
-
     public TransactionResponse processTransaction(TransactionRequest request) throws BadRequestException, JsonProcessingException, ExecutionException, InterruptedException {
-        //validateSufficientBalance(request.getFromWallet(), request.getAmount());
         TransactionResponse response = transactionService.createTransaction(request);
+        //TODO : VALIDATE TOKEN BALANCE FROM WALLETS
         validateTransaction(response.getTransactionId());
-        //deductAndCredit(request.getFromWallet(), request.getToWallet(), request.getAmount());
         addToBlock(response.getTransactionId());
         updateNodes();
         return response;
@@ -157,4 +146,7 @@ public class SmartContract {
     public List<Node> getAllNodesWithBlockchain() {
         return nodeRepository.findAll();
     }
+
+
+
 }

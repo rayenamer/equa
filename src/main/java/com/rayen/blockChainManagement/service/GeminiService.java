@@ -6,7 +6,6 @@ import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestClient;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -48,14 +47,13 @@ public class GeminiService {
     }
 
     public String chat(List<String> history) {
-        if (apiKey == null || apiKey.isBlank()) return "Gemini API key not configured.";
-
         String url = GEMINI_URL + "?key=" + apiKey;
 
-        List<Map<String, Object>> contents = new ArrayList<>();
+        List<Map<String, Object>> contents = new java.util.ArrayList<>();
         for (int i = 0; i < history.size(); i++) {
+            String role = (i % 2 == 0) ? "user" : "model";
             contents.add(Map.of(
-                    "role", i % 2 == 0 ? "user" : "model",
+                    "role", role,
                     "parts", List.of(Map.of("text", history.get(i)))
             ));
         }
@@ -69,10 +67,11 @@ public class GeminiService {
                     .body(body)
                     .retrieve()
                     .body(Map.class);
+
             return extractText(response);
         } catch (Exception e) {
-            log.error("Gemini chat error", e);
-            return "Unable to respond at this time.";
+            log.error("Gemini chat API error", e);
+            return "Unable to process chat at this time.";
         }
     }
 
