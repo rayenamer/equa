@@ -114,13 +114,19 @@ Each module follows clean architecture principles:
 
 ---
 
-### Contributors
+## Contributors
 
 - RAYEN AMEUR
 - NADHMI ROUISSI
 - CHAHINE SAADELLAOUI
 - SEMER REBHI
 - SAFWEN HABOUBI
+
+## 📚 Project Resources
+
+- **Miro Board**: [https://miro.com/app/board/uXjVGGvURDc=/?share_link_id=969033901344](https://miro.com/app/board/uXjVGGvURDc=/?share_link_id=969033901344)
+- **Canva Presentation**: [https://www.canva.com/design/DAG__gdQ8Zk/Pnvcg-baYSi5G3TQ7o7i-g/edit?utm_content=DAG__gdQ8Zk&utm_campaign=designshare&utm_medium=link2&utm_source=sharebutton](https://www.canva.com/design/DAG__gdQ8Zk/Pnvcg-baYSi5G3TQ7o7i-g/edit?utm_content=DAG__gdQ8Zk&utm_campaign=designshare&utm_medium=link2&utm_source=sharebutton)
+- **Report (Google Docs)**: [https://docs.google.com/document/d/1SJ-QzxcbxZDwQ7bfMLdtrK59frejipB1qcXVu3yWqw8/edit?usp=sharing](https://docs.google.com/document/d/1SJ-QzxcbxZDwQ7bfMLdtrK59frejipB1qcXVu3yWqw8/edit?usp=sharing)
 
 ---
 
