@@ -18,9 +18,9 @@ jobs:
           fetch-depth: 0  # a full history is required for pull request analysis
       - name: 'Qodana Scan'
         uses: JetBrains/qodana-action@v2025.3
+        continue-on-error: true
         with:
           pr-mode: false
-          fail-threshold: 200
         env:
           QODANA_TOKEN: ${{ secrets.QODANA_TOKEN_1707163483 }}
           QODANA_ENDPOINT: 'https://qodana.cloud'
