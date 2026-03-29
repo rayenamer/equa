@@ -1,5 +1,6 @@
 package com.rayen.blockChainManagement.service;
 
+import com.rayen.AuthContextService;
 import com.rayen.blockChainManagement.entity.*;
 import com.rayen.blockChainManagement.repository.*;
 import lombok.RequiredArgsConstructor;
@@ -22,9 +23,11 @@ public class DinarWalletService {
     private final DinarWalletRepository dinarWalletRepository;
     private final DinarRepository dinarRepository;
     private final NodeRepository nodeRepository;
+    private final AuthContextService authContextService;
 
     @Transactional
-    public DinarWallet createWallet(String userId) {
+    public DinarWallet createWallet() {
+        String userId = authContextService.getLoggedInUserId().toString();
         if (dinarWalletRepository.existsByUserId(userId))
             throw new IllegalArgumentException("User already has a DinarWallet");
 
@@ -142,6 +145,11 @@ public class DinarWalletService {
     public DinarWallet getWallet(String walletId) {
         return dinarWalletRepository.findById(walletId)
                 .orElseThrow(() -> new IllegalArgumentException("Wallet not found"));
+    }
+    @Transactional
+    public DinarWallet getMyWallet(){
+        return  dinarWalletRepository.findByUserId(authContextService.getLoggedInUserId().toString())
+                .orElseThrow(() -> new IllegalArgumentException("You dont have wallet"));
     }
 
     @Transactional(readOnly = true)
