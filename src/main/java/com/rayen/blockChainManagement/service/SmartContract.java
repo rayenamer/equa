@@ -9,6 +9,8 @@ import com.rayen.blockChainManagement.model.fullBlockMapper;
 import com.rayen.blockChainManagement.model.TransactionRequest;
 import com.rayen.blockChainManagement.model.TransactionResponse;
 import com.rayen.blockChainManagement.repository.*;
+import com.rayen.walletManagement.entity.Wallet;
+import com.rayen.walletManagement.repository.WalletRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -16,7 +18,6 @@ import org.apache.coyote.BadRequestException;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
-import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Random;
 import java.util.concurrent.*;
@@ -34,6 +35,7 @@ public class SmartContract {
     private final TransactionService transactionService;
     private final DinarWalletRepository dinarWalletRepository;
     private final DinarRepository dinarRepository;
+    private final WalletRepository walletRepository;
 
     private String guessHash() {
         Random random = new Random();
@@ -138,18 +140,34 @@ public class SmartContract {
 
     @Transactional
     public void validateSufficientBalance(String walletId, BigDecimal amount) throws BadRequestException {
-        // TODO : check sender balance
+        Wallet wallet = walletRepository.findById(Long.parseLong(walletId))
+                .orElseThrow(() -> new BadRequestException("Wallet not found"));
+
+        if (amount.floatValue() > wallet.getBalance()) {
+            throw new BadRequestException("INSUFFICIENT CREDIT");
+        }
     }
+
     @Transactional
     public void deductAndCredit(String fromWalletId, String toWalletId, BigDecimal amount) throws BadRequestException {
-        //TODO : deduct sender credit
+        Wallet senderWallet = walletRepository.findById(Long.parseLong(fromWalletId))
+                .orElseThrow(() -> new BadRequestException("Sender wallet not found"));
+
+        Wallet receiverWallet = walletRepository.findById(Long.parseLong(toWalletId))
+                .orElseThrow(() -> new BadRequestException("Receiver wallet not found"));
+
+        senderWallet.setBalance(senderWallet.getBalance() - amount.floatValue());
+        receiverWallet.setBalance(receiverWallet.getBalance() + amount.floatValue());
+
+        walletRepository.save(senderWallet);
+        walletRepository.save(receiverWallet);
     }
 
     public TransactionResponse processTransaction(TransactionRequest request) throws BadRequestException, JsonProcessingException, ExecutionException, InterruptedException {
-        //validateSufficientBalance(request.getFromWallet(), request.getAmount());
+        validateSufficientBalance(request.getFromWallet(), request.getAmount());
         TransactionResponse response = transactionService.createTransaction(request);
         validateTransaction(response.getTransactionId());
-        //deductAndCredit(request.getFromWallet(), request.getToWallet(), request.getAmount());
+        deductAndCredit(request.getFromWallet(), request.getToWallet(), request.getAmount());
         addToBlock(response.getTransactionId());
         updateNodes();
         return response;
