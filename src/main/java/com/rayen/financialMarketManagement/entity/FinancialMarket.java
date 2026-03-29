@@ -28,9 +28,6 @@ public class FinancialMarket {
     @JoinColumn(name = "market_id")
     private List<Asset> availableAssets = new ArrayList<>();
 
-    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    @JoinColumn(name = "market_id")
-    private List<Transaction> transactionHistory = new ArrayList<>();
 
     @Column(name = "exchange_rate", nullable = false)
     private Float exchangeRate;
