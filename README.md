@@ -1,12 +1,13 @@
-# EQUA
 
-## Esprit-PIDEV-4INFINI -2026-EquaToken
+# <img src="https://img.shields.io/badge/EQUA-6A0DAD?style=for-the-badge&logo=ethereum&logoColor=white" alt="EQUA" height="35">
+
+## <img src="https://img.shields.io/badge/Esprit--PIDEV--4INFINI--2026--EquaToken-FF6B6B?style=for-the-badge&logo=github&logoColor=white" alt="Esprit-PIDEV-4INFINI-2026-EquaToken" height="30">
 
 This project was developed as part of the PIDEV – 4th Year Engineering Program at Esprit School of Engineering (Academic Year 2025–2026).
 
 ---
 
-## Overview
+## <img src="https://img.shields.io/badge/📖 Overview-4ECDC4?style=for-the-badge&logo=readthedocs&logoColor=white" alt="Overview" height="30">
 
 EQUA is a decentralized microfinance ecosystem designed to deliver accessible, secure, and low-cost financial services to underserved populations.
 
@@ -26,7 +27,7 @@ A key innovation of the platform is the dual-wallet system, allowing users to in
 
 ---
 
-### Features
+### <img src="https://img.shields.io/badge/✨ Features-FFB347?style=for-the-badge&logo=featured&logoColor=white" alt="Features" height="25">
 
 #### User Authentication & Management
 - Secure registration and login
@@ -64,7 +65,7 @@ A key innovation of the platform is the dual-wallet system, allowing users to in
 
 ---
 
-## Tech Stack
+## <img src="https://img.shields.io/badge/🛠️ Tech Stack-45B7D1?style=for-the-badge&logo=spring&logoColor=white" alt="Tech Stack" height="30">
 
 - **Java**: 21.0.9
 - **Spring Boot**: 3.2.1
@@ -75,7 +76,7 @@ A key innovation of the platform is the dual-wallet system, allowing users to in
 
 ---
 
-## Architecture
+## <img src="https://img.shields.io/badge/🏗️ Architecture-96CEB4?style=for-the-badge&logo=architect&logoColor=white" alt="Architecture" height="30">
 
 EQUA follows a modular microservices-inspired architecture within a single project, combining the simplicity of a monolith with the scalability of microservices.
 
@@ -114,7 +115,7 @@ Each module follows clean architecture principles:
 
 ---
 
-## Contributors
+## <img src="https://img.shields.io/badge/👥 Contributors-FF6F61?style=for-the-badge&logo=contributors&logoColor=white" alt="Contributors" height="30">
 
 - RAYEN AMEUR
 - NADHMI ROUISSI
@@ -122,22 +123,25 @@ Each module follows clean architecture principles:
 - SEMER REBHI
 - SAFWEN HABOUBI
 
-## 📚 Project Resources
+---
+
+## <img src="https://img.shields.io/badge/📚 Project Resources-9B59B6?style=for-the-badge&logo=book&logoColor=white" alt="Project Resources" height="30">
 
 <p align="left">
   <a href="https://miro.com/app/board/uXjVGGvURDc=/?share_link_id=969033901344" target="_blank">
-    <img src="https://img.shields.io/badge/Miro-FFC900?style=for-the-badge&logo=miro&logoColor=black" alt="Miro Board" height="30">
+    <img src="https://img.shields.io/badge/Miro-FFC900?style=for-the-badge&logo=miro&logoColor=black" alt="Miro Board" height="35">
   </a>
   <a href="https://www.canva.com/design/DAG__gdQ8Zk/Pnvcg-baYSi5G3TQ7o7i-g/edit?utm_content=DAG__gdQ8Zk&utm_campaign=designshare&utm_medium=link2&utm_source=sharebutton" target="_blank">
-    <img src="https://img.shields.io/badge/Canva%20Presentation-00C4CC?style=for-the-badge&logo=canva&logoColor=white" alt="Canva Presentation" height="30">
+    <img src="https://img.shields.io/badge/Canva%20Presentation-00C4CC?style=for-the-badge&logo=canva&logoColor=white" alt="Canva Presentation" height="35">
   </a>
   <a href="https://docs.google.com/document/d/1SJ-QzxcbxZDwQ7bfMLdtrK59frejipB1qcXVu3yWqw8/edit?usp=sharing" target="_blank">
-    <img src="https://img.shields.io/badge/Google%20Docs-4285F4?style=for-the-badge&logo=googledocs&logoColor=white" alt="Google Docs Report" height="30">
+    <img src="https://img.shields.io/badge/Google%20Docs-4285F4?style=for-the-badge&logo=googledocs&logoColor=white" alt="Google Docs Report" height="35">
   </a>
 </p>
+
 ---
 
-## 🚀 Getting Started
+## <img src="https://img.shields.io/badge/🚀 Getting Started-2ECC71?style=for-the-badge&logo=rocket&logoColor=white" alt="Getting Started" height="30">
 
 ### 1. Clone the Repository
 
@@ -197,7 +201,7 @@ http://localhost:8081/swagger-ui/index.html
 
 ---
 
-### Essential Commands
+### <img src="https://img.shields.io/badge/⚡ Essential Commands-F39C12?style=for-the-badge&logo=terminal&logoColor=white" alt="Essential Commands" height="25">
 
 ```bash
 # Build project
@@ -219,20 +223,20 @@ docker-compose logs -f postgres
 docker ps
 ```
 
-### Important URLs
+### <img src="https://img.shields.io/badge/🔗 Important URLs-3498DB?style=for-the-badge&logo=link&logoColor=white" alt="Important URLs" height="25">
 
 - **Application**: http://localhost:8081
 - **Swagger UI**: http://localhost:8081/swagger-ui.html
 
 ---
 
-### Code Reviews
+### <img src="https://img.shields.io/badge/📝 Code Reviews-E74C3C?style=for-the-badge&logo=code&logoColor=white" alt="Code Reviews" height="25">
 
-Rayen will accept merge requests only if the build job is successful and the code does not negatively impact the project’s quality or performance.
+Rayen will accept merge requests only if the build job is successful and the code does not negatively impact the project's quality or performance.
 
 ---
 
-## ✅ Checklist for First Time Dev
+## <img src="https://img.shields.io/badge/✅ Checklist for First Time Dev-1ABC9C?style=for-the-badge&logo=checklist&logoColor=white" alt="Checklist" height="30">
 
 - [ ] Install Java 21
 - [ ] Install Maven 3.8.8
@@ -251,7 +255,7 @@ Rayen will accept merge requests only if the build job is successful and the cod
 
 ---
 
-## Acknowledgment
+## <img src="https://img.shields.io/badge/🙏 Acknowledgment-8E44AD?style=for-the-badge&logo=heart&logoColor=white" alt="Acknowledgment" height="30">
 
 We would like to thank:
 
@@ -260,7 +264,8 @@ We would like to thank:
 
 ---
 
-## Final Note
+## <img src="https://img.shields.io/badge/💭 Final Note-34495E?style=for-the-badge&logo=quote&logoColor=white" alt="Final Note" height="30">
 
 EQUA was more than an academic project; it is a proof of our relentless pursuit of growth, of showing up with discipline and clarity.  
 We thank our future selves for the glimpses of the vision that keeps us going.
+```
