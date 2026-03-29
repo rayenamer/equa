@@ -19,9 +19,9 @@ public class DinarWalletController {
 
     private final DinarWalletService dinarWalletService;
 
-    @PostMapping("/create/{userId}")
-    public ResponseEntity<DinarWallet> createWallet(@PathVariable String userId) {
-        return ResponseEntity.ok(dinarWalletService.createWallet(userId));
+    @PostMapping("/create")
+    public ResponseEntity<DinarWallet> createWallet() {
+        return ResponseEntity.ok(dinarWalletService.createWallet());
     }
 
     @PostMapping("/{walletId}/deposit/{amount}")
@@ -49,5 +49,11 @@ public class DinarWalletController {
     public ResponseEntity<DinarWallet> withdraw(@PathVariable String walletId,
                                                 @PathVariable int amount) throws BadRequestException {
         return ResponseEntity.ok(dinarWalletService.withdraw(walletId, amount));
+    }
+
+    @GetMapping("/myWallet")
+    public ResponseEntity<DinarWallet> getMyWallet()
+    {
+        return ResponseEntity.ok((dinarWalletService.getMyWallet()));
     }
 }

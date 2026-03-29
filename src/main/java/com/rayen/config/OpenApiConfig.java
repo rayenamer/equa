@@ -5,6 +5,7 @@ import io.swagger.v3.oas.models.OpenAPI;
 import io.swagger.v3.oas.models.security.SecurityScheme;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import io.swagger.v3.oas.models.security.SecurityRequirement;
 
 /**
  * Configure OpenAPI pour afficher le bouton "Authorize" dans Swagger UI
@@ -24,6 +25,7 @@ public class OpenApiConfig {
                                         .type(SecurityScheme.Type.HTTP)
                                         .scheme("bearer")
                                         .bearerFormat("JWT")
-                                        .description("Coller le token reçu après connexion (signin). Ex: eyJhbGciOiJIUzUxMiJ9...")));
+                                        .description("Coller le token reçu après connexion (signin).")))
+                .addSecurityItem(new SecurityRequirement().addList(BEARER_AUTH)); // semicolon only here
     }
 }
