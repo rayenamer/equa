@@ -11,9 +11,9 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-@RestController
-@RequestMapping("/api/assets")
-@Tag(name = "Asset Management", description = "CRUD & business operations for assets")
+@RestController("walletAssetController")
+@RequestMapping("/api/wallet-assets")
+@Tag(name = "Wallet Asset Management", description = "CRUD & business operations for wallet assets")
 public class AssetController {
 
     @Autowired

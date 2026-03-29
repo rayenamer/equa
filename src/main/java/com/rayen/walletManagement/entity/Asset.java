@@ -9,8 +9,8 @@ import java.time.LocalDateTime;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-@Entity
-@Table(name = "assets")
+@Entity(name = "WalletAsset")
+@Table(name = "wallet_assets")
 public class Asset {
 
     @Id

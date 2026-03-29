@@ -46,9 +46,7 @@ services:
     ports:
       - "5000:5000"
     environment:
-      EUREKA_SERVER_URL: http://app:8761/eureka/
-      INSTANCE_HOST: ai-service
-      INSTANCE_PORT: 5000
+      EUREKA_ENABLED: "false"
     depends_on:
       - app
     networks:

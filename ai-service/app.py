@@ -201,7 +201,10 @@ def credit_score():
 
 # Register with Eureka in a background thread (non-blocking, 5s delay)
 # Works both with Gunicorn and direct python execution
-threading.Timer(5, register_with_eureka).start()
+if os.environ.get('EUREKA_ENABLED', 'true').lower() != 'false':
+    threading.Timer(5, register_with_eureka).start()
+else:
+    print("⚠️ Eureka registration disabled via EUREKA_ENABLED=false")
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5000, debug=False)

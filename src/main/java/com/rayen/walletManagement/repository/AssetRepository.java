@@ -8,7 +8,7 @@ import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
-@Repository
+@Repository("walletAssetRepository")
 public interface AssetRepository extends JpaRepository<Asset, Long> {
 
     List<Asset> findByOwnerId(String ownerId);
@@ -19,9 +19,9 @@ public interface AssetRepository extends JpaRepository<Asset, Long> {
 
     List<Asset> findByStatus(String status);
 
-    @Query("SELECT SUM(a.value) FROM Asset a WHERE a.ownerId = :ownerId")
+    @Query("SELECT SUM(a.value) FROM WalletAsset a WHERE a.ownerId = :ownerId")
     Double getTotalAssetValueByOwnerId(@Param("ownerId") String ownerId);
 
-    @Query("SELECT SUM(a.value) FROM Asset a WHERE a.wallet.walletId = :walletId")
+    @Query("SELECT SUM(a.value) FROM WalletAsset a WHERE a.wallet.walletId = :walletId")
     Double getTotalAssetValueByWalletId(@Param("walletId") Long walletId);
 }
