@@ -10,7 +10,9 @@ import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Entity
 @Table(name = "nodes")
@@ -61,7 +63,7 @@ public class Node {
     @OneToMany(mappedBy = "validatorNode", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Transaction> transactions;
 
-    @JsonIgnore
     @OneToMany(mappedBy = "storageNode", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JsonIgnore
     private List<Dinar> storedDinars = new ArrayList<>();
 }
