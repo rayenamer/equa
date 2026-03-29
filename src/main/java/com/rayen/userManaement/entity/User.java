@@ -1,5 +1,6 @@
 package com.rayen.userManaement.entity;
 
+import com.rayen.walletManagement.entity.Wallet;
 import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
@@ -88,4 +89,8 @@ public abstract class User {
     protected void onUpdate() {
         updatedAt = LocalDateTime.now();
     }
+
+    @OneToOne
+    @JoinColumn(name = "wallet_id", nullable = true, unique = true)
+    private Wallet wallet;
 }
