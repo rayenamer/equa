@@ -43,9 +43,6 @@ public class DeviseWalletService {
         validator.validateAmount(amount);
         ensureDeviseWallet(wallet);
 
-        if (currency == CurrencyCode.EUR) {
-            wallet.setBalance(wallet.getBalance() + amount.floatValue());
-        }
         wallet.getDeviseWallet().deposit(currency, amount);
 
         recordOperation(wallet, WalletOperationType.FUNDING, currency, amount);
@@ -59,10 +56,6 @@ public class DeviseWalletService {
         validator.validateAmount(amount);
         ensureDeviseWallet(wallet);
 
-        if (currency == CurrencyCode.EUR) {
-            validator.ensureSufficientMainBalance(wallet, amount);
-            wallet.setBalance(wallet.getBalance() - amount.floatValue());
-        }
         wallet.getDeviseWallet().withdraw(currency, amount);
 
         recordOperation(wallet, WalletOperationType.WITHDRAWAL, currency, amount);
