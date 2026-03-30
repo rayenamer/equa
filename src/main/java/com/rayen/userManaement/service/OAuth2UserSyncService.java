@@ -3,6 +3,7 @@ package com.rayen.userManaement.service;
 import com.rayen.userManaement.controller.AuthController;
 import com.rayen.userManaement.entity.AssistantUser;
 import com.rayen.userManaement.entity.ObserverUser;
+import com.rayen.userManaement.entity.RiskLevel;
 import com.rayen.userManaement.entity.User;
 import com.rayen.userManaement.repository.ObserverUserRepository;
 import com.rayen.userManaement.repository.UserRepository;
@@ -73,6 +74,7 @@ public class OAuth2UserSyncService {
                 newUser.setProviderId(providerId);
                 newUser.setPassword(null);
                 newUser.setEmailVerified(true);
+                newUser.setRiskLevel(RiskLevel.MEDIUM);
                 User saved = observerUserRepository.save(newUser);
                 log.info("OAuth2: nouvel utilisateur OBSERVER créé, id={}, email={}, username={}", saved.getId(), saved.getEmail(), saved.getUsername());
                 return saved;
