@@ -64,6 +64,9 @@ public abstract class User {
     @Column(name = "password_reset_token_expiry")
     private LocalDateTime passwordResetTokenExpiry;
 
+    @Column(name = "password_reset_used_at")
+    private LocalDateTime passwordResetUsedAt;
+
     @Column(name = "last_login_at")
     private LocalDateTime lastLoginAt;
 
@@ -78,6 +81,10 @@ public abstract class User {
     /** Compte actif (false = désactivé, connexion refusée). Nullable pour migration. */
     @Column(name = "enabled")
     private Boolean enabled = true;
+
+    /** Quand true, l'utilisateur doit reinitialiser son mot de passe avant de pouvoir se reconnecter. */
+    @Column(name = "requires_password_reset")
+    private Boolean requiresPasswordReset = false;
 
     @PrePersist
     protected void onCreate() {
