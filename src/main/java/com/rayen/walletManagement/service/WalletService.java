@@ -4,8 +4,10 @@ import com.rayen.AuthContextService;
 import com.rayen.blockChainManagement.entity.DinarWallet;
 import com.rayen.blockChainManagement.repository.DinarWalletRepository;
 import com.rayen.blockChainManagement.service.EquaValuationEngine;
+import com.rayen.walletManagement.entity.DeviseWallet;
 import com.rayen.walletManagement.entity.Wallet;
 import com.rayen.walletManagement.repository.WalletRepository;
+import com.rayen.walletManagement.service.DeviseWalletService;
 import com.rayen.userManaement.entity.User;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -25,6 +27,7 @@ public class WalletService {
     private final DinarWalletRepository dinarWalletRepository;
     private final EquaValuationEngine equaValuationEngine;
     private final AuthContextService authContextService;
+    private final DeviseWalletService deviseWalletService;
 
     // ─── CRUD ────────────────────────────────────────────────
 
@@ -43,8 +46,9 @@ public class WalletService {
                 .user(user)
                 .build();
 
+        Wallet saved = deviseWalletService.createWalletWithDevise(wallet);
         log.info("[WalletService] Wallet created for userId: {}", user.getId());
-        return walletRepository.save(wallet);
+        return saved;
     }
 
     @Transactional(readOnly = true)
@@ -52,6 +56,11 @@ public class WalletService {
         Long userId = authContextService.getLoggedInUserId();
         return walletRepository.findByUser_Id(userId)
                 .orElseThrow(() -> new RuntimeException("Wallet not found for userId: " + userId));
+    }
+
+    @Transactional(readOnly = true)
+    public DeviseWallet getMyDeviseWallet() {
+        return getMyWallet().getDeviseWallet();
     }
 
     @Transactional(readOnly = true)
