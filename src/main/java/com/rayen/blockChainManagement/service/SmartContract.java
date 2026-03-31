@@ -157,7 +157,10 @@ public class SmartContract {
                 .orElseThrow(() -> new BadRequestException("Receiver wallet not found"));
 
         senderWallet.setBalance(senderWallet.getBalance() - amount.floatValue());
+        senderWallet.setEquaAmount(senderWallet.getEquaAmount() - amount.floatValue());
+
         receiverWallet.setBalance(receiverWallet.getBalance() + amount.floatValue());
+        receiverWallet.setEquaAmount(receiverWallet.getEquaAmount() - amount.floatValue());
 
         walletRepository.save(senderWallet);
         walletRepository.save(receiverWallet);
