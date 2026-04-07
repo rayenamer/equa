@@ -1,0 +1,21 @@
+.ui-input {
+  flex: 1;
+  min-width: 200px;
+  padding: 0.6rem 1rem;
+  border: 1px solid rgba(255, 215, 0, 0.25);
+  border-radius: 8px;
+  background: rgba(0, 0, 0, 0.3);
+  color: var(--text-primary);
+  font-size: 1rem;
+
+  &::placeholder {
+    color: var(--text-secondary);
+    opacity: 0.8;
+  }
+}
+
+@media (max-width: 768px) {
+  .ui-input {
+    min-width: 100%;
+  }
+}

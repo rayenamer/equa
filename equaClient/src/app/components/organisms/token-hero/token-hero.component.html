@@ -1,0 +1,23 @@
+<section class="token-section" [id]="sectionId">
+  <app-letter-glitch
+    class="token-section-glitch token-section-glitch-full"
+    [glitchColors]="glitchColors"
+    [glitchSpeed]="50"
+    [outerVignette]="true"
+    [centerVignette]="false"
+    [smooth]="true"
+  />
+
+  <div class="token-section-content">
+    <div class="token-section-left">
+      <p class="token-section-desc">{{ description }}</p>
+      <div class="token-section-cta">
+        <app-ui-button [label]="primaryCtaLabel" variant="primary" href="#" (clicked)="primaryCtaClick.emit($event)" />
+        <app-ui-button [label]="secondaryCtaLabel" variant="secondary" href="#" (clicked)="secondaryCtaClick.emit($event)" />
+      </div>
+    </div>
+    <div class="token-section-right">
+      <canvas #canvasRef></canvas>
+    </div>
+  </div>
+</section>

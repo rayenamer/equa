@@ -1,0 +1,34 @@
+<div
+  #root
+  class="chroma-grid"
+  [style.--r]="radius + 'px'"
+  [style.--cols]="columns"
+  [style.--rows]="rows"
+  (pointermove)="onGridPointerMove($event)"
+  (pointerleave)="onGridPointerLeave()"
+>
+  @for (c of data; track c.title) {
+    <article
+      class="chroma-card"
+      (mousemove)="onCardMouseMove($event, c)"
+      [style.--card-border]="c.borderColor"
+      [style.--card-gradient]="c.gradient"
+    >
+      <div class="chroma-img-wrapper">
+        <img [src]="c.image" [alt]="c.title" loading="lazy" (error)="onImgError($event, c)" />
+      </div>
+      <footer class="chroma-info">
+        <h3 class="name">{{ c.title }}</h3>
+        @if (c.handle) {
+          <span class="handle">{{ c.handle }}</span>
+        }
+        <p class="role">{{ c.subtitle }}</p>
+      </footer>
+      @if (c.description) {
+        <div class="chroma-description">{{ c.description }}</div>
+      }
+    </article>
+  }
+  <div #overlay class="chroma-overlay"></div>
+  <div #fade class="chroma-fade"></div>
+</div>

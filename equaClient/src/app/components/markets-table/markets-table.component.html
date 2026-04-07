@@ -1,0 +1,152 @@
+<section class="markets-section" id="markets">
+  <div class="markets-container">
+    <h2 class="markets-title">EQUA Marchés</h2>
+
+    <div class="markets-toolbar">
+      <div class="filter-tabs">
+        @for (tab of filterTabs; track tab.id) {
+          <button
+            type="button"
+            class="filter-tab"
+            [class.active]="activeFilter() === tab.id"
+            (click)="setFilter(tab.id)"
+          >
+            {{ tab.label }}
+          </button>
+        }
+        @for (tab of pairTypeTabs; track tab.id) {
+          <button
+            type="button"
+            class="filter-tab"
+            [class.active]="activePairFilter() === tab.id"
+            (click)="setPairFilter(tab.id)"
+          >
+            {{ tab.label }}
+          </button>
+        }
+      </div>
+      <button
+        type="button"
+        class="filters-btn"
+        [class.open]="showFiltersPanel()"
+        (click)="toggleFiltersPanel()"
+        aria-label="Filtres"
+      >
+        Filtres
+      </button>
+    </div>
+
+    <div class="table-wrap">
+      <table class="markets-table">
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>Exchange</th>
+            <th>Paire</th>
+            <th>Prix</th>
+            <th class="th-depth">
+              <span>+2% / -2% Depth</span>
+              <span class="th-info" title="Profondeur d’ordre à ±2%">ⓘ</span>
+            </th>
+            <th>Volume (24h)</th>
+            <th class="th-pct">
+              <span>% du volume</span>
+              <span class="th-info" title="Part du volume total">ⓘ</span>
+            </th>
+            <th>
+              <span>Liquidité</span>
+              <span class="th-info" title="Liquidité disponible">ⓘ</span>
+            </th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (row of paginatedMarkets(); track row.rank + row.exchange + row.pair) {
+            <tr>
+              <td class="col-rank">{{ row.rank }}</td>
+              <td class="col-exchange">
+                <span class="exchange-name">{{ row.exchange }}</span>
+              </td>
+              <td class="col-pair">
+                <a [href]="row.pairLink || '#'" class="pair-link" target="_blank" rel="noopener">
+                  {{ row.pair }}
+                  <span class="pair-ext-icon" aria-hidden="true">↗</span>
+                </a>
+              </td>
+              <td class="col-price">{{ row.price }}</td>
+              <td class="col-depth">
+                @if (row.depthBid === '--' && row.depthAsk === '--') {
+                  --
+                } @else {
+                  {{ row.depthBid }} / {{ row.depthAsk }}
+                }
+              </td>
+              <td class="col-volume">{{ row.volume24h }}</td>
+              <td class="col-pct">{{ row.volumePercent }}</td>
+              <td class="col-liquidity">
+                @if (row.liquidityIsValue) {
+                  {{ row.liquidity }}
+                } @else {
+                  <span class="liquidity-bar-icon" aria-hidden="true">▮</span>
+                  {{ row.liquidity }}
+                }
+              </td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+
+    <div class="pagination-bar">
+      <p class="pagination-summary">
+        Affichage des éléments {{ rangeStart() }} à {{ rangeEnd() }} sur {{ totalItems() }}
+      </p>
+      <div class="pagination-controls">
+        <button
+          type="button"
+          class="pagination-arrow"
+          [disabled]="currentPage() <= 1"
+          (click)="setPage(currentPage() - 1)"
+          aria-label="Page précédente"
+        >
+          ‹
+        </button>
+        @for (p of pageNumbers(); track p) {
+          @if (p === -1) {
+            <span class="pagination-ellipsis">…</span>
+          } @else {
+            <button
+              type="button"
+              class="pagination-num"
+              [class.active]="currentPage() === p"
+              (click)="setPage(p)"
+            >
+              {{ p }}
+            </button>
+          }
+        }
+        <button
+          type="button"
+          class="pagination-arrow"
+          [disabled]="currentPage() >= totalPages()"
+          (click)="setPage(currentPage() + 1)"
+          aria-label="Page suivante"
+        >
+          ›
+        </button>
+      </div>
+      <div class="pagination-page-size">
+        <span>Afficher les rangées</span>
+        <select
+          [value]="pageSize()"
+          (change)="setPageSize(+$any($event.target).value)"
+          class="page-size-select"
+        >
+          <option value="10">10</option>
+          <option value="25">25</option>
+          <option value="50">50</option>
+          <option value="100">100</option>
+        </select>
+      </div>
+    </div>
+  </div>
+</section>

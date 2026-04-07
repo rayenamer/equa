@@ -1,0 +1,22 @@
+<div
+  class="stack-container"
+  (mouseenter)="onContainerMouseEnter()"
+  (mouseleave)="onContainerMouseLeave()"
+>
+  @for (contentIndex of order; track contentIndex) {
+    <div
+      class="card-rotate"
+      [style]="getCardStyle(contentIndex)"
+      (pointerdown)="onPointerDown($event, contentIndex)"
+      (pointerup)="onPointerUp($event, contentIndex)"
+      (click)="onCardClick(contentIndex)"
+      [class.card-dragging]="draggingId === contentIndex"
+    >
+      <div class="card stack-card">
+        <span class="token-feature-icon" aria-hidden="true">{{ items[contentIndex].icon }}</span>
+        <h3 class="token-feature-title">{{ items[contentIndex].title }}</h3>
+        <p class="token-feature-text">{{ items[contentIndex].text }}</p>
+      </div>
+    </div>
+  }
+</div>

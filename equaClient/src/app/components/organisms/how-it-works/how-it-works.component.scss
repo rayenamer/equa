@@ -1,0 +1,28 @@
+.how-section {
+  padding: 5rem 0;
+  background: var(--dark-bg);
+  background-image: var(--bg-gradient);
+}
+
+.section-title {
+  text-align: center;
+  color: var(--primary-gold);
+  font-size: clamp(1.5rem, 3vw, 2.25rem);
+  font-weight: 700;
+  margin-bottom: 3rem;
+}
+
+.how-container {
+  max-width: 1000px;
+  margin: 0 auto;
+  padding: 0 2rem;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 2rem;
+}
+
+@media (max-width: 768px) {
+  .how-container {
+    grid-template-columns: 1fr;
+  }
+}

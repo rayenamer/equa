@@ -1,0 +1,46 @@
+<footer class="page-footer">
+  <div class="footer-container">
+    <div class="footer-brand">
+      <a href="/" class="footer-logo">{{ brand }}</a>
+      <p class="footer-tagline">{{ tagline }}</p>
+      <div class="footer-social">
+        @for (social of socialLinks; track social.label) {
+          <a [href]="social.href" [attr.aria-label]="social.ariaLabel">{{ social.label }}</a>
+        }
+      </div>
+    </div>
+
+    <div class="footer-links">
+      @for (group of linkGroups; track group.title) {
+        <div class="footer-col">
+          <h4>{{ group.title }}</h4>
+          @for (link of group.links; track link.label) {
+            <a [href]="link.href">{{ link.label }}</a>
+          }
+        </div>
+      }
+    </div>
+  </div>
+
+  <div class="footer-newsletter">
+    <div class="footer-newsletter-inner">
+      <h4>{{ newsletterTitle }}</h4>
+      <p>{{ newsletterText }}</p>
+      <form class="newsletter-form" (submit)="newsletterSubmit.emit($event)">
+        <app-ui-input
+          type="email"
+          name="newsletterEmail"
+          placeholder="Votre email"
+          [required]="true"
+          [value]="newsletterEmail"
+          (valueChange)="newsletterEmailChange.emit($event)"
+        />
+        <app-ui-button type="submit" variant="primary" label="S'inscrire" />
+      </form>
+    </div>
+  </div>
+
+  <div class="footer-bottom">
+    <p>&copy; {{ currentYear }} {{ brand }}. Tous droits reserves.</p>
+  </div>
+</footer>

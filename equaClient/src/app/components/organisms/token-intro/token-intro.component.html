@@ -1,0 +1,16 @@
+<section class="token-intro-section" [id]="sectionId">
+  <div class="token-intro-container">
+    <h2 class="token-intro-title">{{ title }}</h2>
+    <p class="token-intro-tagline">{{ tagline }}</p>
+    <p class="token-intro-desc">{{ description }}</p>
+    <div class="token-intro-stack-wrap">
+      <app-feature-stack
+        [sensitivity]="180"
+        [sendToBackOnClick]="true"
+        [autoplay]="true"
+        [autoplayDelay]="4000"
+        [pauseOnHover]="true"
+      />
+    </div>
+  </div>
+</section>

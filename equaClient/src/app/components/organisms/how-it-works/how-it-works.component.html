@@ -1,0 +1,8 @@
+<section class="how-section" [id]="sectionId">
+  <h2 class="section-title">{{ title }}</h2>
+  <div class="how-container">
+    @for (step of steps; track step.number) {
+      <app-how-step [stepNumber]="step.number" [title]="step.title" [text]="step.text" />
+    }
+  </div>
+</section>

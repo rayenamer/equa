@@ -1,0 +1,13 @@
+.stat-item {
+  .stat-value {
+    display: block;
+    color: var(--primary-gold);
+    font-size: clamp(1.5rem, 3vw, 2.25rem);
+    font-weight: 700;
+  }
+
+  .stat-label {
+    color: var(--text-secondary);
+    font-size: 0.9rem;
+  }
+}

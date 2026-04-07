@@ -1,0 +1,44 @@
+<section class="price-section" id="price">
+  <div class="price-container">
+    <div class="price-left">
+      <div class="price-main">
+        <div class="price-value">{{ priceValue }}</div>
+        <div class="price-change">{{ priceChange }}</div>
+      </div>
+      <button type="button" class="price-why-btn" (click)="whyPriceClick.emit()">
+        {{ whyPriceLabel }}
+      </button>
+
+      <div class="price-stats-grid">
+        @for (stat of stats; track stat.label) {
+          <div class="price-stat-card">
+            <span class="stat-label">{{ stat.label }}</span>
+            <span class="stat-value">{{ stat.value }}</span>
+            @if (stat.tag) {
+              <span class="stat-tag" [class.positive]="stat.tagVariant === 'positive'" [class.negative]="stat.tagVariant === 'negative'">
+                {{ stat.tag }}
+              </span>
+            }
+          </div>
+        }
+      </div>
+    </div>
+
+    <div class="price-right">
+      <div class="price-chart-header">
+        <div class="price-chart-tabs">
+          @for (tab of tabs; track tab) {
+            <button type="button" class="tab" [class.active]="tab === activeTab" (click)="tabSelect.emit(tab)">{{ tab }}</button>
+          }
+        </div>
+        <div class="price-chart-controls">
+          @for (chip of chips; track chip) {
+            <button type="button" class="chip" [class.active]="chip === activeChip" (click)="chipSelect.emit(chip)">{{ chip }}</button>
+          }
+        </div>
+      </div>
+
+      <app-price-chart />
+    </div>
+  </div>
+</section>

@@ -1,0 +1,37 @@
+<header class="page-header">
+  <div class="header-container">
+    <a href="/" class="logo">{{ logoText }}</a>
+
+    <button
+      type="button"
+      class="header-burger"
+      aria-label="Menu"
+      [class.open]="mobileMenuOpen"
+      (click)="menuToggle.emit()"
+    >
+      <span></span><span></span><span></span>
+    </button>
+
+    <app-nav-menu
+      class="header-nav"
+      [items]="navItems"
+      [open]="mobileMenuOpen"
+      (itemClick)="navItemClick.emit($event)"
+    />
+
+    <div class="header-cta">
+      <app-ui-button
+        [label]="loginLabel"
+        variant="primary"
+        href="#"
+        (clicked)="loginClick.emit($event)"
+      />
+      <app-ui-button
+        [label]="signupLabel"
+        variant="secondary"
+        href="#"
+        (clicked)="signupClick.emit($event)"
+      />
+    </div>
+  </div>
+</header>

@@ -1,0 +1,7 @@
+<section class="stats-section">
+  <div class="stats-container">
+    @for (stat of stats; track stat.label) {
+      <app-stat-card [value]="stat.value" [label]="stat.label" />
+    }
+  </div>
+</section>

@@ -1,0 +1,8 @@
+<div class="faq-item" [class.open]="open">
+  <button type="button" class="faq-question" (click)="toggled.emit()">
+    {{ question }}
+  </button>
+  <div class="faq-answer">
+    <p>{{ answer }}</p>
+  </div>
+</div>

@@ -1,0 +1,7 @@
+<section class="cta-banner" [id]="sectionId">
+  <div class="cta-banner-inner">
+    <h2 class="cta-banner-title">{{ title }}</h2>
+    <p class="cta-banner-text">{{ text }}</p>
+    <app-ui-button [label]="buttonLabel" variant="primary" size="lg" href="#" (clicked)="buttonClick.emit($event)" />
+  </div>
+</section>
