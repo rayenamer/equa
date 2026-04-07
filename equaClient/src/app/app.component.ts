@@ -8,7 +8,6 @@ import { SplashCursorComponent } from './components/splash-cursor/splash-cursor.
   imports: [RouterOutlet, SplashCursorComponent],
   template: `
     <router-outlet></router-outlet>
-    <app-splash-cursor />
   `,
   styles: []
 })

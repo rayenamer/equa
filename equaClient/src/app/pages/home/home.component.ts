@@ -1,5 +1,6 @@
 import { Component, OnDestroy, ElementRef, ViewChild, AfterViewInit, HostListener, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { Router } from '@angular/router';
 import { ThreeService } from '../../services/three.service';
 import { MarketsTableComponent } from '../../components/markets-table/markets-table.component';
 import { HomeHeaderComponent } from '../../components/organisms/home-header/home-header.component';
@@ -173,7 +174,8 @@ export class HomeComponent implements AfterViewInit, OnDestroy {
 
   constructor(
     private threeService: ThreeService,
-    private cdr: ChangeDetectorRef
+    private cdr: ChangeDetectorRef,
+    private router: Router
   ) {}
 
   ngAfterViewInit(): void {
@@ -284,7 +286,7 @@ export class HomeComponent implements AfterViewInit, OnDestroy {
 
   onTokenPrimaryCtaClick(event: Event): void {
     event.preventDefault();
-    this.scrollTo('token-intro');
+    this.router.navigate(['/blockchain']);
   }
 
   onTokenSecondaryCtaClick(event: Event): void {
