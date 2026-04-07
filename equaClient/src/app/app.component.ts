@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { RouterOutlet } from '@angular/router';
+import { OutletContext, RouterOutlet } from '@angular/router';
 import { SplashCursorComponent } from './components/splash-cursor/splash-cursor.component';
 
 @Component({
@@ -14,3 +14,9 @@ import { SplashCursorComponent } from './components/splash-cursor/splash-cursor.
 export class AppComponent {
   title = 'EQUA - Finance Without Barriers';
 }
+/*in demo add 
+    <app-splash-cursor />
+    next to router-outlet    
+
+    COPY PASTE
+*/
