@@ -1,0 +1,55 @@
+<div
+  #container
+  [class]="rootClass"
+  [ngStyle]="containerStyle"
+  role="region"
+  [attr.aria-label]="ariaLabel"
+>
+  <div
+    class="logoloop__track"
+    #track
+    (mouseenter)="onMouseEnter()"
+    (mouseleave)="onMouseLeave()"
+  >
+    @for (copy of copyArray; track copy) {
+      <ul
+        class="logoloop__list"
+        [attr.aria-hidden]="copy > 0"
+        role="list"
+        #firstList
+      >
+        @for (item of items; track item.src + (item.alt ?? '')) {
+          <li class="logoloop__item" role="listitem">
+            @if (item.href) {
+              <a
+                class="logoloop__link"
+                [href]="item.href"
+                [attr.aria-label]="item.alt || item.title || 'logo link'"
+                target="_blank"
+                rel="noreferrer noopener"
+              >
+                <img
+                  [src]="item.src"
+                  [alt]="item.alt ?? ''"
+                  [title]="item.title"
+                  loading="lazy"
+                  decoding="async"
+                  draggable="false"
+                />
+              </a>
+            } @else {
+              <img
+                [src]="item.src"
+                [alt]="item.alt ?? ''"
+                [title]="item.title"
+                loading="lazy"
+                decoding="async"
+                draggable="false"
+              />
+            }
+          </li>
+        }
+      </ul>
+    }
+  </div>
+</div>

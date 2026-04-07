@@ -1,0 +1,5 @@
+<nav class="nav-links" [class.open]="open">
+  @for (item of items; track item.label) {
+    <a href="#" (click)="onItemClick($event, item.sectionId)">{{ item.label }}</a>
+  }
+</nav>

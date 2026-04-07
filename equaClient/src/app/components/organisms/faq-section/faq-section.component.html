@@ -1,0 +1,13 @@
+<section class="faq-section" id="faq">
+  <h2 class="section-title">{{ title }}</h2>
+  <div class="faq-container">
+    @for (item of items; track item.question; let i = $index) {
+      <app-faq-item
+        [question]="item.question"
+        [answer]="item.answer"
+        [open]="openIndex === i"
+        (toggled)="itemToggle.emit(i)"
+      />
+    }
+  </div>
+</section>
