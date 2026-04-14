@@ -1,36 +1,43 @@
 import { Routes } from '@angular/router';
+import { HomeComponent } from './pages/home/home.component';
+import { HomepageComponent as BlockchainHomepage } from './BlockChain/homepage/homepage.component';
+import { HomepageComponent as FinancialMarketHomepage } from './FiancialMarket/homepage/homepage.component';
+import { HomepageComponent as ForumHomepage } from './Forum/homepage/homepage.component';
+import { HomepageComponent as LoanHomepage } from './Loan/homepage/homepage.component';
+import { HomepageComponent as UserHomepage } from './User/homepage/homepage.component';
+import { HomepageComponent as WalletHomepage } from './Wallet/homepage/homepage.component';
 
 export const routes: Routes = [
-  {
-    path: '',
-    loadComponent: () => import('./pages/home/home.component').then(m => m.HomeComponent)
-  },
-  {
-    path: 'blockchain',
-    loadChildren: () => import('./BlockChain/blockchain.routes').then(m => m.BLOCKCHAIN_ROUTES)
-  },
-  {
-    path: 'financial-market',
-    loadChildren: () => import('./FiancialMarket/financial-market.routes').then(m => m.FINANCIAL_MARKET_ROUTES)
-  },
-  {
-    path: 'forum',
-    loadChildren: () => import('./Forum/forum.routes').then(m => m.FORUM_ROUTES)
-  },
-  {
-    path: 'loan',
-    loadChildren: () => import('./Loan/loan.routes').then(m => m.LOAN_ROUTES)
-  },
-  {
-    path: 'user',
-    loadChildren: () => import('./User/user.routes').then(m => m.USER_ROUTES)
-  },
-  {
-    path: 'wallet',
-    loadChildren: () => import('./Wallet/wallet.routes').then(m => m.WALLET_ROUTES)
-  },
-  {
-    path: '**',
-    redirectTo: ''
-  }
+{
+path: '',
+component: HomeComponent
+},
+{
+path: 'blockchain',
+component: BlockchainHomepage
+},
+{
+path: 'financial-market',
+component: FinancialMarketHomepage
+},
+{
+path: 'forum',
+component: ForumHomepage
+},
+{
+path: 'loan',
+component: LoanHomepage
+},
+{
+path: 'user',
+component: UserHomepage
+},
+{
+path: 'wallet',
+component: WalletHomepage
+},
+{
+path: '**',
+redirectTo: ''
+}
 ];
