@@ -1,0 +1,91 @@
+.blockchain-layout {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    background: #050505;
+    color: #fff;
+
+    .content-container {
+        display: flex;
+        flex: 1;
+        max-width: 1400px;
+        margin: 0 auto;
+        width: 100%;
+        padding: 2rem 1rem;
+        gap: 2rem;
+
+        .sidebar {
+            width: 280px;
+            flex-shrink: 0;
+
+            nav {
+                position: sticky;
+                top: 100px;
+                background: rgba(255, 255, 255, 0.03);
+                border: 1px solid rgba(255, 255, 255, 0.1);
+                border-radius: 16px;
+                padding: 1.5rem;
+                backdrop-filter: blur(10px);
+
+                ul {
+                    list-style: none;
+                    padding: 0;
+                    margin: 0;
+                    display: flex;
+                    flex-direction: column;
+                    gap: 0.5rem;
+
+                    a {
+                        display: block;
+                        padding: 0.75rem 1rem;
+                        color: rgba(255, 255, 255, 0.6);
+                        text-decoration: none;
+                        border-radius: 8px;
+                        transition: all 0.3s ease;
+                        font-weight: 500;
+
+                        &:hover {
+                            background: rgba(255, 255, 255, 0.05);
+                            color: #fff;
+                        }
+
+                        &.active {
+                            background: linear-gradient(135deg, rgba(98, 126, 234, 0.2), rgba(98, 126, 234, 0.1));
+                            color: #627eea;
+                            border-left: 3px solid #627eea;
+                        }
+                    }
+                }
+            }
+        }
+
+        .page-content {
+            flex: 1;
+            min-width: 0;
+        }
+    }
+}
+
+@media (max-width: 1024px) {
+    .blockchain-layout .content-container {
+        flex-direction: column;
+
+        .sidebar {
+            width: 100%;
+
+            nav {
+                position: static;
+
+                ul {
+                    flex-direction: row;
+                    overflow-x: auto;
+                    padding-bottom: 0.5rem;
+
+                    a {
+                        white-space: nowrap;
+                    }
+                }
+            }
+        }
+    }
+}

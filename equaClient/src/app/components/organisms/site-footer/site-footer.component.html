@@ -22,24 +22,6 @@
     </div>
   </div>
 
-  <div class="footer-newsletter">
-    <div class="footer-newsletter-inner">
-      <h4>{{ newsletterTitle }}</h4>
-      <p>{{ newsletterText }}</p>
-      <form class="newsletter-form" (submit)="newsletterSubmit.emit($event)">
-        <app-ui-input
-          type="email"
-          name="newsletterEmail"
-          placeholder="Votre email"
-          [required]="true"
-          [value]="newsletterEmail"
-          (valueChange)="newsletterEmailChange.emit($event)"
-        />
-        <app-ui-button type="submit" variant="primary" label="S'inscrire" />
-      </form>
-    </div>
-  </div>
-
   <div class="footer-bottom">
     <p>&copy; {{ currentYear }} {{ brand }}. Tous droits reserves.</p>
   </div>

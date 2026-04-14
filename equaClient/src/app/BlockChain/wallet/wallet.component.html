@@ -1,0 +1,38 @@
+<div class="wallet-page">
+    <header class="section-header">
+        <h1>Mon Portefeuille Dinar</h1>
+        <p>Gérez vos actifs et visualisez l'historique de vos transactions.</p>
+    </header>
+
+    <div class="stats-grid">
+        <app-stat-card *ngFor="let stat of walletStats" [label]="stat.label" [value]="stat.value"></app-stat-card>
+    </div>
+
+    <div class="wallet-actions-grid">
+        <div class="chart-section card-container">
+            <div class="card-header">
+                <h2>Évolution du Solde</h2>
+            </div>
+            <app-price-chart></app-price-chart>
+        </div>
+
+        <div class="actions-panel card-container">
+            <div class="card-header">
+                <h2>Actions Rapides</h2>
+            </div>
+            <div class="buttons-stack">
+                <app-ui-button variant="primary">Envoyer des Dinar</app-ui-button>
+                <app-ui-button variant="secondary">Recevoir</app-ui-button>
+                <app-ui-button variant="secondary">Déposer</app-ui-button>
+                <app-ui-button variant="secondary" class="danger">Retirer</app-ui-button>
+            </div>
+        </div>
+    </div>
+
+    <div class="table-section card-container">
+        <div class="card-header">
+            <h2>Transactions Portefeuille</h2>
+        </div>
+        <app-markets-table></app-markets-table>
+    </div>
+</div>

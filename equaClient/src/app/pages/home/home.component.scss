@@ -146,6 +146,32 @@
   background-image: var(--bg-gradient);
 }
 
+.home-chart-section,
+.financial-chart-section {
+  padding: 3rem 0;
+  display: flex;
+  justify-content: center;
+  background: var(--dark-bg);
+  background-image: var(--bg-gradient);
+}
+
+.home-chart-container,
+.financial-chart-container {
+  width: min(100%, 1200px);
+  max-width: 100%;
+  padding: 0 1rem;
+}
+
+.home-chart {
+  width: 100%;
+  min-height: 30rem;
+}
+
+.financial-chart-container app-financial-chart,
+.financial-chart-container > * {
+  width: 100%;
+}
+
 .section-title {
   text-align: center;
   color: var(--primary-gold);
@@ -1214,3 +1240,4 @@
     grid-template-columns: 1fr;
   }
 }
+

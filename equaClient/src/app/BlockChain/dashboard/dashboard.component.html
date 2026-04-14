@@ -1,0 +1,21 @@
+<div class="dashboard-page">
+    <div class="stats-grid">
+        <app-stat-card *ngFor="let stat of stats" [label]="stat.label" [value]="stat.value"></app-stat-card>
+    </div>
+
+    <div class="chart-section card-container">
+        <div class="card-header">
+            <h2>Activité du Réseau (24h)</h2>
+            <app-ui-button variant="secondary" size="md">Détails</app-ui-button>
+        </div>
+        <app-price-chart></app-price-chart>
+    </div>
+
+    <div class="table-section card-container">
+        <div class="card-header">
+            <h2>Transactions Récentes</h2>
+            <app-ui-button variant="secondary" size="md">Voir tout</app-ui-button>
+        </div>
+        <app-markets-table></app-markets-table>
+    </div>
+</div>
