@@ -1,0 +1,21 @@
+<div class="blocks-page">
+    <header class="section-header">
+        <h1>Explorateur de Blocs</h1>
+        <p>Visualisez les blocs minés en temps réel sur la blockchain EQUA.</p>
+    </header>
+
+    <div class="stats-grid">
+        <app-stat-card *ngFor="let stat of blockStats" [label]="stat.label" [value]="stat.value"></app-stat-card>
+    </div>
+
+    <div class="search-bar card-container">
+        <app-ui-input placeholder="Rechercher un numéro de bloc ou un hash..."></app-ui-input>
+    </div>
+
+    <div class="table-section card-container">
+        <div class="card-header">
+            <h2>Derniers Blocs</h2>
+        </div>
+        <app-markets-table></app-markets-table>
+    </div>
+</div>

@@ -2,6 +2,7 @@ import { Component, OnDestroy, ElementRef, ViewChild, AfterViewInit, HostListene
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
 import { ThreeService } from '../../services/three.service';
+import { ChartModule } from 'primeng/chart';
 import { MarketsTableComponent } from '../../components/markets-table/markets-table.component';
 import { HomeHeaderComponent } from '../../components/organisms/home-header/home-header.component';
 import { StatsStripComponent } from '../../components/organisms/stats-strip/stats-strip.component';
@@ -19,6 +20,9 @@ import { NavMenuItem } from '../../components/molecules/nav-menu/nav-menu.compon
 import { FaqSectionItem } from '../../components/organisms/faq-section/faq-section.component';
 import { FooterLinkGroup } from '../../components/organisms/site-footer/site-footer.component';
 import { PriceStatItem } from '../../components/organisms/price-overview/price-overview.component';
+import { FinancialChartComponent } from '../../components/financial-chart/financial-chart.component';
+import { getAcmeData, getAcmeAnnotations } from '../../components/financial-chart/financial-chart.data';
+import { ChartLinesStyleComponent } from '../../components/chart-lines-style/chart-lines-style.component';
 
 interface StatItem {
   label: string;
@@ -44,7 +48,10 @@ interface StatItem {
     HowItWorksComponent,
     CtaBannerComponent,
     LogoLoopBandComponent,
-    BackToTopButtonComponent
+    BackToTopButtonComponent,
+    ChartModule,
+    FinancialChartComponent,
+    ChartLinesStyleComponent
   ],
   templateUrl: './home.component.html',
   styleUrls: ['./home.component.scss']
@@ -160,6 +167,45 @@ export class HomeComponent implements AfterViewInit, OnDestroy {
     { number: '3', title: 'Utilisez les services', text: 'Paiements, transferts et services décentralisés en un clic.' },
     { number: '4', title: 'Restez en contrôle', text: 'Vos actifs, votre portefeuille, une totale transparence.' }
   ];
+
+  chartData = getAcmeData();
+  chartTitle = 'Prix EQUA';
+  chartAnnotations = getAcmeAnnotations();
+
+  lineChartData = {
+    labels: ['Jan', 'Fév', 'Mar', 'Avr', 'Mai', 'Juin', 'Juil'],
+    datasets: [
+      {
+        label: 'Prix EQUA',
+        data: [65, 59, 80, 81, 56, 55, 70],
+        fill: false,
+        tension: 0.4,
+        borderColor: '#00bcd4',
+        backgroundColor: 'rgba(0, 188, 212, 0.2)'
+      }
+    ]
+  };
+
+  lineChartOptions = {
+    maintainAspectRatio: false,
+    plugins: {
+      legend: {
+        labels: {
+          color: '#ffffff'
+        }
+      }
+    },
+    scales: {
+      x: {
+        ticks: { color: '#cbd5e1' },
+        grid: { color: 'rgba(255,255,255,0.12)' }
+      },
+      y: {
+        ticks: { color: '#cbd5e1' },
+        grid: { color: 'rgba(255,255,255,0.12)' }
+      }
+    }
+  };
 
   stats: StatItem[] = [
     { label: 'Pays', target: 50, suffix: '+', current: 0 },

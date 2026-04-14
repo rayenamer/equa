@@ -3,20 +3,9 @@
   <div class="spinner"></div>
 </div>
 
-<app-home-header
-  [logoText]="'EQUA'"
-  [navItems]="headerNavItems"
-  [mobileMenuOpen]="mobileMenuOpen"
-  [loginLabel]="'Connexion'"
-  (menuToggle)="toggleMobileMenu()"
-  (navItemClick)="scrollTo($event)"
-  (loginClick)="onHeaderCtaClick($event)"
-  (signupClick)="onHeaderCtaClick($event)"
-/>
+<!--<app-logo-loop-band />-->
 
-<app-logo-loop-band />
-
-<app-token-hero
+<!--<app-token-hero
   [sectionId]="'token-section'"
   [glitchColors]="glitchColors"
   [description]="'Accédez au token EQUA et aux services décentralisés en quelques clics.'"
@@ -25,14 +14,10 @@
   (canvasReady)="onTokenCanvasReady($event)"
   (primaryCtaClick)="onTokenPrimaryCtaClick($event)"
   (secondaryCtaClick)="onTokenSecondaryCtaClick($event)"
-/>
+/>-->
 
-<app-token-intro
-  [sectionId]="'token-intro'"
-  [title]="'Le token EQUA'"
-  [tagline]="'Finance Without Barriers'"
-  [description]="tokenIntroDescription"
-/>
+<app-token-intro [sectionId]="'token-intro'" [title]="'Le token EQUA'" [tagline]="'Finance Without Barriers'"
+  [description]="tokenIntroDescription" />
 
 <app-tokens-market [title]="'Tokens du marché'" />
 
@@ -41,55 +26,39 @@
   <app-stats-strip [stats]="statsStripItems" />
 </section>
 
-<app-how-it-works
-  [sectionId]="'how-it-works'"
-  [title]="'Comment ça marche'"
-  [steps]="howItWorksSteps"
-/>
+<app-how-it-works [sectionId]="'how-it-works'" [title]="'Comment ça marche'" [steps]="howItWorksSteps" />
 
-<app-price-overview
-  [priceValue]="priceOverview.priceValue"
-  [priceChange]="priceOverview.priceChange"
-  [whyPriceLabel]="priceOverview.whyPriceLabel"
-  [stats]="priceOverview.stats"
-  [tabs]="priceOverview.tabs"
-  [activeTab]="priceOverview.activeTab"
-  [chips]="priceOverview.chips"
-  [activeChip]="priceOverview.activeChip"
-  (whyPriceClick)="onWhyPriceClick()"
-  (tabSelect)="onPriceTabSelect($event)"
-  (chipSelect)="onPriceChipSelect($event)"
-/>
-
+<app-price-overview [priceValue]="priceOverview.priceValue" [priceChange]="priceOverview.priceChange"
+  [whyPriceLabel]="priceOverview.whyPriceLabel" [stats]="priceOverview.stats" [tabs]="priceOverview.tabs"
+  [activeTab]="priceOverview.activeTab" [chips]="priceOverview.chips" [activeChip]="priceOverview.activeChip"
+  (whyPriceClick)="onWhyPriceClick()" (tabSelect)="onPriceTabSelect($event)" (chipSelect)="onPriceChipSelect($event)" />
+<section class="home-chart-section">
+  <div class="home-chart-container">
+    <p-chart
+      type="line"
+      [data]="lineChartData"
+      [options]="lineChartOptions"
+      class="home-chart"
+    ></p-chart>
+  </div>
+</section>
 <!-- Marchés EQUA -->
+<div class="financial-chart-section">
+  <div class="financial-chart-container">
+  <app-financial-chart
+    [data]="chartData"
+    [title]="chartTitle"
+    [annotations]="chartAnnotations"
+  />
+  </div>
+</div>
 <app-markets-table />
 
-<app-faq-section
-  [title]="'Questions fréquentes'"
-  [items]="faqItems"
-  [openIndex]="faqOpen"
-  (itemToggle)="toggleFaq($event)"
-/>
+<app-faq-section [title]="'Questions fréquentes'" [items]="faqItems" [openIndex]="faqOpen"
+  (itemToggle)="toggleFaq($event)" />
 
-<app-cta-banner
-  [sectionId]="'contact-cta'"
-  [title]="'Prêt à commencer ?'"
-  [text]="ctaBannerText"
-  [buttonLabel]="'Rejoindre EQUA'"
-  (buttonClick)="onJoinCtaClick($event)"
-/>
+<app-cta-banner [sectionId]="'contact-cta'" [title]="'Prêt à commencer ?'" [text]="ctaBannerText"
+  [buttonLabel]="'Rejoindre EQUA'" (buttonClick)="onJoinCtaClick($event)" />
 
-<app-site-footer
-  [brand]="'EQUA'"
-  [tagline]="'Finance Without Barriers'"
-  [socialLinks]="footerSocialLinks"
-  [linkGroups]="footerLinkGroups"
-  [newsletterTitle]="'Restez informé'"
-  [newsletterText]="'Recevez les actualités et les nouveautés EQUA.'"
-  [newsletterEmail]="newsletterEmail"
-  [currentYear]="currentYear"
-  (newsletterEmailChange)="newsletterEmail = $event"
-  (newsletterSubmit)="onNewsletterSubmit($event)"
-/>
 
 <app-back-to-top-button [visible]="showBackToTop" [ariaLabel]="'Retour en haut'" (pressed)="scrollToTop()" />

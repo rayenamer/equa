@@ -1,0 +1,20 @@
+<div class="transactions-list-page">
+    <header class="section-header">
+        <h1>Explorateur de Transactions</h1>
+        <p>Historique complet des transactions sur le réseau EQUA.</p>
+    </header>
+
+    <div class="filters-bar card-container">
+        <div class="search-box">
+            <app-ui-input placeholder="Rechercher par hash, adresse..."></app-ui-input>
+        </div>
+        <div class="filter-group">
+            <app-ui-button variant="secondary" size="md" *ngFor="let f of statusFilters">{{f}}</app-ui-button>
+        </div>
+        <app-ui-button variant="primary" size="md">Filtrer</app-ui-button>
+    </div>
+
+    <div class="table-section card-container">
+        <app-markets-table></app-markets-table>
+    </div>
+</div>

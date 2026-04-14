@@ -1,1 +1,24 @@
-<p>homepage works!</p>
+<div class="blockchain-layout">
+    <app-home-header [navItems]="navItems" (navItemClick)="onNavItemClick($event)"
+        logoText="EQUA Chain"></app-home-header>
+
+    <main class="content-container">
+        <aside class="sidebar">
+            <nav>
+                <ul>
+                    <li *ngFor="let item of navItems">
+                        <a [routerLink]="item.sectionId" routerLinkActive="active">
+                            {{ item.label }}
+                        </a>
+                    </li>
+                </ul>
+            </nav>
+        </aside>
+
+        <section class="page-content">
+            <router-outlet></router-outlet>
+        </section>
+    </main>
+
+    <app-site-footer brand="EQUA Chain" [linkGroups]="footerGroups"></app-site-footer>
+</div>
