@@ -4,16 +4,9 @@
         <p>Visualisation des validateurs et de leur état de santé sur le réseau.</p>
     </header>
 
-    <div class="stats-grid">
-        <app-stat-card *ngFor="let stat of nodeStats" [label]="stat.label" [value]="stat.value"></app-stat-card>
-    </div>
+    <app-node-stats></app-node-stats>
 
-    <div class="nodes-visualizer card-container">
-        <div class="card-header">
-            <h2>Top Validateurs</h2>
-        </div>
-        <div class="grid-wrapper">
-            <app-tokens-grid [items]="nodes" [columns]="2"></app-tokens-grid>
-        </div>
+    <div class="nodes-table-section">
+        <app-nodes-table></app-nodes-table>
     </div>
 </div>

@@ -1,0 +1,18 @@
+<div class="stats-container">
+    <div class="stat-card">
+        <span class="label">Total Fees</span>
+        <span class="value">{{ totalFees() | number:'1.4-4' }} EQUA</span>
+    </div>
+    <div class="stat-card">
+        <span class="label">Average Amount</span>
+        <span class="value">{{ avgAmount() | number:'1.2-2' }} EQUA</span>
+    </div>
+    <div class="stat-card user-stat">
+        <span class="label">Total Sent (Me)</span>
+        <span class="value">{{ totalSent() | number:'1.2-2' }} EQUA</span>
+    </div>
+    <div class="stat-card user-stat">
+        <span class="label">Total Received (Me)</span>
+        <span class="value">{{ totalReceived() | number:'1.2-2' }} EQUA</span>
+    </div>
+</div>

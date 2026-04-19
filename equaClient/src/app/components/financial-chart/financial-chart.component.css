@@ -1,7 +1,8 @@
 :host {
   display: block;
   width: 100%;
-  min-width: 0;        /* prevents flex/grid children from overflowing */
+  min-width: 0;
+  /* prevents flex/grid children from overflowing */
   height: 100%;
   overflow: hidden;
 }

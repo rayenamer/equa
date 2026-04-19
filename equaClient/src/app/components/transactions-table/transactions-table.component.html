@@ -1,0 +1,81 @@
+<div class="transactions-container">
+    <app-transaction-stats [transactions]="filteredTransactions()"></app-transaction-stats>
+
+    <app-transaction-filters (filtersChanged)="handleFiltersChange($event)"></app-transaction-filters>
+
+    <div class="transactions-toolbar">
+        <div class="toolbar-main">
+            <div class="filter-tabs">
+                @for (tab of statusTabs; track tab.id) {
+                <button type="button" class="filter-tab" [class.active]="activeFilter() === tab.id"
+                    (click)="setFilter(tab.id)">
+                    {{ tab.label }}
+                </button>
+                }
+            </div>
+
+            <div class="sort-controls">
+                <span>Trier par:</span>
+                <button [class.active]="sortOrder() === 'timestamp'" (click)="setSort('timestamp')">Date</button>
+                <button [class.active]="sortOrder() === 'amount'" (click)="setSort('amount')">Montant</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="table-wrap">
+        <table class="transactions-table">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>De</th>
+                    <th>À</th>
+                    <th>Montant</th>
+                    <th>Date</th>
+                    <th>Statut</th>
+                    <th>Hash</th>
+                    <th>Frais</th>
+                </tr>
+            </thead>
+            <tbody>
+                @for (tx of paginatedTransactions(); track tx.transactionId) {
+                <tr>
+                    <td class="col-id">{{ tx.transactionId }}</td>
+                    <td class="col-wallet">{{ tx.fromWallet }}</td>
+                    <td class="col-wallet">{{ tx.toWallet }}</td>
+                    <td class="col-amount">{{ tx.amount | number:'1.2-2' }} EQUA</td>
+                    <td class="col-date">{{ tx.timestamp | date:'short' }}</td>
+                    <td class="col-status">
+                        <span [class]="'status-badge ' + getStatusClass(tx.status)">
+                            {{ tx.status }}
+                        </span>
+                    </td>
+                    <td class="col-hash">
+                        <span class="hash-text" [title]="tx.transactionHash">{{ tx.transactionHash }}</span>
+                    </td>
+                    <td class="col-fee">{{ tx.fee | number:'1.4-4' }}</td>
+                </tr>
+                } @empty {
+                <tr>
+                    <td colspan="8" class="empty-state">Aucune transaction trouvée</td>
+                </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+
+    @if (totalPages() > 1) {
+    <div class="pagination-bar">
+        <div class="pagination-controls">
+            <button type="button" class="pagination-arrow" [disabled]="currentPage() <= 1"
+                (click)="setPage(currentPage() - 1)">
+                ‹
+            </button>
+            <span class="page-info">Page {{ currentPage() }} sur {{ totalPages() }}</span>
+            <button type="button" class="pagination-arrow" [disabled]="currentPage() >= totalPages()"
+                (click)="setPage(currentPage() + 1)">
+                ›
+            </button>
+        </div>
+    </div>
+    }
+</div>

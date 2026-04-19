@@ -1,0 +1,54 @@
+<div class="blocks-container">
+    <div class="table-wrap">
+        <table class="blocks-table">
+            <thead>
+                <tr>
+                    <th>ID Bloc</th>
+                    <th>Hash du Bloc</th>
+                    <th>Hash Précédent</th>
+                    <th>Taille</th>
+                    <th>Timestamp</th>
+                    <th>Créé à</th>
+                </tr>
+            </thead>
+            <tbody>
+                @for (block of paginatedBlocks(); track block.blockId) {
+                <tr>
+                    <td class="col-id">
+                        <span class="block-number">#{{ block.blockId }}</span>
+                    </td>
+                    <td class="col-hash">
+                        <span class="hash-text" [title]="block.blockHash">{{ block.blockHash }}</span>
+                    </td>
+                    <td class="col-hash">
+                        <span class="hash-text" [title]="block.previousHash">{{ block.previousHash }}</span>
+                    </td>
+                    <td class="col-size">{{ formatBytes(block.blockSize) }}</td>
+                    <td class="col-date">{{ block.timestamp | date:'medium' }}</td>
+                    <td class="col-date">{{ block.createdAt | date:'shortTime' }}</td>
+                </tr>
+                } @empty {
+                <tr>
+                    <td colspan="6" class="empty-state">Aucun bloc trouvé</td>
+                </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+
+    @if (totalPages() > 1) {
+    <div class="pagination-bar">
+        <div class="pagination-controls">
+            <button type="button" class="pagination-arrow" [disabled]="currentPage() <= 1"
+                (click)="setPage(currentPage() - 1)">
+                ‹
+            </button>
+            <span class="page-info">Page {{ currentPage() }} sur {{ totalPages() }}</span>
+            <button type="button" class="pagination-arrow" [disabled]="currentPage() >= totalPages()"
+                (click)="setPage(currentPage() + 1)">
+                ›
+            </button>
+        </div>
+    </div>
+    }
+</div>

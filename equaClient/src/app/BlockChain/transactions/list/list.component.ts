@@ -1,22 +1,16 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { MarketsTableComponent } from '../../../components/markets-table/markets-table.component';
-import { UiInputComponent } from '../../../components/atoms/ui-input/ui-input.component';
-import { UiButtonComponent } from '../../../components/atoms/ui-button/ui-button.component';
+import { TransactionsTableComponent } from '../../../components/transactions-table/transactions-table.component';
 
 @Component({
   selector: 'app-list',
   standalone: true,
   imports: [
     CommonModule,
-    MarketsTableComponent,
-    UiInputComponent,
-    UiButtonComponent
+    TransactionsTableComponent
   ],
   templateUrl: './list.component.html',
   styleUrl: './list.component.scss'
 })
 export class ListComponent {
-  // Static filters for UI simulation
-  statusFilters = ['Tous', 'Confirmé', 'En attente', 'Échoué'];
 }

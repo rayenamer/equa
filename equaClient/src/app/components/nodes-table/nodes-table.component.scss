@@ -1,0 +1,133 @@
+.nodes-container {
+    padding: 1.5rem;
+    background: rgba(255, 255, 255, 0.02);
+    border-radius: 16px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.nodes-toolbar {
+    margin-bottom: 2rem;
+}
+
+.filter-tabs {
+    display: flex;
+    gap: 0.75rem;
+
+    button {
+        background: rgba(255, 255, 255, 0.05);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        color: rgba(255, 255, 255, 0.6);
+        padding: 0.6rem 1.25rem;
+        border-radius: 10px;
+        font-size: 0.85rem;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.2s;
+
+        &:hover {
+            background: rgba(255, 255, 255, 0.1);
+            color: #fff;
+        }
+
+        &.active {
+            background: #627eea;
+            border-color: #627eea;
+            color: #fff;
+        }
+    }
+}
+
+.table-wrap {
+    overflow-x: auto;
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    border-radius: 12px;
+}
+
+.nodes-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.85rem;
+
+    th {
+        padding: 1.25rem 1rem;
+        text-align: left;
+        color: rgba(255, 255, 255, 0.4);
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    td {
+        padding: 1.25rem 1rem;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        color: #fff;
+    }
+
+    .node-id {
+        color: #627eea;
+        font-weight: 700;
+        font-family: monospace;
+    }
+
+    .node-type-badge {
+        background: rgba(255, 255, 255, 0.1);
+        padding: 0.25rem 0.6rem;
+        border-radius: 6px;
+        font-size: 0.75rem;
+        font-weight: 600;
+        color: rgba(255, 255, 255, 0.8);
+    }
+
+    .status-indicator {
+        padding: 0.25rem 0.75rem;
+        border-radius: 100px;
+        font-size: 0.7rem;
+        font-weight: 700;
+
+        &.status-online {
+            background: rgba(74, 222, 128, 0.1);
+            color: #4ade80;
+        }
+
+        &.status-offline {
+            background: rgba(248, 113, 113, 0.1);
+            color: #f87171;
+        }
+    }
+
+    .reputation-cell {
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+        min-width: 140px;
+
+        .rep-bar-bg {
+            flex: 1;
+            height: 6px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 100px;
+            overflow: hidden;
+        }
+
+        .rep-bar-fill {
+            height: 100%;
+            border-radius: 100px;
+            transition: width 0.5s ease;
+        }
+
+        .rep-value {
+            font-weight: 600;
+            width: 40px;
+        }
+    }
+
+    .col-ip {
+        font-family: monospace;
+        opacity: 0.8;
+    }
+
+    .col-loc {
+        color: rgba(255, 255, 255, 0.7);
+    }
+}

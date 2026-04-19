@@ -13,6 +13,7 @@ import { WalletComponent as BlockchainWalletComponent } from './BlockChain/walle
 import { NodesComponent } from './BlockChain/nodes/nodes.component';
 import { BlocksComponent } from './BlockChain/blocks/blocks.component';
 import { AiInsightsComponent } from './BlockChain/ai-insights/ai-insights.component';
+import { TransactionFormComponent } from './BlockChain/transaction-form/transaction-form.component';
 
 export const routes: Routes = [
     {
@@ -29,6 +30,7 @@ export const routes: Routes = [
                 path: 'transactions',
                 children: [
                     { path: '', component: TransactionListComponent },
+                    { path: 'create', component: TransactionFormComponent },
                     { path: ':id', component: TransactionDetailsComponent }
                 ]
             },
