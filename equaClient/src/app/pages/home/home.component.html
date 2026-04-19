@@ -28,28 +28,16 @@
 
 <app-how-it-works [sectionId]="'how-it-works'" [title]="'Comment ça marche'" [steps]="howItWorksSteps" />
 
-<app-price-overview [priceValue]="priceOverview.priceValue" [priceChange]="priceOverview.priceChange"
-  [whyPriceLabel]="priceOverview.whyPriceLabel" [stats]="priceOverview.stats" [tabs]="priceOverview.tabs"
-  [activeTab]="priceOverview.activeTab" [chips]="priceOverview.chips" [activeChip]="priceOverview.activeChip"
-  (whyPriceClick)="onWhyPriceClick()" (tabSelect)="onPriceTabSelect($event)" (chipSelect)="onPriceChipSelect($event)" />
+
 <section class="home-chart-section">
   <div class="home-chart-container">
-    <p-chart
-      type="line"
-      [data]="lineChartData"
-      [options]="lineChartOptions"
-      class="home-chart"
-    ></p-chart>
+    <p-chart type="line" [data]="lineChartData" [options]="lineChartOptions" class="home-chart"></p-chart>
   </div>
 </section>
 <!-- Marchés EQUA -->
 <div class="financial-chart-section">
   <div class="financial-chart-container">
-  <app-financial-chart
-    [data]="chartData"
-    [title]="chartTitle"
-    [annotations]="chartAnnotations"
-  />
+    <app-financial-chart [data]="chartData" [title]="chartTitle" [annotations]="chartAnnotations" />
   </div>
 </div>
 <app-markets-table />

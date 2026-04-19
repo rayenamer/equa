@@ -8,7 +8,9 @@
             <h2>Activité du Réseau (24h)</h2>
             <app-ui-button variant="secondary" size="md">Détails</app-ui-button>
         </div>
-        <app-price-chart></app-price-chart>
+        <div class="home-chart-container">
+            <p-chart type="line" [data]="lineChartData" [options]="lineChartOptions" class="home-chart"></p-chart>
+        </div>
     </div>
 
     <div class="table-section card-container">
@@ -16,6 +18,6 @@
             <h2>Transactions Récentes</h2>
             <app-ui-button variant="secondary" size="md">Voir tout</app-ui-button>
         </div>
-        <app-markets-table></app-markets-table>
+        <app-transactions-table></app-transactions-table>
     </div>
 </div>

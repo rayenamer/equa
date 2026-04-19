@@ -23,6 +23,7 @@ export class HomepageComponent {
   navItems: NavMenuItem[] = [
     { label: 'Tableau de bord', sectionId: '/blockchain/dashboard' },
     { label: 'Transactions', sectionId: '/blockchain/transactions' },
+    { label: 'Envoyer des fonds', sectionId: '/blockchain/transactions/create' },
     { label: 'Blocs', sectionId: '/blockchain/blocks' },
     { label: 'Nœuds', sectionId: '/blockchain/nodes' },
     { label: 'Portefeuille (Dinar)', sectionId: '/blockchain/wallet' },

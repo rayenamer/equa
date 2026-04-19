@@ -1,0 +1,27 @@
+<div class="filters-panel">
+    <div class="filter-group">
+        <label>Wallet Address</label>
+        <input type="text" [(ngModel)]="filters.walletSearch" (input)="applyFilters()" placeholder="0x...">
+    </div>
+
+    <div class="filter-group">
+        <label>Threshold Amount</label>
+        <input type="number" [(ngModel)]="filters.amountThreshold" (input)="applyFilters()" placeholder="Min amount...">
+    </div>
+
+    <div class="filter-group">
+        <label>Validator Node ID</label>
+        <input type="number" [(ngModel)]="filters.nodeId" (input)="applyFilters()" placeholder="ID...">
+    </div>
+
+    <div class="filter-group date-group">
+        <label>Date Range</label>
+        <div class="date-inputs">
+            <input type="date" [(ngModel)]="filters.startDate" (change)="applyFilters()">
+            <span>to</span>
+            <input type="date" [(ngModel)]="filters.endDate" (change)="applyFilters()">
+        </div>
+    </div>
+
+    <button class="clear-btn" (click)="clearFilters()">Clear</button>
+</div>

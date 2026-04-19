@@ -1,0 +1,52 @@
+<div class="nodes-container">
+    <div class="nodes-toolbar">
+        <div class="filter-tabs">
+            <button (click)="setFilter('all')" [class.active]="filter() === 'all'">Tous les Nœuds</button>
+            <button (click)="setFilter('online')" [class.active]="filter() === 'online'">Nœuds en Ligne</button>
+            <button (click)="setFilter('top')" [class.active]="filter() === 'top'">Top Réputation</button>
+        </div>
+    </div>
+
+    <div class="table-wrap">
+        <table class="nodes-table">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Type</th>
+                    <th>Adresse IP</th>
+                    <th>Statut</th>
+                    <th>Réputation</th>
+                    <th>Connexions</th>
+                    <th>Localisation</th>
+                    <th>Dernier Vu</th>
+                </tr>
+            </thead>
+            <tbody>
+                @for (node of filteredNodes(); track node.nodeId) {
+                <tr>
+                    <td><span class="node-id">#{{ node.nodeId }}</span></td>
+                    <td><span class="node-type-badge">{{ node.nodeType }}</span></td>
+                    <td class="col-ip">{{ node.ipAddress }}</td>
+                    <td>
+                        <span class="status-indicator" [ngClass]="getStatusClass(node.status)">
+                            {{ node.status }}
+                        </span>
+                    </td>
+                    <td>
+                        <div class="reputation-cell">
+                            <div class="rep-bar-bg">
+                                <div class="rep-bar-fill" [style.width.%]="node.reputationScore"
+                                    [style.background-color]="getReputationColor(node.reputationScore)"></div>
+                            </div>
+                            <span class="rep-value">{{ node.reputationScore }}%</span>
+                        </div>
+                    </td>
+                    <td class="col-conn">{{ node.connectedNodesCount }}</td>
+                    <td class="col-loc">{{ node.location }}</td>
+                    <td class="col-seen">{{ node.lastSeen | date:'shortTime' }}</td>
+                </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>

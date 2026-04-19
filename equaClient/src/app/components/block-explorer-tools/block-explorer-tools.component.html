@@ -1,0 +1,28 @@
+<div class="tools-container card-container">
+    <div class="card-header">
+        <h2>Vérificateur de Bloc</h2>
+    </div>
+
+    <div class="tool-content">
+        <div class="search-box">
+            <input type="text" [(ngModel)]="searchHash" placeholder="Entrez un Hash de bloc à vérifier..."
+                (keyup.enter)="checkBlock()">
+            <button (click)="checkBlock()" [disabled]="isChecking || !searchHash">
+                <span *ngIf="!isChecking">Vérifier Existence</span>
+                <span *ngIf="isChecking" class="loader"></span>
+            </button>
+        </div>
+
+        <div class="result-message" [ngClass]="searchResult">
+            @if (searchResult === 'found') {
+            <div class="status positive">
+                <span class="icon">󰄬</span> Ce bloc existe sur la blockchain EQUA.
+            </div>
+            } @else if (searchResult === 'not-found') {
+            <div class="status negative">
+                <span class="icon">󰅙</span> Bloc introuvable. Veuillez vérifier le hash.
+            </div>
+            }
+        </div>
+    </div>
+</div>

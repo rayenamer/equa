@@ -109,22 +109,22 @@ export class HomeComponent implements AfterViewInit, OnDestroy {
     chips: string[];
     activeChip: string;
   } = {
-    priceValue: '1,00 €',
-    priceChange: '0,0 % (24h)',
-    whyPriceLabel: "Pourquoi le prix d'EQUA est-il en hausse ?",
-    stats: [
-      { label: 'Cap. Marché', value: '120,0 M €', tag: 'stable', tagVariant: 'default' },
-      { label: 'Volume (24h)', value: '8,2 M €', tag: '+1,2 %', tagVariant: 'positive' },
-      { label: 'Vol/Market Cap', value: '6,8 %' },
-      { label: 'FDV', value: '120,0 M €' },
-      { label: 'Offre totale', value: '120,0 M EQUA' },
-      { label: 'Offre en circulation', value: '118,5 M EQUA' }
-    ],
-    tabs: ['Prix', 'Cap. Marché', 'TradingView'],
-    activeTab: 'Prix',
-    chips: ['24h', '1W', '1M', '1Y', 'Tout'],
-    activeChip: '24h'
-  };
+      priceValue: '1,00 €',
+      priceChange: '0,0 % (24h)',
+      whyPriceLabel: "Pourquoi le prix d'EQUA est-il en hausse ?",
+      stats: [
+        { label: 'Cap. Marché', value: '120,0 M €', tag: 'stable', tagVariant: 'default' },
+        { label: 'Volume (24h)', value: '8,2 M €', tag: '+1,2 %', tagVariant: 'positive' },
+        { label: 'Vol/Market Cap', value: '6,8 %' },
+        { label: 'FDV', value: '120,0 M €' },
+        { label: 'Offre totale', value: '120,0 M EQUA' },
+        { label: 'Offre en circulation', value: '118,5 M EQUA' }
+      ],
+      tabs: ['Prix', 'Cap. Marché', 'TradingView'],
+      activeTab: 'Prix',
+      chips: ['24h', '1W', '1M', '1Y', 'Tout'],
+      activeChip: '24h'
+    };
   footerSocialLinks = [
     { label: 'Twitter', href: '#', ariaLabel: 'Twitter' },
     { label: 'LinkedIn', href: '#', ariaLabel: 'LinkedIn' },
@@ -222,7 +222,7 @@ export class HomeComponent implements AfterViewInit, OnDestroy {
     private threeService: ThreeService,
     private cdr: ChangeDetectorRef,
     private router: Router
-  ) {}
+  ) { }
 
   ngAfterViewInit(): void {
     const tokenImagePath = '/assets/images/equa-token-ref.png';
@@ -340,7 +340,7 @@ export class HomeComponent implements AfterViewInit, OnDestroy {
     this.scrollTo('how-it-works');
   }
 
-  onWhyPriceClick(): void {}
+  onWhyPriceClick(): void { }
 
   onPriceTabSelect(tab: string): void {
     this.priceOverview = { ...this.priceOverview, activeTab: tab };

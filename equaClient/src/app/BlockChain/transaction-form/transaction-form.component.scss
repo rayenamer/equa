@@ -1,0 +1,200 @@
+.form-container {
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 20px;
+    padding: 2rem;
+    max-width: 800px;
+    margin: 0 auto;
+    backdrop-filter: blur(20px);
+}
+
+.form-header {
+    margin-bottom: 2rem;
+    text-align: center;
+
+    h2 {
+        font-size: 1.75rem;
+        color: #fff;
+        margin-bottom: 0.5rem;
+        font-weight: 700;
+    }
+
+    p {
+        color: rgba(255, 255, 255, 0.5);
+        font-size: 0.95rem;
+    }
+}
+
+.form-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.5rem;
+    margin-bottom: 2rem;
+}
+
+.form-field {
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem;
+
+    &.full-width {
+        grid-column: span 2;
+    }
+
+    label {
+        font-size: 0.85rem;
+        color: rgba(255, 255, 255, 0.7);
+        font-weight: 500;
+        margin-left: 0.25rem;
+    }
+
+    .input-wrapper {
+        position: relative;
+        display: flex;
+        align-items: center;
+
+        .icon {
+            position: absolute;
+            left: 1rem;
+            color: rgba(98, 126, 234, 0.6);
+            font-size: 1.1rem;
+        }
+
+        input {
+            width: 100%;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            padding: 0.85rem 1rem 0.85rem 2.8rem;
+            color: #fff;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            outline: none;
+
+            &::placeholder {
+                color: rgba(255, 255, 255, 0.2);
+            }
+
+            &:focus {
+                background: rgba(255, 255, 255, 0.08);
+                border-color: #627eea;
+                box-shadow: 0 0 0 4px rgba(98, 126, 234, 0.1);
+            }
+
+            &.error {
+                border-color: #f87171;
+                background: rgba(248, 113, 113, 0.05);
+            }
+        }
+    }
+
+    .error-msg {
+        color: #f87171;
+        font-size: 0.8rem;
+        margin-top: 0.25rem;
+        margin-left: 0.25rem;
+    }
+}
+
+.messages {
+    margin-bottom: 2rem;
+}
+
+.success-banner,
+.error-banner {
+    padding: 1rem;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    font-size: 0.95rem;
+    animation: slideDown 0.3s ease-out;
+
+    .icon {
+        font-size: 1.25rem;
+    }
+}
+
+.success-banner {
+    background: rgba(74, 222, 128, 0.1);
+    color: #4ade80;
+    border: 1px solid rgba(74, 222, 128, 0.2);
+}
+
+.error-banner {
+    background: rgba(248, 113, 113, 0.1);
+    color: #f87171;
+    border: 1px solid rgba(248, 113, 113, 0.2);
+}
+
+.form-actions {
+    display: flex;
+    justify-content: center;
+
+    .submit-btn {
+        background: linear-gradient(135deg, #627eea 0%, #4b68ff 100%);
+        color: #fff;
+        border: none;
+        border-radius: 12px;
+        padding: 1rem 3rem;
+        font-size: 1rem;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        box-shadow: 0 10px 20px -10px rgba(98, 126, 234, 0.5);
+
+        &:hover:not(:disabled) {
+            transform: translateY(-2px);
+            box-shadow: 0 15px 30px -12px rgba(98, 126, 234, 0.6);
+            filter: brightness(1.1);
+        }
+
+        &:active:not(:disabled) {
+            transform: translateY(0);
+        }
+
+        &:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            filter: grayscale(0.5);
+        }
+    }
+}
+
+.loader {
+    width: 20px;
+    height: 20px;
+    border: 3px solid rgba(255, 255, 255, 0.3);
+    border-radius: 50%;
+    border-top-color: #fff;
+    animation: spin 1s linear infinite;
+    display: inline-block;
+}
+
+@keyframes spin {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+@keyframes slideDown {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@media (max-width: 600px) {
+    .form-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .form-field.full-width {
+        grid-column: span 1;
+    }
+}

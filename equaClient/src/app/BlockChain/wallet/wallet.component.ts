@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { StatCardComponent } from '../../components/molecules/stat-card/stat-card.component';
 import { PriceChartComponent } from '../../components/price-chart/price-chart.component';
-import { MarketsTableComponent } from '../../components/markets-table/markets-table.component';
+import { TransactionsTableComponent } from '../../components/transactions-table/transactions-table.component';
 import { UiButtonComponent } from '../../components/atoms/ui-button/ui-button.component';
 
 @Component({
@@ -12,7 +12,7 @@ import { UiButtonComponent } from '../../components/atoms/ui-button/ui-button.co
     CommonModule,
     StatCardComponent,
     PriceChartComponent,
-    MarketsTableComponent,
+    TransactionsTableComponent,
     UiButtonComponent
   ],
   templateUrl: './wallet.component.html',

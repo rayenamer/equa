@@ -1,0 +1,33 @@
+<div class="highlights-grid">
+    <!-- Latest Block -->
+    <div class="highlight-card latest" *ngIf="latestBlock">
+        <div class="card-tag">Dernier Bloc</div>
+        <div class="card-main">
+            <span class="block-id">#{{ latestBlock.blockId }}</span>
+            <span class="timestamp">{{ latestBlock.timestamp | date:'mediumTime' }}</span>
+        </div>
+        <div class="hash-bin">
+            <span class="label">HASH</span>
+            <span class="value">{{ latestBlock.blockHash }}</span>
+        </div>
+        <div class="card-footer">
+            <span>Taille: {{ latestBlock.blockSize / 1024 | number:'1.2-2' }} KB</span>
+        </div>
+    </div>
+
+    <!-- Genesis Block -->
+    <div class="highlight-card genesis" *ngIf="genesisBlock">
+        <div class="card-tag">Bloc de Genèse</div>
+        <div class="card-main">
+            <span class="block-id">#{{ genesisBlock.blockId }}</span>
+            <span class="timestamp">{{ genesisBlock.timestamp | date:'longDate' }}</span>
+        </div>
+        <div class="hash-bin">
+            <span class="label">HASH</span>
+            <span class="value">{{ genesisBlock.blockHash }}</span>
+        </div>
+        <div class="card-footer">
+            <span>Le début de la chaîne EQUA</span>
+        </div>
+    </div>
+</div>

@@ -4,18 +4,14 @@
         <p>Visualisez les blocs minés en temps réel sur la blockchain EQUA.</p>
     </header>
 
-    <div class="stats-grid">
-        <app-stat-card *ngFor="let stat of blockStats" [label]="stat.label" [value]="stat.value"></app-stat-card>
-    </div>
+    <app-block-highlights></app-block-highlights>
 
-    <div class="search-bar card-container">
-        <app-ui-input placeholder="Rechercher un numéro de bloc ou un hash..."></app-ui-input>
-    </div>
+    <app-block-explorer-tools></app-block-explorer-tools>
 
     <div class="table-section card-container">
         <div class="card-header">
             <h2>Derniers Blocs</h2>
         </div>
-        <app-markets-table></app-markets-table>
+        <app-blocks-table></app-blocks-table>
     </div>
 </div>
