@@ -1,0 +1,692 @@
+.consensus-page {
+    background: #0a0a12;
+    color: #fff;
+    min-height: 100vh;
+    padding-top: 2rem;
+}
+
+.page-header {
+    text-align: center;
+    margin-bottom: 5rem;
+    padding: 2rem;
+    background: linear-gradient(180deg, rgba(98, 126, 234, 0.1) 0%, transparent 100%);
+
+    h1 {
+        font-size: clamp(2rem, 5vw, 4rem);
+        font-weight: 800;
+        margin-bottom: 1rem;
+        background: linear-gradient(135deg, #fff 0%, #627eea 100%);
+        -webkit-background-clip: text;
+        background-clip: text;
+        -webkit-text-fill-color: transparent;
+    }
+
+    .subtitle {
+        font-size: 1.25rem;
+        color: rgba(255, 255, 255, 0.6);
+        margin-bottom: 2rem;
+    }
+
+    .controls {
+        button {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            color: #fff;
+            padding: 0.75rem 2rem;
+            border-radius: 50px;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.75rem;
+            font-weight: 600;
+            transition: all 0.3s ease;
+
+            &:hover {
+                background: rgba(255, 255, 255, 0.1);
+                border-color: #627eea;
+                transform: translateY(-2px);
+            }
+
+            &.active {
+                background: #627eea;
+                border-color: #627eea;
+                color: #fff;
+            }
+
+            .icon {
+                font-size: 1.25rem;
+            }
+        }
+    }
+}
+
+.explanation-step {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 4rem;
+    margin-bottom: 10rem;
+    align-items: center;
+
+    @media (max-width: 968px) {
+        grid-template-columns: 1fr;
+        gap: 2rem;
+        text-align: center;
+    }
+
+    .step-info {
+        .step-number {
+            font-size: 4rem;
+            font-weight: 900;
+            color: rgba(98, 126, 234, 0.1);
+            line-height: 1;
+            margin-bottom: -1rem;
+        }
+
+        h3 {
+            font-size: 2.25rem;
+            font-weight: 800;
+            margin-bottom: 1.5rem;
+            color: #627eea;
+        }
+
+        p {
+            font-size: 1.1rem;
+            color: rgba(255, 255, 255, 0.7);
+            line-height: 1.7;
+
+            strong {
+                color: #fff;
+            }
+        }
+    }
+
+    .step-visual {
+        background: rgba(255, 255, 255, 0.02);
+        border: 1px solid rgba(255, 255, 255, 0.05);
+        border-radius: 30px;
+        padding: 3rem;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        min-height: 350px;
+        backdrop-filter: blur(20px);
+    }
+}
+
+// Step 1: Premium TX Visual
+.tx-card-premium {
+    background: linear-gradient(145deg, #1a1a2e, #16213e);
+    border: 1px solid rgba(98, 126, 234, 0.3);
+    border-radius: 24px;
+    padding: 2rem;
+    width: 320px;
+    box-shadow:
+        0 10px 30px rgba(0, 0, 0, 0.5),
+        inset 0 0 20px rgba(98, 126, 234, 0.1);
+    position: relative;
+    overflow: hidden;
+
+    .tx-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 2rem;
+
+        .chip {
+            background: rgba(98, 126, 234, 0.1);
+            color: #627eea;
+            font-size: 0.65rem;
+            font-weight: 800;
+            padding: 0.25rem 0.75rem;
+            border-radius: 100px;
+            letter-spacing: 0.05em;
+        }
+
+        .tx-id-badge {
+            font-family: monospace;
+            font-size: 0.75rem;
+            color: rgba(255, 255, 255, 0.4);
+        }
+    }
+
+    .data-group {
+        display: flex;
+        flex-direction: column;
+        gap: 0.75rem;
+        margin-bottom: 2rem;
+
+        .data-row {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.75rem;
+
+            .label {
+                color: rgba(255, 255, 255, 0.3);
+            }
+
+            .val {
+                color: rgba(255, 255, 255, 0.7);
+                font-family: monospace;
+            }
+        }
+    }
+
+    .target-scanner {
+        background: rgba(0, 0, 0, 0.3);
+        border: 1px solid rgba(255, 255, 255, 0.05);
+        border-radius: 16px;
+        padding: 1.5rem;
+        position: relative;
+        overflow: hidden;
+        text-align: center;
+
+        .scan-line {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, #627eea, transparent);
+            animation: scanning 2s infinite ease-in-out;
+            box-shadow: 0 0 10px #627eea;
+        }
+
+        .target-box {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+
+            .t-placeholder {
+                font-size: 2.5rem;
+                font-weight: 900;
+                color: #fff;
+            }
+
+            .t-real {
+                font-size: 0.75rem;
+                color: #4ade80;
+                font-weight: 700;
+            }
+        }
+    }
+
+    .tx-footer {
+        margin-top: 2rem;
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+        justify-content: center;
+
+        .status-indicator {
+            width: 8px;
+            height: 8px;
+            background: #facc15;
+            border-radius: 50%;
+            box-shadow: 0 0 8px #facc15;
+        }
+
+        .status-text {
+            font-size: 0.65rem;
+            font-weight: 700;
+            color: rgba(255, 255, 255, 0.4);
+            letter-spacing: 0.05em;
+        }
+    }
+}
+
+@keyframes scanning {
+    0% {
+        top: 0;
+    }
+
+    50% {
+        top: 100%;
+    }
+
+    100% {
+        top: 0;
+    }
+}
+
+// Step 2: Nodes Visual
+.nodes-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.5rem;
+    width: 100%;
+}
+
+.node-card {
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    padding: 1.5rem;
+    border-radius: 20px;
+    text-align: center;
+    position: relative;
+    transition: all 0.3s ease;
+
+    &.guessing {
+        border-color: #627eea;
+        transform: scale(1.05);
+        background: rgba(98, 126, 234, 0.1);
+    }
+
+    &.winner {
+        border-color: #4ade80;
+        background: rgba(74, 222, 128, 0.1);
+        box-shadow: 0 0 40px rgba(74, 222, 128, 0.2);
+    }
+
+    &.cooldown {
+        opacity: 0.6;
+    }
+
+    .node-icon {
+        font-size: 1.5rem;
+        margin-bottom: 1rem;
+        color: #627eea;
+    }
+
+    .node-name {
+        font-size: 0.9rem;
+        font-weight: 600;
+        margin-bottom: 1rem;
+    }
+
+    .node-guess {
+        font-size: 2rem;
+        font-weight: 800;
+        font-family: monospace;
+        color: #fff;
+        height: 48px;
+    }
+
+    .node-status {
+        font-size: 0.7rem;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        color: rgba(255, 255, 255, 0.4);
+        margin-top: 1rem;
+    }
+
+    .node-cooldown-bar {
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        width: 100%;
+        height: 3px;
+        background: rgba(255, 255, 255, 0.05);
+        overflow: hidden;
+
+        .fill {
+            height: 100%;
+            background: #facc15;
+            transition: width 0.1s linear;
+        }
+    }
+}
+
+// Step 3: Scoreboard
+.scoreboard {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+
+    .score-row {
+        display: flex;
+        align-items: center;
+        gap: 1.5rem;
+
+        .s-name {
+            width: 100px;
+            font-size: 0.9rem;
+            color: rgba(255, 255, 255, 0.6);
+        }
+
+        .s-bar-container {
+            flex: 1;
+            height: 12px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 100px;
+            overflow: hidden;
+
+            .s-bar {
+                height: 100%;
+                background: linear-gradient(90deg, #627eea, #4ade80);
+                border-radius: 100px;
+                transition: width 1s cubic-bezier(0.4, 0, 0.2, 1);
+            }
+        }
+
+        .s-val {
+            width: 80px;
+            font-size: 0.9rem;
+            text-align: right;
+        }
+    }
+}
+
+// Step 4: Block
+.block-container {
+    background: #161625;
+    border: 2px solid rgba(255, 255, 255, 0.1);
+    padding: 2rem;
+    border-radius: 24px;
+    width: 250px;
+    text-align: center;
+    transition: all 0.5s ease;
+
+    &.full {
+        border-color: #facc15;
+        box-shadow: 0 0 50px rgba(250, 204, 21, 0.2);
+    }
+
+    .block-header {
+        font-size: 0.8rem;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        margin-bottom: 2rem;
+        color: rgba(255, 255, 255, 0.4);
+    }
+
+    .block-slots {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 1rem;
+        margin-bottom: 2rem;
+
+        .slot {
+            aspect-ratio: 1;
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px dashed rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 800;
+            color: #4ade80;
+            transition: all 0.3s ease;
+
+            &.filled {
+                background: rgba(74, 222, 128, 0.1);
+                border-style: solid;
+                border-color: #4ade80;
+                transform: scale(1.1);
+            }
+        }
+    }
+
+    .block-status {
+        font-size: 0.85rem;
+        color: #facc15;
+    }
+}
+
+// Step 5: Simple Explanatory Chain
+.simple-chain {
+    display: flex;
+    gap: 3.5rem;
+    overflow-x: auto;
+    padding: 2rem 1rem;
+    width: 100%;
+
+    &::-webkit-scrollbar {
+        height: 6px;
+    }
+
+    &::-webkit-scrollbar-thumb {
+        background: rgba(255, 255, 255, 0.1);
+        border-radius: 10px;
+    }
+}
+
+.block-unit {
+    min-width: 180px;
+    background: #11111e;
+    border: 1px solid rgba(98, 126, 234, 0.2);
+    border-radius: 16px;
+    position: relative;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+    display: flex;
+    flex-direction: column;
+
+    .block-meta {
+        background: rgba(98, 126, 234, 0.1);
+        padding: 0.75rem;
+        border-radius: 16px 16px 0 0;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+
+        .b-index {
+            display: block;
+            font-size: 0.8rem;
+            font-weight: 800;
+            color: #627eea;
+            margin-bottom: 0.25rem;
+        }
+
+        .b-hash-top {
+            font-family: monospace;
+            font-size: 0.65rem;
+            color: rgba(255, 255, 255, 0.4);
+            word-break: break-all;
+        }
+    }
+
+    .block-data-list {
+        padding: 1rem;
+        display: flex;
+        flex-direction: column;
+        gap: 0.5rem;
+        flex: 1;
+
+        .mini-tx {
+            font-size: 0.75rem;
+            color: rgba(255, 255, 255, 0.6);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.4rem;
+            background: rgba(255, 255, 255, 0.02);
+            border-radius: 6px;
+        }
+    }
+}
+
+.block-link-line {
+    position: absolute;
+    right: -3.5rem;
+    top: 50%;
+    width: 3.5rem;
+    height: 2px;
+    background: #627eea;
+
+    .connector {
+        position: absolute;
+        top: -20px;
+        left: 0;
+        width: 100%;
+        text-align: center;
+
+        .hash-transfer {
+            font-size: 0.6rem;
+            color: #4ade80;
+            background: #0a0a12;
+            padding: 2px 6px;
+            border-radius: 4px;
+            white-space: nowrap;
+        }
+    }
+
+    &::after {
+        content: '';
+        position: absolute;
+        right: -4px;
+        top: -4px;
+        border-left: 8px solid #627eea;
+        border-top: 5px solid transparent;
+        border-bottom: 5px solid transparent;
+    }
+}
+
+// Step 6: Sync Grid
+.sync-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 2rem;
+    width: 100%;
+}
+
+.sync-node {
+    background: rgba(255, 255, 255, 0.02);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    border-radius: 20px;
+    padding: 1.5rem;
+    text-align: center;
+
+    .s-node-head {
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+        justify-content: center;
+        margin-bottom: 1rem;
+
+        .icon {
+            color: #627eea;
+            font-size: 1.25rem;
+        }
+
+        .name {
+            font-weight: 600;
+            font-size: 0.9rem;
+        }
+    }
+
+    .mini-chain-indicator {
+        display: flex;
+        gap: 8px;
+        justify-content: center;
+        margin-bottom: 1rem;
+
+        .dot {
+            width: 8px;
+            height: 8px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 50%;
+
+            &.active {
+                background: #627eea;
+                box-shadow: 0 0 5px #627eea;
+            }
+
+            &.pulse {
+                background: #4ade80;
+                animation: blink 1s infinite alternate;
+            }
+        }
+    }
+
+    .sync-status {
+        font-size: 0.65rem;
+        font-weight: 800;
+        color: #4ade80;
+        letter-spacing: 0.1em;
+    }
+}
+
+// Final Summary Redesign
+.security-cards {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 2rem;
+    max-width: 1100px;
+    margin: 0 auto;
+
+    @media (max-width: 768px) {
+        grid-template-columns: 1fr;
+    }
+}
+
+.s-card {
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    padding: 3rem 2rem;
+    border-radius: 30px;
+    transition: all 0.3s ease;
+
+    &:hover {
+        background: rgba(255, 255, 255, 0.05);
+        transform: translateY(-10px);
+        border-color: #627eea;
+    }
+
+    .s-icon {
+        font-size: 2.5rem;
+        color: #627eea;
+        margin-bottom: 1.5rem;
+    }
+
+    h4 {
+        font-size: 1.25rem;
+        font-weight: 800;
+        margin-bottom: 1rem;
+        color: #fff;
+    }
+
+    p {
+        font-size: 0.9rem;
+        color: rgba(255, 255, 255, 0.6);
+        line-height: 1.6;
+    }
+}
+
+@keyframes blink {
+    from {
+        opacity: 0.3;
+        transform: scale(0.8);
+    }
+
+    to {
+        opacity: 1;
+        transform: scale(1.1);
+    }
+}
+
+.pulse {
+    animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+    0% {
+        transform: scale(1);
+        opacity: 1;
+    }
+
+    50% {
+        transform: scale(1.05);
+        opacity: 0.8;
+    }
+
+    100% {
+        transform: scale(1);
+        opacity: 1;
+    }
+}
+
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 2rem;
+}
+.final-summary {
+    background: #000;
+    padding: 100px 0;
+    text-align: center;
+    margin-top: 5rem;
+
+    h2 {
+        font-size: 2.5rem;
+        font-weight: 800;
+        margin-bottom: 4rem;
+    }
+}

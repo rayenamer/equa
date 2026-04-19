@@ -14,6 +14,7 @@ import { NodesComponent } from './BlockChain/nodes/nodes.component';
 import { BlocksComponent } from './BlockChain/blocks/blocks.component';
 import { AiInsightsComponent } from './BlockChain/ai-insights/ai-insights.component';
 import { TransactionFormComponent } from './BlockChain/transaction-form/transaction-form.component';
+import { ConsensusExplanationComponent } from './BlockChain/consensus-explanation/consensus-explanation.component';
 
 export const routes: Routes = [
     {
@@ -24,7 +25,7 @@ export const routes: Routes = [
         path: 'blockchain',
         component: BlockchainHomepage,
         children: [
-            { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
+            { path: '', redirectTo: 'explanation', pathMatch: 'full' },
             { path: 'dashboard', component: DashboardComponent },
             {
                 path: 'transactions',
@@ -37,7 +38,8 @@ export const routes: Routes = [
             { path: 'wallet', component: BlockchainWalletComponent },
             { path: 'nodes', component: NodesComponent },
             { path: 'blocks', component: BlocksComponent },
-            { path: 'ai-insights', component: AiInsightsComponent }
+            { path: 'ai-insights', component: AiInsightsComponent },
+            { path: 'explanation', component: ConsensusExplanationComponent }
         ]
     },
     {
