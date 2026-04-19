@@ -27,7 +27,8 @@ export class HomepageComponent {
     { label: 'Blocs', sectionId: '/blockchain/blocks' },
     { label: 'Nœuds', sectionId: '/blockchain/nodes' },
     { label: 'Portefeuille (Dinar)', sectionId: '/blockchain/wallet' },
-    { label: 'IA Insights', sectionId: '/blockchain/ai-insights' }
+    { label: 'IA Insights', sectionId: '/blockchain/ai-insights' },
+    { label: 'Comment ça marche', sectionId: '/blockchain/explanation' }
   ];
 
   footerGroups: FooterLinkGroup[] = [
