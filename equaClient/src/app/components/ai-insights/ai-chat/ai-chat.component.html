@@ -1,0 +1,40 @@
+<div class="chat-container card-container">
+    <div class="card-header">
+        <div class="header-main">
+            <div class="ai-avatar">󰚩</div>
+            <div class="ai-info">
+                <h2>Assistant Exploration IA</h2>
+                <span class="status">En ligne</span>
+            </div>
+        </div>
+        <button class="clear-btn" (click)="clearChat()" title="Effacer l'historique">󰎟</button>
+    </div>
+
+    <div class="messages-container">
+        @for (msg of messages; track msg.timestamp) {
+        <div class="message-wrapper" [ngClass]="msg.role">
+            <div class="message-bubble">
+                {{ msg.content }}
+                <span class="msg-time">{{ msg.timestamp | date:'shortTime' }}</span>
+            </div>
+        </div>
+        }
+        @if (isTyping) {
+        <div class="message-wrapper ai">
+            <div class="message-bubble typing">
+                <span class="dot"></span>
+                <span class="dot"></span>
+                <span class="dot"></span>
+            </div>
+        </div>
+        }
+    </div>
+
+    <div class="chat-input-area">
+        <input type="text" [(ngModel)]="userInput" placeholder="Posez une question sur le réseau..."
+            (keyup.enter)="sendMessage()">
+        <button class="send-btn" (click)="sendMessage()" [disabled]="!userInput.trim() || isTyping">
+            󰒘
+        </button>
+    </div>
+</div>

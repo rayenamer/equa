@@ -1,34 +1,39 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { LetterGlitchComponent } from '../../components/letter-glitch/letter-glitch.component';
-import { StatCardComponent } from '../../components/molecules/stat-card/stat-card.component';
-import { UiInputComponent } from '../../components/atoms/ui-input/ui-input.component';
-import { UiButtonComponent } from '../../components/atoms/ui-button/ui-button.component';
+import { AiNetworkHealthComponent } from '../../components/ai-insights/ai-network-health/ai-network-health.component';
+import { AiValidatorPredictionComponent } from '../../components/ai-insights/ai-validator-prediction/ai-validator-prediction.component';
+import { AiChatComponent } from '../../components/ai-insights/ai-chat/ai-chat.component';
+import { AiAnalyzerComponent } from '../../components/ai-insights/ai-analyzer/ai-analyzer.component';
 
 @Component({
   selector: 'app-ai-insights',
   standalone: true,
   imports: [
     CommonModule,
-    LetterGlitchComponent,
-    StatCardComponent,
-    UiInputComponent,
-    UiButtonComponent
+    AiNetworkHealthComponent,
+    AiValidatorPredictionComponent,
+    AiChatComponent,
+    AiAnalyzerComponent
   ],
   templateUrl: './ai-insights.component.html',
   styleUrl: './ai-insights.component.scss'
 })
 export class AiInsightsComponent {
-  aiStats = [
-    { label: 'Score Santé Réseau', value: '94/100' },
-    { label: 'Confiance Prédiction', value: '88%' },
-    { label: 'Anomalies Détectées', value: '0' },
-    { label: 'Contrats Analysés', value: '1,245' }
-  ];
+  analysisText = 'Cliquez sur le bouton pour lancer une analyse complète du réseau...';
+  isAnalyzing = false;
 
-  messages = [
-    { role: 'ai', text: 'Bonjour ! Je suis l\'IA EQUA. Comment puis-je vous aider avec l\'analyse de la blockchain aujourd\'hui ?' },
-    { role: 'user', text: 'Peux-tu me donner le score de réputation du validateur Oracle ?' },
-    { role: 'ai', text: 'Le validateur Oracle a un score de 99.2%. Il est actuellement très stable et performant.' }
-  ];
+  runAnalysis() {
+    this.isAnalyzing = true;
+    this.analysisText = '';
+
+    // Simulate API call to /analyze
+    setTimeout(() => {
+      this.isAnalyzing = false;
+      this.analysisText = `--- ANALYSE RÉSEAU EQUA ---
+Statut Global: OPTIMAL
+Détection d'anomalies: Aucune (0%)
+Performance des Validateurs: Constante (+2.4% vs 24h)
+Recommandation: Le réseau est prêt pour une augmentation de charge de 15%. La répartition de la réputation est équilibrée.`;
+    }, 2000);
+  }
 }

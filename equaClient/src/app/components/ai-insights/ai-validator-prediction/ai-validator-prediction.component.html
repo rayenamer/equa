@@ -1,0 +1,46 @@
+<div class="prediction-card card-container">
+    <div class="card-header">
+        <div class="header-titles">
+            <h2>Gagnant Prédit</h2>
+            <p class="reason">{{ prediction.reasoning }}</p>
+        </div>
+        <div class="win-prob">
+            <span class="val">{{ prediction.winProbability }}%</span>
+            <span class="lab">Probabilité</span>
+        </div>
+    </div>
+
+    <div class="winner-showcase">
+        <div class="main-info">
+            <div class="node-icon">󰚩</div>
+            <div class="node-meta">
+                <span class="id">Nœud #{{ prediction.predictedNodeId }}</span>
+                <span class="loc">{{ prediction.location }}</span>
+            </div>
+        </div>
+        <div class="badges">
+            <span class="badge">{{ prediction.nodeType }}</span>
+            <span class="badge rep">Réputation: {{ prediction.reputation }}</span>
+        </div>
+    </div>
+
+    <div class="odds-board">
+        <h3>Tableau des Probabilités</h3>
+        <div class="odds-list">
+            @for (odd of prediction.allNodeOdds; track odd.nodeId) {
+            <div class="odd-item">
+                <div class="node-brief">
+                    <span class="n-id">#{{ odd.nodeId }}</span>
+                    <span class="n-loc">{{ odd.location }}</span>
+                </div>
+                <div class="chance-meter">
+                    <div class="chance-bar">
+                        <div class="fill" [style.width.%]="odd.winChance"></div>
+                    </div>
+                    <span class="chance-val">{{ odd.winChance }}%</span>
+                </div>
+            </div>
+            }
+        </div>
+    </div>
+</div>

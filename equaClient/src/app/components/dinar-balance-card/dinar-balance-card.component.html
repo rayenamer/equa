@@ -1,0 +1,28 @@
+<div class="balance-card">
+    <div class="card-glow"></div>
+    <div class="card-content">
+        <div class="header">
+            <div class="wallet-info">
+                <span class="label">MON PORTEFEUILLE DINAR</span>
+                <span class="id">ID: {{ walletId }}</span>
+            </div>
+            <div class="chip">󰄔</div>
+        </div>
+
+        <div class="balance-display">
+            <span class="currency">TND</span>
+            <span class="amount">{{ balance | number:'1.2-2' }}</span>
+        </div>
+
+        <div class="footer">
+            <div class="stat">
+                <span class="stat-label">Unités en main</span>
+                <span class="stat-value">{{ dinarCount }}</span>
+            </div>
+            <div class="status">
+                <span class="dot"></span>
+                Actif
+            </div>
+        </div>
+    </div>
+</div>
