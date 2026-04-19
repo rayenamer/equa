@@ -1,0 +1,55 @@
+.inventory-card {
+    margin-top: 2rem;
+}
+
+.table-wrap {
+    overflow-x: auto;
+    padding: 1.5rem;
+}
+
+.dinar-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.9rem;
+
+    th {
+        padding: 1rem;
+        text-align: left;
+        color: rgba(255, 255, 255, 0.4);
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    td {
+        padding: 1rem;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        color: #fff;
+    }
+
+    .serial {
+        font-family: monospace;
+        color: #627eea;
+        font-weight: 700;
+    }
+
+    .value {
+        font-weight: 600;
+    }
+
+    .wallet-tag {
+        background: rgba(255, 255, 255, 0.05);
+        padding: 0.25rem 0.6rem;
+        border-radius: 6px;
+        font-size: 0.75rem;
+        color: rgba(255, 255, 255, 0.6);
+    }
+
+    .empty-state {
+        text-align: center;
+        padding: 3rem;
+        color: rgba(255, 255, 255, 0.3);
+        font-style: italic;
+    }
+}

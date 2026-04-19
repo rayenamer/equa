@@ -1,57 +1,30 @@
 <div class="ai-insights-page">
-    <div class="background-glitch">
-        <app-letter-glitch [glitchSpeed]="80" [outerVignette]="true"></app-letter-glitch>
-    </div>
-
-    <div class="content-overlay">
-        <header class="section-header">
+    <header class="section-header">
+        <div class="header-content">
             <h1>Intelligence Artificielle</h1>
-            <p>Analyses prédictives et assistants intelligents pour votre écosystème.</p>
-        </header>
+            <p>Analyse prédictive et assistance interactive pour la blockchain EQUA.</p>
+        </div>
+        <button class="analyze-btn" (click)="runAnalysis()" [disabled]="isAnalyzing">
+            <span class="icon">󰒋</span>
+            {{ isAnalyzing ? 'Analyse en cours...' : 'Lancer une Analyse' }}
+        </button>
+    </header>
 
-        <div class="stats-grid">
-            <app-stat-card *ngFor="let stat of aiStats" [label]="stat.label" [value]="stat.value"></app-stat-card>
+    <div class="grid-layout">
+        <!-- Top Row: Health & Prediction -->
+        <div class="dashboard-row">
+            <app-ai-network-health></app-ai-network-health>
+            <app-ai-validator-prediction></app-ai-validator-prediction>
         </div>
 
-        <div class="ai-main-layout">
-            <div class="chat-container card-container">
-                <div class="card-header">
-                    <h2>Discuter avec l'IA</h2>
-                </div>
-                <div class="chat-messages">
-                    <div *ngFor="let msg of messages" [class]="'message ' + msg.role">
-                        <div class="bubble">
-                            {{msg.text}}
-                        </div>
-                    </div>
-                </div>
-                <div class="chat-input-area">
-                    <app-ui-input placeholder="Posez une question à l'IA..."></app-ui-input>
-                    <app-ui-button variant="primary">Envoyer</app-ui-button>
-                </div>
-            </div>
+        <!-- Middle Row: Analysis Report -->
+        <div class="analysis-row">
+            <app-ai-analyzer [analysisText]="analysisText" [isAnalyzing]="isAnalyzing"></app-ai-analyzer>
+        </div>
 
-            <div class="analysis-panel card-container">
-                <div class="card-header">
-                    <h2>Analyse en Cours</h2>
-                </div>
-                <div class="analysis-list">
-                    <div class="analysis-item">
-                        <span class="dot pulse"></span>
-                        <div class="info">
-                            <span class="title">Prédiction de Charge Réseau</span>
-                            <span class="status">En cours...</span>
-                        </div>
-                    </div>
-                    <div class="analysis-item">
-                        <span class="dot green"></span>
-                        <div class="info">
-                            <span class="title">Vérification des Smart Contracts</span>
-                            <span class="status">OK - 0 vulnérabilité</span>
-                        </div>
-                    </div>
-                </div>
-            </div>
+        <!-- Bottom Row: Interactive Chat -->
+        <div class="chat-row">
+            <app-ai-chat></app-ai-chat>
         </div>
     </div>
 </div>

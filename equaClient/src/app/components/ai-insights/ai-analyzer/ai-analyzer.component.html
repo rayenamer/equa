@@ -1,0 +1,28 @@
+<div class="analyzer-card card-container">
+    <div class="card-header">
+        <div class="title-group">
+            <span class="icon">󰒋</span>
+            <h2>Rapport d'Analyse IA</h2>
+        </div>
+        <div class="ai-badge">Deep Analysis</div>
+    </div>
+
+    <div class="analyzer-content">
+        <div class="text-area" [class.loading]="isAnalyzing">
+            @if (isAnalyzing) {
+            <div class="shimmer-lines">
+                <div class="line"></div>
+                <div class="line"></div>
+                <div class="line"></div>
+                <div class="line"></div>
+            </div>
+            } @else {
+            <p>{{ analysisText }}</p>
+            }
+        </div>
+    </div>
+
+    <div class="card-footer">
+        <span class="info">Analyse basée sur les 100 derniers blocs et l'activité des nœuds.</span>
+    </div>
+</div>

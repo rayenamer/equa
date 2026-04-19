@@ -1,0 +1,59 @@
+<div class="health-card card-container">
+    <div class="card-header">
+        <div class="header-titles">
+            <h2>Santé Globale</h2>
+            <p class="explanation">{{ health.overallExplanation }}</p>
+        </div>
+        <div class="overall-badge" [style.background-color]="getStatusColor(health.overallScore) + '22'"
+            [style.color]="getStatusColor(health.overallScore)">
+            {{ health.overallScore }}%
+        </div>
+    </div>
+
+    <div class="breakdown-grid">
+        <!-- Decentralization -->
+        <div class="breakdown-item">
+            <div class="item-header">
+                <span class="label">Décentralisation</span>
+                <span class="score" [style.color]="getStatusColor(health.decentralizationScore)">
+                    {{ health.decentralizationScore }}%
+                </span>
+            </div>
+            <div class="progress-bar">
+                <div class="fill" [style.width.%]="health.decentralizationScore"
+                    [style.background-color]="getStatusColor(health.decentralizationScore)"></div>
+            </div>
+            <p class="item-desc">{{ health.decentralizationExplanation }}</p>
+        </div>
+
+        <!-- Activity -->
+        <div class="breakdown-item">
+            <div class="item-header">
+                <span class="label">Activité</span>
+                <span class="score" [style.color]="getStatusColor(health.activityScore)">
+                    {{ health.activityScore }}%
+                </span>
+            </div>
+            <div class="progress-bar">
+                <div class="fill" [style.width.%]="health.activityScore"
+                    [style.background-color]="getStatusColor(health.activityScore)"></div>
+            </div>
+            <p class="item-desc">{{ health.activityExplanation }}</p>
+        </div>
+
+        <!-- Diversity -->
+        <div class="breakdown-item">
+            <div class="item-header">
+                <span class="label">Diversité</span>
+                <span class="score" [style.color]="getStatusColor(health.nodeDiversityScore)">
+                    {{ health.nodeDiversityScore }}%
+                </span>
+            </div>
+            <div class="progress-bar">
+                <div class="fill" [style.width.%]="health.nodeDiversityScore"
+                    [style.background-color]="getStatusColor(health.nodeDiversityScore)"></div>
+            </div>
+            <p class="item-desc">{{ health.nodeDiversityExplanation }}</p>
+        </div>
+    </div>
+</div>
