@@ -1,0 +1,11 @@
+<aside class="sidebar">
+    <nav>
+        <ul>
+            <li *ngFor="let item of navItems">
+                <a [routerLink]="item.sectionId" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">
+                    {{ item.label }}
+                </a>
+            </li>
+        </ul>
+    </nav>
+</aside>

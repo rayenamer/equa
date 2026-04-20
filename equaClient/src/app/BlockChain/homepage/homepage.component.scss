@@ -12,57 +12,10 @@
         padding: 0;
         gap: 0;
 
-        .sidebar {
-            width: 260px;
-            flex-shrink: 0;
-            border-right: 1px solid rgba(255, 255, 255, 0.1);
-            background: rgba(255, 255, 255, 0.02);
-
-            nav {
-                position: sticky;
-                top: 0;
-                padding: 2rem 1rem;
-
-                ul {
-                    list-style: none;
-                    padding: 0;
-                    margin: 0;
-                    display: flex;
-                    flex-direction: column;
-                    gap: 0.5rem;
-
-                    a {
-                        display: block;
-                        padding: 0.75rem 1.25rem;
-                        color: rgba(255, 255, 255, 0.6);
-                        text-decoration: none;
-                        border-radius: 8px;
-                        transition: all 0.3s ease;
-                        font-weight: 500;
-                        font-size: 0.95rem;
-
-                        &:hover {
-                            background: rgba(255, 255, 255, 0.05);
-                            color: #fff;
-                        }
-
-                        &.active {
-                            background: linear-gradient(135deg, rgba(98, 126, 234, 0.2), rgba(98, 126, 234, 0.1));
-                            color: #627eea;
-                            padding-left: 1.5rem;
-                            border-left: 4px solid #627eea;
-                            border-top-left-radius: 0;
-                            border-bottom-left-radius: 0;
-                        }
-                    }
-                }
-            }
-        }
-
         .page-content {
             flex: 1;
             min-width: 0;
-            padding: 2rem 3rem;
+            padding: 1.5rem;
         }
     }
 }
@@ -70,23 +23,5 @@
 @media (max-width: 1024px) {
     .blockchain-layout .content-container {
         flex-direction: column;
-
-        .sidebar {
-            width: 100%;
-
-            nav {
-                position: static;
-
-                ul {
-                    flex-direction: row;
-                    overflow-x: auto;
-                    padding-bottom: 0.5rem;
-
-                    a {
-                        white-space: nowrap;
-                    }
-                }
-            }
-        }
     }
 }

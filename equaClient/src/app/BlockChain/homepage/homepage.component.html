@@ -1,17 +1,6 @@
 <div class="blockchain-layout">
     <main class="content-container">
-        <aside class="sidebar">
-            <nav>
-                <ul>
-                    <li *ngFor="let item of navItems">
-                        <a [routerLink]="item.sectionId" routerLinkActive="active"
-                            [routerLinkActiveOptions]="{exact: true}">
-                            {{ item.label }}
-                        </a>
-                    </li>
-                </ul>
-            </nav>
-        </aside>
+        <app-blockchain-sidebar [navItems]="navItems"></app-blockchain-sidebar>
 
         <section class="page-content">
             <router-outlet></router-outlet>

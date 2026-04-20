@@ -149,8 +149,9 @@ export class ConsensusExplanationComponent implements OnInit, OnDestroy {
 
     finalizeBlock() {
         const blockHash = '0x' + Math.random().toString(16).substring(2, 10);
-        (this.currentBlock as any).hash = blockHash;
-        this.finalizedBlocks.unshift([...this.currentBlock] as any);
+        const newBlock = [...this.currentBlock] as any;
+        newBlock.hash = blockHash;
+        this.finalizedBlocks.unshift(newBlock);
         this.currentBlock = [];
         if (this.finalizedBlocks.length > 5) {
             this.finalizedBlocks.pop();
