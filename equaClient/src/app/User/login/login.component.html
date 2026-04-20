@@ -1,0 +1,60 @@
+<div class="auth-page">
+    <div class="auth-container">
+        <div class="auth-card">
+            <header class="auth-header">
+                <div class="logo">EQUA</div>
+                <h1>Bon retour parmi nous</h1>
+                <p>Connectez-vous à votre compte pour accéder à l'écosystème.</p>
+            </header>
+
+            <form (submit)="onSubmit()" class="auth-form">
+                <div class="form-group">
+                    <app-ui-input 
+                        type="email" 
+                        name="email" 
+                        placeholder="Email" 
+                        [(value)]="credentials.email"
+                        [required]="true">
+                    </app-ui-input>
+                </div>
+                <div class="form-group">
+                    <app-ui-input 
+                        type="password" 
+                        name="password" 
+                        placeholder="Mot de passe" 
+                        [(value)]="credentials.password"
+                        [required]="true">
+                    </app-ui-input>
+                </div>
+
+                <div class="form-options">
+                    <label class="remember-me">
+                        <input type="checkbox"> Se souvenir de moi
+                    </label>
+                    <a routerLink="/user/forgot-password" class="forgot-pwd">Mot de passe oublié ?</a>
+                </div>
+
+                <app-ui-button 
+                    label="Se connecter" 
+                    type="submit" 
+                    variant="primary" 
+                    size="lg" 
+                    class="submit-btn">
+                </app-ui-button>
+            </form>
+
+            <div class="divider">
+                <span>ou continuer avec</span>
+            </div>
+
+            <button (click)="loginWithGoogle()" class="google-btn">
+                <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" alt="Google">
+                Google
+            </button>
+
+            <footer class="auth-footer">
+                Pas encore de compte ? <a routerLink="/register">Inscrivez-vous</a>
+            </footer>
+        </div>
+    </div>
+</div>

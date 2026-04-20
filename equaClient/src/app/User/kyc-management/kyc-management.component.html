@@ -1,0 +1,90 @@
+<div class="management-container">
+    <header class="page-header">
+        <h1>Gestion des KYC</h1>
+        <p class="subtitle">Examinez les profils des observateurs et validez leurs identités.</p>
+    </header>
+
+    <div class="content-card">
+        <div class="table-container">
+            <table class="kyc-table">
+                <thead>
+                    <tr>
+                        <th>Utilisateur</th>
+                        <th>Email</th>
+                        <th>Dernière Soumission</th>
+                        <th>Statut Actuel</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let user of users">
+                        <td>
+                            <div class="user-cell">
+                                <div class="avatar-sm">{{ user.username[0] | uppercase }}</div>
+                                <span>{{ user.username }}</span>
+                            </div>
+                        </td>
+                        <td>{{ user.email }}</td>
+                        <td>{{ user.lastSubmitted | date:'medium' }}</td>
+                        <td>
+                            <span class="kyc-status" [ngClass]="user.kycStatus.toLowerCase()">
+                                {{ user.kycStatus }}
+                            </span>
+                        </td>
+                        <td>
+                            <app-ui-button 
+                                *ngIf="user.kycStatus !== 'APPROVED'"
+                                label="Valider" 
+                                (clicked)="openReview(user)" 
+                                variant="primary" 
+                                size="md">
+                            </app-ui-button>
+                            <span *ngIf="user.kycStatus === 'APPROVED'" class="validated-label">
+                                ✓ Validé
+                            </span>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- Review Modal Overlay -->
+    <div class="modal-overlay" *ngIf="selectedUser">
+        <div class="review-modal">
+            <header>
+                <h2>Valider le KYC : {{ selectedUser.username }}</h2>
+                <button class="close-btn" (click)="selectedUser = null">×</button>
+            </header>
+            
+            <div class="modal-body">
+                <p>Voulez-vous approuver ou rejeter la demande de cet utilisateur ?</p>
+                
+                <div class="form-group">
+                    <label>Note de révision (optionnel)</label>
+                    <app-ui-input 
+                        type="text" 
+                        name="reviewNote" 
+                        placeholder="Ex: Documents conformes" 
+                        [(value)]="reviewNote">
+                    </app-ui-input>
+                </div>
+            </div>
+
+            <footer class="modal-footer">
+                <app-ui-button 
+                    label="Rejeter" 
+                    (clicked)="updateStatus('REJECTED')" 
+                    variant="secondary" 
+                    size="md">
+                </app-ui-button>
+                <app-ui-button 
+                    label="Approuver" 
+                    (clicked)="updateStatus('APPROVED')" 
+                    variant="primary" 
+                    size="md">
+                </app-ui-button>
+            </footer>
+        </div>
+    </div>
+</div>

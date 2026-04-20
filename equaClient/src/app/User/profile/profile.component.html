@@ -1,0 +1,111 @@
+<div class="profile-container">
+    <header class="page-header">
+        <h1>Mon Profil</h1>
+        <p class="subtitle">Gérez vos informations personnelles et configurez vos accès.</p>
+    </header>
+
+    <div class="profile-layout">
+        <!-- Main Info Card -->
+        <div class="profile-main">
+            <div class="profile-card user-identity">
+                <div class="card-header">
+                    <div class="avatar-large">{{ user.username[0] | uppercase }}</div>
+                    <div class="identity-text">
+                        <h2>{{ user.username }}</h2>
+                        <p>{{ user.email }}</p>
+                        <span class="badge" [class.badge-observer]="user.userType === 'OBSERVER'">
+                            {{ user.userType }}
+                        </span>
+                    </div>
+                </div>
+
+                <div class="section-divider"></div>
+
+                <!-- Coordonnées Section -->
+                <div class="form-section">
+                    <h3>Coordonnées</h3>
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label>Nom d'utilisateur</label>
+                            <app-ui-input 
+                                type="text" 
+                                name="username" 
+                                [(value)]="user.username"
+                                [placeholder]="user.username">
+                            </app-ui-input>
+                        </div>
+                        <div class="form-group">
+                            <label>Adresse Email</label>
+                            <app-ui-input 
+                                type="email" 
+                                name="email" 
+                                [(value)]="user.email"
+                                [placeholder]="user.email">
+                            </app-ui-input>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="section-divider"></div>
+
+                <!-- Roles & Permissions Section -->
+                <div class="form-section">
+                    <div class="section-header">
+                        <h3>Rôles et Permissions</h3>
+                        <div class="user-type-toggle">
+                            <button [class.active]="user.userType === 'OBSERVER'" (click)="user.userType = 'OBSERVER'">Observateur</button>
+                            <button [class.active]="user.userType === 'ASSISTANT'" (click)="user.userType = 'ASSISTANT'">Assistant</button>
+                        </div>
+                    </div>
+                    
+                    <p class="section-hint" *ngIf="user.userType === 'OBSERVER'">
+                        En tant qu'observateur, vous pouvez sélectionner vos permissions spécifiques.
+                    </p>
+                    <p class="section-hint" *ngIf="user.userType === 'ASSISTANT'">
+                        Les assistants ont des permissions prédéfinies par le système.
+                    </p>
+
+                    <div class="permissions-grid" *ngIf="user.userType === 'OBSERVER'">
+                        <div class="permission-item" 
+                             *ngFor="let perm of availablePermissions"
+                             [class.selected]="hasPermission(perm.id)"
+                             (click)="togglePermission(perm.id)">
+                            <div class="perm-checkbox">
+                                <span *ngIf="hasPermission(perm.id)">✓</span>
+                            </div>
+                            <span class="perm-label">{{ perm.label }}</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card-footer">
+                    <app-ui-button 
+                        label="Enregistrer les modifications" 
+                        (clicked)="saveProfile()" 
+                        variant="primary" 
+                        size="md">
+                    </app-ui-button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Sidebar Info -->
+        <aside class="profile-sidebar">
+            <div class="status-card">
+                <label>Niveau de Risque</label>
+                <div class="risk-meter">
+                    <div class="meter-bar" [style.width.%]="user.riskLevel === 'LOW' ? 33 : 100" [class.low]="user.riskLevel === 'LOW'"></div>
+                </div>
+                <p class="risk-value">{{ user.riskLevel }}</p>
+            </div>
+
+            <div class="status-card">
+                <label>Statut KYC</label>
+                <div class="kyc-badge-container">
+                    <span class="kyc-dot" [class.approved]="user.kycStatus === 'APPROVED'"></span>
+                    <span class="kyc-text">{{ user.kycStatus }}</span>
+                </div>
+            </div>
+        </aside>
+    </div>
+</div>

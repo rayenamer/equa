@@ -1,0 +1,47 @@
+<div class="security-container">
+    <header class="page-header">
+        <h1>Sécurité du Compte</h1>
+        <p class="subtitle">Protégez votre compte avec des mesures de sécurité avancées.</p>
+    </header>
+
+    <div class="security-grid">
+        <section class="security-card">
+            <h2>Changer le mot de passe</h2>
+            <form class="security-form">
+                <div class="form-group">
+                    <label>Mot de passe actuel</label>
+                    <input type="password" placeholder="••••••••">
+                </div>
+                <div class="form-group">
+                    <label>Nouveau mot de passe</label>
+                    <input type="password" placeholder="••••••••">
+                </div>
+                <div class="form-group">
+                    <label>Confirmer le nouveau mot de passe</label>
+                    <input type="password" placeholder="••••••••">
+                </div>
+                <button class="btn btn-primary">Mettre à jour le mot de passe</button>
+            </form>
+        </section>
+
+        <div class="side-options">
+            <section class="security-card compact">
+                <div class="option-header">
+                    <div class="option-info">
+                        <h3>Authentification à deux facteurs</h3>
+                        <p>Ajoutez une couche de sécurité supplémentaire.</p>
+                    </div>
+                    <div class="toggle" [class.on]="twoFactorEnabled" (click)="twoFactorEnabled = !twoFactorEnabled">
+                        <div class="toggle-handle"></div>
+                    </div>
+                </div>
+            </section>
+
+            <section class="security-card compact danger-zone">
+                <h3>Désactiver le compte</h3>
+                <p>Cette action est irréversible. Toutes vos données seront inaccessibles.</p>
+                <button class="btn btn-danger">Désactiver mon compte</button>
+            </section>
+        </div>
+    </div>
+</div>

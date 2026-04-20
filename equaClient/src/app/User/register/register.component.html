@@ -1,0 +1,73 @@
+<div class="auth-page">
+    <div class="auth-container">
+        <div class="auth-card">
+            <header class="auth-header">
+                <div class="logo">EQUA</div>
+                <h1>Créer un compte</h1>
+                <p>Rejoignez la révolution financière décentralisée dès aujourd'hui.</p>
+            </header>
+
+            <form (submit)="onSubmit()" class="auth-form">
+                <div class="form-group">
+                    <app-ui-input 
+                        type="text" 
+                        name="username" 
+                        placeholder="Nom d'utilisateur" 
+                        [(value)]="user.username"
+                        [required]="true">
+                    </app-ui-input>
+                </div>
+                <div class="form-group">
+                    <app-ui-input 
+                        type="email" 
+                        name="email" 
+                        placeholder="Email" 
+                        [(value)]="user.email"
+                        [required]="true">
+                    </app-ui-input>
+                </div>
+                <div class="form-group">
+                    <app-ui-input 
+                        type="password" 
+                        name="password" 
+                        placeholder="Mot de passe" 
+                        [(value)]="user.password"
+                        [required]="true">
+                    </app-ui-input>
+                </div>
+
+                <div class="role-selector">
+                    <label>Type de compte</label>
+                    <div class="roles">
+                        <button type="button" 
+                                [class.active]="user.userType === 'OBSERVER'"
+                                (click)="user.userType = 'OBSERVER'">
+                            Observateur
+                        </button>
+                        <button type="button" 
+                                [class.active]="user.userType === 'ASSISTANT'"
+                                (click)="user.userType = 'ASSISTANT'">
+                            Assistant
+                        </button>
+                    </div>
+                </div>
+
+                <p class="terms">
+                    En vous inscrivant, vous acceptez nos <a>Conditions d'utilisation</a> et notre <a>Politique de confidentialité</a>.
+                </p>
+
+                <app-ui-button 
+                    label="Créer mon compte" 
+                    type="submit" 
+                    variant="primary" 
+                    size="lg" 
+                    class="submit-btn">
+                </app-ui-button>
+            </form>
+
+            <footer class="auth-footer">
+                Vous avez déjà un compte ? <a routerLink="/login">Connectez-vous</a>
+            </footer>
+        </div>
+    </div>
+</div>

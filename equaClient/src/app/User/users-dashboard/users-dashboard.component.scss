@@ -1,0 +1,156 @@
+.dashboard-container {
+    animation: fadeIn 0.5s ease-out;
+
+    .page-header {
+        margin-bottom: 2.5rem;
+        h1 { font-size: 2.5rem; margin-bottom: 0.5rem; background: linear-gradient(135deg, #fff, rgba(255,255,255,0.7)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .subtitle { color: rgba(255,255,255,0.5); }
+    }
+}
+
+.stats-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 1.5rem;
+    margin-bottom: 3rem;
+
+    .stat-card {
+        background: rgba(255, 255, 255, 0.03);
+        border: 1px solid rgba(255, 255, 255, 0.08);
+        border-radius: 20px;
+        padding: 1.5rem;
+        display: flex;
+        align-items: center;
+        gap: 1.25rem;
+        backdrop-filter: blur(10px);
+        transition: transform 0.3s ease;
+
+        &:hover { transform: translateY(-5px); background: rgba(255, 255, 255, 0.05); }
+
+        .stat-icon {
+            width: 50px;
+            height: 50px;
+            border-radius: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            background: rgba(255, 255, 255, 0.05);
+
+            &.total { color: #627eea; background: rgba(98, 126, 234, 0.1); }
+            &.observers { color: #4ade80; background: rgba(74, 222, 128, 0.1); }
+            &.assistants { color: #ffb800; background: rgba(255, 184, 0, 0.1); }
+            &.active { color: #f87171; background: rgba(248, 113, 113, 0.1); }
+        }
+
+        .stat-info {
+            .label { font-size: 0.85rem; color: rgba(255,255,255,0.4); margin-bottom: 0.25rem; display: block; }
+            .value { font-size: 1.5rem; font-weight: 700; color: #fff; }
+        }
+    }
+}
+
+.content-card {
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 24px;
+    padding: 2rem;
+    backdrop-filter: blur(10px);
+
+    .card-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 2rem;
+
+        h2 { font-size: 1.5rem; }
+        .header-actions { display: flex; gap: 1rem; }
+    }
+}
+
+.table-container {
+    overflow-x: auto;
+}
+
+.users-table {
+    width: 100%;
+    border-collapse: collapse;
+    text-align: left;
+
+    th {
+        padding: 1rem 1.5rem;
+        color: rgba(255,255,255,0.4);
+        font-size: 0.85rem;
+        text-transform: uppercase;
+        border-bottom: 1px solid rgba(255,255,255,0.05);
+    }
+
+    td {
+        padding: 1.25rem 1.5rem;
+        border-bottom: 1px solid rgba(255,255,255,0.05);
+        color: rgba(255,255,255,0.8);
+    }
+
+    .user-cell {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+        
+        .avatar-sm {
+            width: 32px;
+            height: 32px;
+            border-radius: 8px;
+            background: rgba(255,255,255,0.1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            font-size: 0.85rem;
+        }
+    }
+
+    .badge {
+        padding: 0.25rem 0.75rem;
+        border-radius: 20px;
+        font-size: 0.75rem;
+        font-weight: 600;
+        
+        &-assistant { background: rgba(255, 184, 0, 0.15); color: #ffb800; border: 1px solid rgba(255, 184, 0, 0.3); }
+        &-observer { background: rgba(98, 126, 234, 0.15); color: #627eea; border: 1px solid rgba(98, 126, 234, 0.3); }
+    }
+
+    .status-indicator {
+        display: inline-block;
+        width: 8px;
+        height: 8px;
+        border-radius: 50%;
+        margin-right: 0.5rem;
+        &.active { background: #4ade80; box-shadow: 0 0 8px #4ade80; }
+    }
+
+    .action-btn {
+        background: transparent;
+        border: none;
+        color: rgba(255,255,255,0.3);
+        cursor: pointer;
+        padding: 0.5rem;
+        border-radius: 6px;
+        &:hover { color: #fff; background: rgba(255,255,255,0.05); }
+    }
+}
+
+.btn {
+    padding: 0.6rem 1.25rem;
+    border-radius: 10px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    
+    &-primary { background: #627eea; color: #fff; border: none; &:hover { background: #4f69d6; } }
+    &-outline { background: transparent; color: #fff; border: 1px solid rgba(255,255,255,0.1); &:hover { background: rgba(255,255,255,0.05); } }
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
