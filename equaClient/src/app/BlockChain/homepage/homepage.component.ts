@@ -4,6 +4,7 @@ import { RouterOutlet, RouterLink, RouterLinkActive } from '@angular/router';
 import { HomeHeaderComponent } from '../../components/organisms/home-header/home-header.component';
 import { SiteFooterComponent, FooterLinkGroup } from '../../components/organisms/site-footer/site-footer.component';
 import { NavMenuItem } from '../../components/molecules/nav-menu/nav-menu.component';
+import { BlockchainSidebarComponent } from '../../components/organisms/blockchain-sidebar/blockchain-sidebar.component';
 
 @Component({
   selector: 'app-homepage',
@@ -14,7 +15,8 @@ import { NavMenuItem } from '../../components/molecules/nav-menu/nav-menu.compon
     RouterLink,
     RouterLinkActive,
     HomeHeaderComponent,
-    SiteFooterComponent
+    SiteFooterComponent,
+    BlockchainSidebarComponent
   ],
   templateUrl: './homepage.component.html',
   styleUrl: './homepage.component.scss'
@@ -31,24 +33,7 @@ export class HomepageComponent {
     { label: 'Comment ça marche', sectionId: '/blockchain/explanation' }
   ];
 
-  footerGroups: FooterLinkGroup[] = [
-    {
-      title: 'Ecosystème',
-      links: [
-        { label: 'Explorateur', href: '#' },
-        { label: 'Validateurs', href: '#' },
-        { label: 'Dinar Stable', href: '#' }
-      ]
-    },
-    {
-      title: 'Ressources',
-      links: [
-        { label: 'Documentation API', href: '#' },
-        { label: 'Whitepaper', href: '#' },
-        { label: 'GitHub', href: '#' }
-      ]
-    }
-  ];
+
 
   onNavItemClick(path: string): void {
     // In a real app we'd inject Router, but per rules we composition only.
