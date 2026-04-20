@@ -1,0 +1,214 @@
+.kyc-container {
+    animation: fadeIn 0.5s ease-out;
+
+    .page-header {
+        margin-bottom: 3rem;
+
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+            background: linear-gradient(135deg, #fff 0%, rgba(255, 255, 255, 0.7) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .subtitle {
+            color: rgba(255, 255, 255, 0.5);
+        }
+    }
+
+    .kyc-content {
+        display: grid;
+        grid-template-columns: 300px 1fr;
+        gap: 3rem;
+    }
+
+    .kyc-steps {
+        display: flex;
+        flex-direction: column;
+        gap: 1.5rem;
+
+        .step-item {
+            display: flex;
+            align-items: center;
+            gap: 1.25rem;
+            padding: 1rem;
+            border-radius: 12px;
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            transition: all 0.3s ease;
+
+            &.active {
+                background: rgba(98, 126, 234, 0.1);
+                border-color: rgba(98, 126, 234, 0.3);
+                
+                .step-number {
+                    background: #627eea;
+                    color: #fff;
+                }
+            }
+
+            &.completed {
+                .step-number {
+                    background: rgba(74, 222, 128, 0.2);
+                    color: #4ade80;
+                    border: 1px solid #4ade80;
+                }
+            }
+
+            .step-number {
+                width: 36px;
+                height: 36px;
+                border-radius: 50%;
+                background: rgba(255, 255, 255, 0.05);
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                font-weight: 700;
+                font-size: 0.9rem;
+                color: rgba(255, 255, 255, 0.4);
+            }
+
+            .step-info {
+                h3 {
+                    font-size: 0.95rem;
+                    margin: 0;
+                    font-weight: 600;
+                }
+                .step-status {
+                    font-size: 0.75rem;
+                    color: rgba(255, 255, 255, 0.3);
+                    text-transform: capitalize;
+                }
+            }
+        }
+    }
+
+    .form-card {
+        background: rgba(255, 255, 255, 0.03);
+        border: 1px solid rgba(255, 255, 255, 0.08);
+        border-radius: 20px;
+        padding: 2.5rem;
+        backdrop-filter: blur(10px);
+
+        h2 {
+            font-size: 1.8rem;
+            margin-bottom: 1rem;
+        }
+
+        p {
+            color: rgba(255, 255, 255, 0.6);
+            margin-bottom: 2rem;
+        }
+
+        .kyc-form {
+            .form-grid {
+                display: grid;
+                grid-template-columns: 1fr 1fr;
+                gap: 1.5rem;
+                margin-bottom: 2rem;
+
+                .form-group {
+                    display: flex;
+                    flex-direction: column;
+                    gap: 0.5rem;
+
+                    label {
+                        font-size: 0.85rem;
+                        color: rgba(255, 255, 255, 0.4);
+                        text-transform: uppercase;
+                        letter-spacing: 0.05em;
+                    }
+
+                    &.full-width {
+                        grid-column: span 2;
+                    }
+                }
+            }
+        }
+
+        .upload-zone {
+            border: 2px dashed rgba(255, 255, 255, 0.1);
+            border-radius: 16px;
+            padding: 4rem 2rem;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            background: rgba(255, 255, 255, 0.01);
+
+            &:hover {
+                border-color: #627eea;
+                background: rgba(98, 126, 234, 0.05);
+            }
+
+            .upload-icon {
+                font-size: 2.5rem;
+                margin-bottom: 1rem;
+                color: #627eea;
+            }
+
+            p {
+                margin-bottom: 0.5rem;
+                span {
+                    color: #627eea;
+                    font-weight: 600;
+                    text-decoration: underline;
+                }
+            }
+
+            .upload-limit {
+                font-size: 0.8rem;
+                color: rgba(255, 255, 255, 0.3);
+            }
+        }
+
+        .form-actions {
+            display: flex;
+            justify-content: flex-end;
+            gap: 1rem;
+            margin-top: 3rem;
+
+            .btn {
+                padding: 0.75rem 2rem;
+                border-radius: 10px;
+                font-weight: 600;
+                cursor: pointer;
+                transition: all 0.3s ease;
+
+                &-primary {
+                    background: #627eea;
+                    color: #fff;
+                    border: none;
+                    &:hover { background: #4f69d6; }
+                }
+
+                &-secondary {
+                    background: transparent;
+                    color: rgba(255, 255, 255, 0.7);
+                    border: 1px solid rgba(255, 255, 255, 0.1);
+                    &:hover { background: rgba(255, 255, 255, 0.05); }
+                }
+            }
+        }
+    }
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+@media (max-width: 900px) {
+    .kyc-content {
+        grid-template-columns: 1fr;
+    }
+    .kyc-steps {
+        flex-direction: row;
+        overflow-x: auto;
+        padding-bottom: 1rem;
+        
+        .step-item {
+            min-width: 200px;
+        }
+    }
+}

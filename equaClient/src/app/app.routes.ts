@@ -15,6 +15,14 @@ import { BlocksComponent } from './BlockChain/blocks/blocks.component';
 import { AiInsightsComponent } from './BlockChain/ai-insights/ai-insights.component';
 import { TransactionFormComponent } from './BlockChain/transaction-form/transaction-form.component';
 import { ConsensusExplanationComponent } from './BlockChain/consensus-explanation/consensus-explanation.component';
+import { ProfileComponent } from './User/profile/profile.component';
+import { KycComponent } from './User/kyc/kyc.component';
+import { AuditLogsComponent } from './User/audit-logs/audit-logs.component';
+import { SecurityComponent } from './User/security/security.component';
+import { LoginComponent } from './User/login/login.component';
+import { RegisterComponent } from './User/register/register.component';
+import { UsersDashboardComponent } from './User/users-dashboard/users-dashboard.component';
+import { KycManagementComponent } from './User/kyc-management/kyc-management.component';
 
 export const routes: Routes = [
     {
@@ -56,8 +64,20 @@ export const routes: Routes = [
     },
     {
         path: 'user',
-        component: UserHomepage
+        component: UserHomepage,
+        children: [
+            { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
+            { path: 'dashboard', component: UsersDashboardComponent },
+            { path: 'profile', component: ProfileComponent },
+            { path: 'kyc', component: KycComponent },
+            { path: 'kyc-management', component: KycManagementComponent },
+            { path: 'audit-logs', component: AuditLogsComponent },
+            { path: 'security', component: SecurityComponent }
+        ]
     },
+    { path: 'login', component: LoginComponent },
+    { path: 'register', component: RegisterComponent },
+    { path: 'forgot-password', loadComponent: () => import('./User/security/security.component').then(m => m.SecurityComponent) }, // Placeholder or separate component
     {
         path: 'wallet',
         component: WalletHomepage

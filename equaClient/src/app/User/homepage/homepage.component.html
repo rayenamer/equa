@@ -1,1 +1,29 @@
-<p>homepage works!</p>
+<div class="user-layout">
+    <main class="content-container">
+        <aside class="sidebar">
+            <nav>
+                <div class="sidebar-header">
+                    <div class="user-brief">
+                        <div class="avatar-small">JD</div>
+                        <div class="brief-info">
+                            <span class="name">John Doe</span>
+                            <span class="role">Observateur</span>
+                        </div>
+                    </div>
+                </div>
+                <ul>
+                    <li *ngFor="let item of navItems">
+                        <a [routerLink]="item.sectionId" routerLinkActive="active"
+                            [routerLinkActiveOptions]="{exact: true}">
+                            <span class="nav-label">{{ item.label }}</span>
+                        </a>
+                    </li>
+                </ul>
+            </nav>
+        </aside>
+
+        <section class="page-content">
+            <router-outlet></router-outlet>
+        </section>
+    </main>
+</div>
