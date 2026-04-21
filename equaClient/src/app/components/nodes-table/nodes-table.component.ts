@@ -1,6 +1,6 @@
 import { Component, computed, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { Node } from '../../models/node.model';
+import { Node } from '../../BlockChain/models/node.model';
 
 const MOCK_NODES: Node[] = [
     {

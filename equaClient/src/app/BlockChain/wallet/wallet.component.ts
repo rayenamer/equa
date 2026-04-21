@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 import { DinarBalanceCardComponent } from '../../components/dinar-balance-card/dinar-balance-card.component';
 import { DinarActionsComponent } from '../../components/dinar-actions/dinar-actions.component';
 import { DinarInventoryComponent } from '../../components/dinar-inventory/dinar-inventory.component';
-import { DinarWallet, Dinar } from '../../models/dinar-wallet.model';
+import { DinarWallet, Dinar } from '../../BlockChain/models/dinar-wallet.model';
 
 @Component({
   selector: 'app-wallet',

@@ -1,6 +1,6 @@
 import { Component, Input } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { Dinar } from '../../models/dinar-wallet.model';
+import { Dinar } from '../../BlockChain/models/dinar-wallet.model';
 
 @Component({
     selector: 'app-dinar-inventory',

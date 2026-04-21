@@ -1,6 +1,6 @@
 import { Component, computed, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { Block } from '../../models/block.model';
+import { Block } from '../../BlockChain/models/block.model';
 
 const MOCK_BLOCKS: Block[] = [
     {

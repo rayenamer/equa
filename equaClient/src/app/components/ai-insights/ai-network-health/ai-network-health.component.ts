@@ -1,6 +1,6 @@
 import { Component, Input } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { HealthScore } from '../../../models/ai-insights.model';
+import { HealthScore } from '../../../BlockChain/models/ai-insights.model';
 
 @Component({
     selector: 'app-ai-network-health',

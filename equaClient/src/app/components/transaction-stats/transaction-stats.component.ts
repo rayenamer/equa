@@ -1,6 +1,6 @@
 import { Component, Input, computed } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { Transaction } from '../../models/transaction.model';
+import { Transaction } from '../../BlockChain/models/transaction.model';
 
 @Component({
     selector: 'app-transaction-stats',
