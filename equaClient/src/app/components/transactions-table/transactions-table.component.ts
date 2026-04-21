@@ -1,6 +1,6 @@
 import { Component, computed, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { Transaction, TransactionStatus } from '../../models/transaction.model';
+import { Transaction, TransactionStatus } from '../../BlockChain/models/transaction.model';
 
 const MOCK_TRANSACTIONS: Transaction[] = [
     {
