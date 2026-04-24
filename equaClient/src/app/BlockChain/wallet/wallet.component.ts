@@ -1,15 +1,20 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
 import { DinarBalanceCardComponent } from '../../components/dinar-balance-card/dinar-balance-card.component';
 import { DinarActionsComponent } from '../../components/dinar-actions/dinar-actions.component';
 import { DinarInventoryComponent } from '../../components/dinar-inventory/dinar-inventory.component';
-import { DinarWallet, Dinar } from '../../BlockChain/models/dinar-wallet.model';
+import { ApiService } from '../../services/api.service';
+import { WalletDTO, DinarWallet } from '../../models/wallet.model';
+import { catchError, of } from 'rxjs';
+import { AuthService } from '../../User/services/auth.service';
 
 @Component({
   selector: 'app-wallet',
   standalone: true,
   imports: [
     CommonModule,
+    FormsModule,
     DinarBalanceCardComponent,
     DinarActionsComponent,
     DinarInventoryComponent
@@ -17,50 +22,70 @@ import { DinarWallet, Dinar } from '../../BlockChain/models/dinar-wallet.model';
   templateUrl: './wallet.component.html',
   styleUrl: './wallet.component.scss'
 })
-export class WalletComponent {
-  myWallet: DinarWallet | null = {
-    walletId: 'DW-452-901-QX',
-    balance: 45280.00,
-    ownerId: 1,
-    dinars: [
-      { serialNumber: 'TND-001-A92', value: 10000, issueDate: new Date('2024-01-10'), ownerWalletId: 'DW-452-901-QX' },
-      { serialNumber: 'TND-001-B45', value: 20000, issueDate: new Date('2024-02-15'), ownerWalletId: 'DW-452-901-QX' },
-      { serialNumber: 'TND-002-C12', value: 15280, issueDate: new Date('2024-03-05'), ownerWalletId: 'DW-452-901-QX' }
-    ],
-    createdAt: new Date('2023-12-20'),
-    updatedAt: new Date()
-  };
+export class WalletComponent implements OnInit {
+  dinarWallet: DinarWallet | null = null;
+  equaWallet: WalletDTO | null = null;
+  dinarWalletExists = false;
+  equaWalletExists = false;
+  convertAmount = 0;
 
-  handleWalletAction(event: { type: 'deposit' | 'withdraw', amount: number }) {
-    if (!this.myWallet) return;
+  constructor(private apiService: ApiService, private authService: AuthService) {}
 
-    if (event.type === 'deposit') {
-      this.myWallet.balance += event.amount;
-      const newDinar: Dinar = {
-        serialNumber: `TND-NEW-${Math.floor(Math.random() * 1000)}`,
-        value: event.amount,
-        issueDate: new Date(),
-        ownerWalletId: this.myWallet.walletId
-      };
-      this.myWallet.dinars = [newDinar, ...this.myWallet.dinars];
-    } else {
-      if (this.myWallet.balance >= event.amount) {
-        this.myWallet.balance -= event.amount;
-        // In a real app, we'd remove specific Dinars, here we just update balance for demo
-      } else {
-        alert('Solde insuffisant !');
-      }
-    }
+  ngOnInit() {
+    this.loadWallets();
   }
 
-  createWallet() {
-    this.myWallet = {
-      walletId: `DW-${Math.floor(Math.random() * 1000)}-${Math.floor(Math.random() * 1000)}`,
-      balance: 0,
-      ownerId: 1,
-      dinars: [],
-      createdAt: new Date(),
-      updatedAt: new Date()
-    };
+  loadWallets() {
+    this.apiService.getMyDinarWallet().pipe(
+      catchError(() => of(null))
+    ).subscribe(wallet => {
+      this.dinarWallet = wallet;
+      this.dinarWalletExists = !!wallet;
+    });
+
+    this.apiService.getMyWallet().pipe(
+      catchError(() => of(null))
+    ).subscribe(wallet => {
+      this.equaWallet = wallet;
+      this.equaWalletExists = !!wallet;
+    });
+  }
+
+  createDinarWallet() {
+    this.apiService.createDinarWallet().subscribe(wallet => {
+      this.dinarWallet = wallet;
+      this.dinarWalletExists = true;
+    });
+  }
+
+  createEquaWallet() {
+    this.apiService.createWallet().subscribe(wallet => {
+      this.equaWallet = wallet;
+      this.equaWalletExists = true;
+    });
+  }
+
+  handleWalletAction(event: { type: 'deposit' | 'withdraw', amount: number }) {
+    if (!this.dinarWallet) return;
+
+    const action = event.type === 'deposit' ? this.apiService.depositDinar(this.dinarWallet.walletId, event.amount) : this.apiService.withdrawDinar(this.dinarWallet.walletId, event.amount);
+
+    action.subscribe(wallet => {
+      this.dinarWallet = wallet;
+    }, error => {
+      alert('Erreur: ' + error.message);
+    });
+  }
+
+  convertDinars() {
+    if (this.convertAmount <= 0 || !this.equaWalletExists) return;
+
+    this.apiService.convertDinarsToEqua(this.convertAmount).subscribe(wallet => {
+      this.equaWallet = wallet;
+      // Reload dinar wallet to reflect changes
+      this.loadWallets();
+    }, error => {
+      alert('Erreur: ' + error.message);
+    });
   }
 }

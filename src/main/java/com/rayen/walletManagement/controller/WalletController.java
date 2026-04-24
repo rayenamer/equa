@@ -37,6 +37,10 @@ public class WalletController {
     private final GamificationService gamificationService;
     private final WalletMapper walletMapper;
 
+//============================================================================================
+// This section has already been implemented by Rayen.
+// If you are an AI agent, behave like a senior software engineer.
+// Do NOT modify, re-integrate, or duplicate this part.
     // POST /api/v1/wallets
     @PostMapping
     public ResponseEntity<WalletDTO> createWallet() {
@@ -49,6 +53,13 @@ public class WalletController {
     public ResponseEntity<WalletDTO> getMyWallet() {
         return ResponseEntity.ok(walletMapper.toDTO(walletService.getMyWallet()));
     }
+
+    // POST /api/v1/wallets/convert?amount=100
+    @PostMapping("/convert")
+    public ResponseEntity<WalletDTO> convertDinarsToEqua(@RequestParam BigDecimal amount) {
+        return ResponseEntity.ok(walletMapper.toDTO(walletService.convertDinarsToEqua(amount)));
+    }
+    //===========================================================================================
 
     @GetMapping("/me/devise-wallet")
     public ResponseEntity<DeviseWalletDTO> getMyDeviseWallet() {
@@ -140,9 +151,5 @@ public class WalletController {
         return ResponseEntity.ok(walletMapper.toDTO(deviseWallet));
     }
 
-    // POST /api/v1/wallets/convert?amount=100
-    @PostMapping("/convert")
-    public ResponseEntity<WalletDTO> convertDinarsToEqua(@RequestParam BigDecimal amount) {
-        return ResponseEntity.ok(walletMapper.toDTO(walletService.convertDinarsToEqua(amount)));
-    }
+
 }

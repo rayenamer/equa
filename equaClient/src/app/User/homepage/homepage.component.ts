@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterOutlet, RouterLink, RouterLinkActive } from '@angular/router';
+import { AuthService } from '../services/auth.service';
 import { NavMenuItem } from '../../components/molecules/nav-menu/nav-menu.component';
 import { BlockchainSidebarComponent } from '../../components/organisms/blockchain-sidebar/blockchain-sidebar.component';
 
@@ -12,6 +13,7 @@ import { BlockchainSidebarComponent } from '../../components/organisms/blockchai
   styleUrl: './homepage.component.scss'
 })
 export class HomepageComponent {
+  constructor(public authService: AuthService) {}
   navItems: NavMenuItem[] = [
     { label: 'Tableau de bord', sectionId: '/user/dashboard' },
     { label: 'Profil', sectionId: '/user/profile' },

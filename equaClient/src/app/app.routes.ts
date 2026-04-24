@@ -30,10 +30,14 @@ export const routes: Routes = [
         component: HomeComponent
     },
     {
+        path: 'home',
+        component: HomeComponent
+    },
+    {
         path: 'blockchain',
         component: BlockchainHomepage,
         children: [
-            { path: '', redirectTo: 'explanation', pathMatch: 'full' },
+            { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
             { path: 'dashboard', component: DashboardComponent },
             {
                 path: 'transactions',
@@ -72,11 +76,11 @@ export const routes: Routes = [
             { path: 'kyc', component: KycComponent },
             { path: 'kyc-management', component: KycManagementComponent },
             { path: 'audit-logs', component: AuditLogsComponent },
-            { path: 'security', component: SecurityComponent }
+            { path: 'security', component: SecurityComponent },
+            { path: 'login', component: LoginComponent },
+            { path: 'register', component: RegisterComponent }
         ]
     },
-    { path: 'login', component: LoginComponent },
-    { path: 'register', component: RegisterComponent },
     { path: 'forgot-password', loadComponent: () => import('./User/security/security.component').then(m => m.SecurityComponent) }, // Placeholder or separate component
     {
         path: 'wallet',

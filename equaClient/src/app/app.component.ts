@@ -3,7 +3,6 @@ import { OutletContext, RouterOutlet } from '@angular/router';
 import { SplashCursorComponent } from './components/splash-cursor/splash-cursor.component';
 import { HomeHeaderComponent } from './components/organisms/home-header/home-header.component';
 
-import { NavMenuItem } from './components/molecules/nav-menu/nav-menu.component';
 import { SiteFooterComponent } from './components/organisms/site-footer/site-footer.component';
 
 import { FooterLinkGroup } from './components/organisms/site-footer/site-footer.component';
@@ -16,13 +15,6 @@ import { FooterLinkGroup } from './components/organisms/site-footer/site-footer.
 })
 export class AppComponent {
   title = 'EQUA - Finance Without Barriers';
-    headerNavItems: NavMenuItem[] = [
-      { label: 'Accueil', sectionId: 'token-intro' },
-      { label: 'Token', sectionId: 'token-intro' },
-      { label: 'Services', sectionId: 'how-it-works' },
-      { label: 'FAQ', sectionId: 'faq' },
-      { label: 'Contact', sectionId: 'contact-cta' }
-    ];
     mobileMenuOpen = false;
     toggleMobileMenu(): void {
     this.mobileMenuOpen = !this.mobileMenuOpen;

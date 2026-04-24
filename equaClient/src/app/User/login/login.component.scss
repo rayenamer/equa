@@ -82,6 +82,17 @@
             box-shadow: 0 10px 20px rgba(98, 126, 234, 0.2);
         }
     }
+
+    .error-message {
+        margin-top: 1rem;
+        color: #ff6b6b;
+        font-size: 0.9rem;
+        text-align: center;
+        padding: 0.5rem;
+        background: rgba(255, 107, 107, 0.1);
+        border: 1px solid rgba(255, 107, 107, 0.2);
+        border-radius: 8px;
+    }
 }
 
 .divider {
