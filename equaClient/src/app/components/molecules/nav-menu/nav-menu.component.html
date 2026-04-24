@@ -1,5 +1,15 @@
 <nav class="nav-links" [class.open]="open">
-  @for (item of items; track item.label) {
-    <a href="#" (click)="onItemClick($event, item.sectionId)">{{ item.label }}</a>
+  @for (item of menuItems; track item.label) {
+    @if (item.styleType === 'button') {
+      <button type="button" class="nav-button" (click)="item.action?.()">{{ item.label }}</button>
+    } @else if (item.styleType === 'icon') {
+        <a [routerLink]="item.route" class="nav-icon" [attr.aria-label]="item.label">{{ item.icon }}</a>
+    } @else {
+      @if (item.route) {
+        <a [routerLink]="item.route">{{ item.label }}</a>
+      } @else {
+        <a href="#" (click)="onItemClick($event, item.sectionId)">{{ item.label }}</a>
+      }
+    }
   }
 </nav>

@@ -1,6 +1,6 @@
 <div class="user-layout">
     <main class="content-container">
-        <app-blockchain-sidebar [navItems]="navItems"></app-blockchain-sidebar>
+        <app-blockchain-sidebar *ngIf="authService.currentUser$ | async" [navItems]="navItems"></app-blockchain-sidebar>
         <section class="page-content">
             <router-outlet></router-outlet>
         </section>

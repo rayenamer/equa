@@ -34,13 +34,20 @@
                     <a routerLink="/user/forgot-password" class="forgot-pwd">Mot de passe oublié ?</a>
                 </div>
 
-                <app-ui-button 
-                    label="Se connecter" 
-                    type="submit" 
-                    variant="primary" 
-                    size="lg" 
-                    class="submit-btn">
+                <app-ui-button
+                    label="Se connecter"
+                    type="submit"
+                    variant="primary"
+                    size="lg"
+                    class="submit-btn"
+                    [disabled]="loading">
+                    <span *ngIf="loading">Connexion...</span>
+                    <span *ngIf="!loading">Se connecter</span>
                 </app-ui-button>
+
+                <div *ngIf="errorMessage" class="error-message">
+                    {{ errorMessage }}
+                </div>
             </form>
 
             <div class="divider">
@@ -53,7 +60,7 @@
             </button>
 
             <footer class="auth-footer">
-                Pas encore de compte ? <a routerLink="/register">Inscrivez-vous</a>
+                Pas encore de compte ? <a routerLink="/user/register">Inscrivez-vous</a>
             </footer>
         </div>
     </div>
