@@ -10,11 +10,8 @@ import { Transaction, TransactionStatus } from '../models/transaction.model';
 export class TransactionService {
   private baseUrl = `${environment.apiUrl}/v1/transactions`;
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient) { }
 
-  createTransaction(request: Record<string, any>): Observable<Transaction> {
-    return this.http.post<Transaction>(this.baseUrl, request);
-  }
 
   getTransactionById(id: number): Observable<Transaction> {
     return this.http.get<Transaction>(`${this.baseUrl}/${id}`);

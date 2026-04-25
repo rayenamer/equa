@@ -4,8 +4,9 @@ import { FormsModule } from '@angular/forms';
 import { DinarBalanceCardComponent } from '../../components/dinar-balance-card/dinar-balance-card.component';
 import { DinarActionsComponent } from '../../components/dinar-actions/dinar-actions.component';
 import { DinarInventoryComponent } from '../../components/dinar-inventory/dinar-inventory.component';
+import { WalletCardComponent } from '../../components/wallet-card/wallet-card.component';
 import { ApiService } from '../../services/api.service';
-import { DinarWallet,WalletDTO } from '../models/dinar-wallet.model';
+import { DinarWallet, WalletDTO } from '../models/dinar-wallet.model';
 import { catchError, of } from 'rxjs';
 import { AuthService } from '../../User/services/auth.service';
 
@@ -17,7 +18,8 @@ import { AuthService } from '../../User/services/auth.service';
     FormsModule,
     DinarBalanceCardComponent,
     DinarActionsComponent,
-    DinarInventoryComponent
+    DinarInventoryComponent,
+    WalletCardComponent
   ],
   templateUrl: './wallet.component.html',
   styleUrl: './wallet.component.scss'
@@ -29,7 +31,7 @@ export class WalletComponent implements OnInit {
   equaWalletExists = false;
   convertAmount = 0;
 
-  constructor(private apiService: ApiService, private authService: AuthService) {}
+  constructor(private apiService: ApiService, private authService: AuthService) { }
 
   ngOnInit() {
     this.loadWallets();
@@ -78,14 +80,18 @@ export class WalletComponent implements OnInit {
   }
 
   convertDinars() {
-    if (this.convertAmount <= 0 || !this.equaWalletExists) return;
+    if (this.convertAmount <= 0) {
+      alert('Veuillez entrer un montant valide');
+      return;
+    }
 
     this.apiService.convertDinarsToEqua(this.convertAmount).subscribe(wallet => {
       this.equaWallet = wallet;
-      // Reload dinar wallet to reflect changes
+      this.convertAmount = 0; // Reset after success
       this.loadWallets();
     }, error => {
       alert('Erreur: ' + error.message);
     });
   }
+
 }

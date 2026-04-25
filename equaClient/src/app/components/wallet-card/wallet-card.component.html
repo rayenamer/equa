@@ -1,0 +1,23 @@
+<div class="wallet-card-container">
+    <div class="section-title">
+        <h2>{{ title }}</h2>
+    </div>
+
+    @if (exists) {
+    <app-dinar-balance-card [balance]="balance" [walletId]="walletId" [dinarCount]="subValue"
+        [title]="'MON PORTEFEUILLE ' + currency" [currency]="currency" [subLabel]="subLabel">
+    </app-dinar-balance-card>
+
+    <div class="actions-content">
+        <ng-content></ng-content>
+    </div>
+    } @else {
+    <div class="no-wallet">
+        <h3>{{ emptyTitle }}</h3>
+        <p>{{ emptyDesc }}</p>
+        <button class="create-btn" (click)="onCreate()">
+            {{ btnText }}
+        </button>
+    </div>
+    }
+</div>

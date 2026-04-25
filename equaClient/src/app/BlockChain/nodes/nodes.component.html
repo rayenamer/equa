@@ -4,9 +4,10 @@
         <p>Visualisation des validateurs et de leur état de santé sur le réseau.</p>
     </header>
 
-    <app-node-stats></app-node-stats>
+    <app-node-stats [totalNodes]="totalNodes()" [onlineNodes]="onlineNodesCount()" [avgReputation]="avgReputation()">
+    </app-node-stats>
 
     <div class="nodes-table-section">
-        <app-nodes-table></app-nodes-table>
+        <app-nodes-table [nodes]="nodes()"></app-nodes-table>
     </div>
 </div>

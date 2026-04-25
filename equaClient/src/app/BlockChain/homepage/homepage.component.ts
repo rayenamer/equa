@@ -24,11 +24,15 @@ import { BlockchainSidebarComponent } from '../../components/organisms/blockchai
 export class HomepageComponent {
   navItems: NavMenuItem[] = [
     { label: 'Tableau de bord', sectionId: '/blockchain/dashboard' },
+
+    { label: 'Envoi / Réception', type: 'header' },
+    { label: 'Portefeuille (Dinar)', sectionId: '/blockchain/wallet' },
     { label: 'Transactions', sectionId: '/blockchain/transactions' },
     { label: 'Envoyer des fonds', sectionId: '/blockchain/transactions/create' },
+
+    { label: 'Système', type: 'header' },
     { label: 'Blocs', sectionId: '/blockchain/blocks' },
     { label: 'Nœuds', sectionId: '/blockchain/nodes' },
-    { label: 'Portefeuille (Dinar)', sectionId: '/blockchain/wallet' },
     { label: 'IA Insights', sectionId: '/blockchain/ai-insights' },
     { label: 'Comment ça marche', sectionId: '/blockchain/explanation' }
   ];

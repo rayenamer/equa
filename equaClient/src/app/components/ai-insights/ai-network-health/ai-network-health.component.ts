@@ -1,6 +1,8 @@
-import { Component, Input } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { HealthScore } from '../../../BlockChain/models/ai-insights.model';
+import { ApiService } from '../../../services/api.service';
+
 
 @Component({
     selector: 'app-ai-network-health',
@@ -10,16 +12,22 @@ import { HealthScore } from '../../../BlockChain/models/ai-insights.model';
     styleUrls: ['./ai-network-health.component.scss']
 })
 export class AiNetworkHealthComponent {
-    @Input() health: HealthScore = {
-        decentralizationScore: 85,
-        decentralizationExplanation: 'Bonne répartition géographique des nœuds.',
-        activityScore: 92,
-        activityExplanation: 'Volume de transactions élevé et stable.',
-        nodeDiversityScore: 78,
-        nodeDiversityExplanation: 'Besoin de plus de types de nœuds archives.',
-        overallScore: 85,
-        overallExplanation: 'Le réseau est robuste avec une marge de progression sur la diversité.'
-    };
+    health: HealthScore | null = null;
+    loading = true;
+
+    constructor(private apiService: ApiService) { }
+
+    ngOnInit() {
+        this.apiService.getHealthScore().subscribe({
+            next: (data) => {
+                this.health = data;
+                this.loading = false;
+            },
+            error: () => {
+                this.loading = false;
+            }
+        });
+    }
 
     getStatusColor(score: number) {
         if (score >= 90) return '#4ade80';
@@ -27,3 +35,4 @@ export class AiNetworkHealthComponent {
         return '#f87171';
     }
 }
+

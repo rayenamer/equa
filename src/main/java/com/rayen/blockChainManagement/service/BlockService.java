@@ -29,6 +29,7 @@ public class BlockService {
     private final BlockRepository blockRepository;
     private final BlockMapper blockMapper;
     private static final String GENESIS_PREVIOUS_HASH = "0000000000000000000000000000000000000000000000000000000000000000";
+
     @Transactional
     public BlockResponse createBlock(BlockRequest request) {
         log.info("Creating new block with previousHash: {}", request.getPreviousHash());
@@ -61,6 +62,7 @@ public class BlockService {
 
         return blockMapper.toResponse(savedBlock);
     }
+
     @Transactional(readOnly = true)
     public BlockResponse getBlockById(Integer blockId) {
         Block block = blockRepository.findById(blockId)
@@ -84,7 +86,7 @@ public class BlockService {
 
     @Transactional(readOnly = true)
     public BlockResponse getGenesisBlock() {
-        Block block= blockRepository.findGenesisBlock();
+        Block block = blockRepository.findGenesisBlock();
         return blockMapper.toResponse(block);
     }
 
@@ -101,8 +103,7 @@ public class BlockService {
                 request.getTimestampBefore(),
                 request.getCreatedAfter(),
                 request.getCreatedBefore(),
-                request.getSortBy() != null ? request.getSortBy() : "timestampDesc"
-        );
+                request.getSortBy() != null ? request.getSortBy() : "timestampDesc");
 
         return blocks.stream()
                 .map(blockMapper::toResponse)
@@ -216,6 +217,5 @@ public class BlockService {
         block.getTransaction().add(transaction);
         blockRepository.save(block);
     }
-
 
 }

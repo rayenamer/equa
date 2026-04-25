@@ -1,0 +1,61 @@
+<div class="converter-box">
+    <div class="converter-header">
+        <div class="icon-orb">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M7 11V7a5 5 0 0 1 10 0v4" />
+                <path d="M5 11h14v10H5z" />
+            </svg>
+        </div>
+        <div class="header-text">
+            <h3>Conversion de Jetons</h3>
+            <p>Transformez vos Dinars en Points EQUA</p>
+        </div>
+    </div>
+
+    <div class="input-wrapper">
+        <div class="input-container">
+            <div class="field-label">
+                <span>Montant à convertir</span>
+                <span class="max-badge" (click)="amount = maxAmount">MAX</span>
+            </div>
+            <div class="amount-input-group">
+                <input type="number" [(ngModel)]="amount" name="amount" (ngModelChange)="onAmountChange($event)"
+                    id="convert-amount" placeholder="0.00" min="0" [max]="maxAmount">
+                <span class="currency-tag">DINAR</span>
+            </div>
+            <div class="balance-row">
+                <span>Solde disponible:</span>
+                <span class="balance-val">{{ maxAmount | number:'1.2-2' }} DT</span>
+            </div>
+        </div>
+
+        <div class="swap-icon">
+            <div class="line"></div>
+            <div class="circle">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                    <path d="M7 13l5 5 5-5M7 6l5 5 5-5" />
+                </svg>
+            </div>
+            <div class="line"></div>
+        </div>
+
+        <div class="preview-container">
+            <div class="field-label">Vous recevrez</div>
+            <div class="preview-output">
+                <span class="value">{{ amount ? (amount / 10 | number:'1.2-2') : '0.00' }}</span>
+                <span class="currency-tag equa">EQUA</span>
+            </div>
+            <div class="rate-row">
+                <span>Taux fixe: 1.00 EQUA = 10.00 DT</span>
+            </div>
+        </div>
+    </div>
+
+    <button class="convert-btn" [disabled]="!amount || amount <= 0 || amount > maxAmount" (click)="onConvert()">
+        <span class="btn-shine"></span>
+        <span class="btn-text">Confirmer la Conversion</span>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M5 12h14m-7-7 7 7-7 7" />
+        </svg>
+    </button>
+</div>

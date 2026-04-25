@@ -1,9 +1,6 @@
 package com.rayen.blockChainManagement.model;
 
-
 import com.rayen.blockChainManagement.entity.Block;
-import com.rayen.blockChainManagement.model.BlockResponse;
-import com.rayen.blockChainManagement.model.BlockStats;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -20,8 +17,7 @@ public class BlockMapper {
                 .blockHash(block.getBlockHash())
                 .timestamp(block.getTimestamp())
                 .blockSize(block.getBlockSize())
-                .previousBlockId(block.getPreviousBlock() != null ?
-                        block.getPreviousBlock().getBlockId() : null)
+                .previousBlockId(block.getPreviousBlock() != null ? block.getPreviousBlock().getBlockId() : null)
                 .createdAt(block.getCreatedAt())
                 .updatedAt(block.getUpdatedAt())
                 .build();
@@ -44,7 +40,7 @@ public class BlockMapper {
     }
 
     public BlockStats toStats(Long totalBlocks, Double averageBlockSize,
-                              BlockResponse latestBlock, BlockResponse genesisBlock) {
+            BlockResponse latestBlock, BlockResponse genesisBlock) {
         return BlockStats.builder()
                 .totalBlocks(totalBlocks)
                 .averageBlockSize(averageBlockSize)
