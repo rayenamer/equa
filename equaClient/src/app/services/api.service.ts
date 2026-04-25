@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { Project } from '../models/project.model';
-import { WalletDTO, DinarWallet } from '../models/wallet.model';
+import { DinarWallet,WalletDTO } from '../BlockChain/models/dinar-wallet.model';
 
 @Injectable({
   providedIn: 'root'

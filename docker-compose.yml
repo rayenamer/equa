@@ -14,20 +14,20 @@ services:
       - postgres_data:/var/lib/postgresql/data
     networks:
       - equa-network
-  backend:
-    build: .
-    container_name: equa-backend
-    ports:
-      - "8081:8081"
-    environment:
-      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/equadb
-      SPRING_DATASOURCE_USERNAME: equauser
-      SPRING_DATASOURCE_PASSWORD: equapass
-      SPRING_AUTOCONFIGURE_EXCLUDE: org.springframework.boot.autoconfigure.security.oauth2.client.servlet.OAuth2ClientAutoConfiguration
-    depends_on:
-      - postgres
-    networks:
-      - equa-network
+
+  # backend:
+  #   build: .
+  #   container_name: equa-backend
+  #   ports:
+  #     - "8081:8081"
+  #   environment:
+  #     SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/equadb
+  #     SPRING_DATASOURCE_USERNAME: equauser
+  #     SPRING_DATASOURCE_PASSWORD: equapass
+  #   depends_on:
+  #     - postgres
+  #   networks:
+  #     - equa-network
 
 volumes:
   postgres_data:
