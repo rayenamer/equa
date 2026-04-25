@@ -5,7 +5,7 @@ import { DinarBalanceCardComponent } from '../../components/dinar-balance-card/d
 import { DinarActionsComponent } from '../../components/dinar-actions/dinar-actions.component';
 import { DinarInventoryComponent } from '../../components/dinar-inventory/dinar-inventory.component';
 import { ApiService } from '../../services/api.service';
-import { WalletDTO, DinarWallet } from '../../models/wallet.model';
+import { DinarWallet,WalletDTO } from '../models/dinar-wallet.model';
 import { catchError, of } from 'rxjs';
 import { AuthService } from '../../User/services/auth.service';
 

@@ -1,50 +1,63 @@
 <div class="wallet-page">
-    <header class="section-header">
-        <h1>Portefeuilles</h1>
-        <p>Gérez vos fonds en Dinar et Equa.</p>
-    </header>
+  <header class="section-header">
+    <h1>Portefeuilles</h1>
+    <p>Gérez vos fonds en Dinar et Equa.</p>
+  </header>
 
-    <div class="wallet-dashboard">
-        <!-- Dinar Wallet Section -->
+  <div class="wallet-dashboard">
+
+    <!-- Dinar Wallet -->
+    @if (dinarWalletExists && dinarWallet) {
+      <div class="wallet-section">
+        <h2>Portefeuille Dinar</h2>
+
+        <app-dinar-balance-card
+          [balance]="dinarWallet.balance"
+          [walletId]="dinarWallet.walletId"
+          [dinarCount]="0"> <!-- ✅ no dinars in model -->
+        </app-dinar-balance-card>
+
+        <app-dinar-actions (action)="handleWalletAction($event)"></app-dinar-actions>
+      </div>
+    } @else {
+      <div class="no-wallet card-container">
+        <div class="empty-icon">󰄗</div>
+        <h2>Aucun portefeuille Dinar trouvé</h2>
+        <p>Vous devez créer un portefeuille Dinar pour gérer vos fonds locaux.</p>
+        <button class="create-btn" (click)="createDinarWallet()">
+          Créer Portefeuille Dinar
+        </button>
+      </div>
+    }
+
+    <!-- Equa Wallet -->
+    @if (equaWalletExists && equaWallet) {
+      <div class="wallet-section">
+        <h2>Portefeuille Equa</h2>
+
+        <div class="equa-balance">
+          <!-- ✅ use correct field -->
+          <h3>Solde Equa: {{ equaWallet.equaAmount }}</h3>
+        </div>
+
         @if (dinarWalletExists) {
-        <div class="wallet-section">
-            <h2>Portefeuille Dinar</h2>
-            <app-dinar-balance-card [balance]="dinarWallet!.balance" [walletId]="dinarWallet!.walletId"
-                [dinarCount]="dinarWallet!.dinars.length">
-            </app-dinar-balance-card>
-            <app-dinar-actions (action)="handleWalletAction($event)"></app-dinar-actions>
-        </div>
-        } @else {
-        <div class="no-wallet card-container">
-            <div class="empty-icon">󰄗</div>
-            <h2>Aucun portefeuille Dinar trouvé</h2>
-            <p>Vous devez créer un portefeuille Dinar pour gérer vos fonds locaux.</p>
-            <button class="create-btn" (click)="createDinarWallet()">Créer Portefeuille Dinar</button>
-        </div>
+          <div class="convert-section">
+            <h3>Convertir Dinars en Equa</h3>
+            <input type="number" [(ngModel)]="convertAmount" placeholder="Montant en Dinars" />
+            <button (click)="convertDinars()">Convertir</button>
+          </div>
         }
+      </div>
+    } @else {
+      <div class="no-wallet card-container">
+        <div class="empty-icon">󰄗</div>
+        <h2>Aucun portefeuille Equa trouvé</h2>
+        <p>Vous devez créer un portefeuille Equa pour utiliser les jetons.</p>
+        <button class="create-btn" (click)="createEquaWallet()">
+          Créer Portefeuille Equa
+        </button>
+      </div>
+    }
 
-        <!-- Equa Wallet Section -->
-        @if (equaWalletExists) {
-        <div class="wallet-section">
-            <h2>Portefeuille Equa</h2>
-            <div class="equa-balance">
-                <h3>Solde Equa: {{ equaWallet!.balance }}</h3>
-            </div>
-            @if (dinarWalletExists) {
-            <div class="convert-section">
-                <h3>Convertir Dinars en Equa</h3>
-                <input type="number" [(ngModel)]="convertAmount" placeholder="Montant en Dinars" />
-                <button (click)="convertDinars()">Convertir</button>
-            </div>
-            }
-        </div>
-        } @else {
-        <div class="no-wallet card-container">
-            <div class="empty-icon">󰄗</div>
-            <h2>Aucun portefeuille Equa trouvé</h2>
-            <p>Vous devez créer un portefeuille Equa pour utiliser les jetons.</p>
-            <button class="create-btn" (click)="createEquaWallet()">Créer Portefeuille Equa</button>
-        </div>
-        }
-    </div>
+  </div>
 </div>
