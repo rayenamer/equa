@@ -4,7 +4,14 @@
         <p>Visualisez les blocs minés en temps réel sur la blockchain EQUA.</p>
     </header>
 
-    <app-block-highlights></app-block-highlights>
+    <div class="stats-grid">
+        @for (stat of blockStats(); track stat.label) {
+        <app-stat-card [label]="stat.label" [value]="stat.value"></app-stat-card>
+        }
+    </div>
+
+    <app-block-highlights [latestBlock]="latestBlock()" [genesisBlock]="genesisBlock()">
+    </app-block-highlights>
 
     <app-block-explorer-tools></app-block-explorer-tools>
 
@@ -12,6 +19,6 @@
         <div class="card-header">
             <h2>Derniers Blocs</h2>
         </div>
-        <app-blocks-table></app-blocks-table>
+        <app-blocks-table [blocks]="blocks()"></app-blocks-table>
     </div>
 </div>

@@ -1,27 +1,12 @@
 <div class="actions-grid">
-    <!-- Deposit Section -->
-    <div class="action-card deposit">
-        <div class="icon">󰄔</div>
-        <h3>Déposer des Dinars</h3>
-        <p>Ajoutez des fonds à votre compte pour les échanger plus tard.</p>
+    <!-- Deposit Action -->
+    <div class="action-card">
+        <div class="icon">↓</div>
+        <h3>Dépôt de Fonds</h3>
+        <p>Alimentez votre portefeuille Dinar pour pouvoir ensuite les convertir en tokens EQUA.</p>
         <div class="input-group">
-            <input type="number" [(ngModel)]="depositAmount" placeholder="Montant en TND...">
-            <button (click)="onDeposit()" [disabled]="!depositAmount || depositAmount <= 0">
-                Déposer
-            </button>
-        </div>
-    </div>
-
-    <!-- Withdraw Section -->
-    <div class="action-card withdraw">
-        <div class="icon">󰄚</div>
-        <h3>Retirer des Dinars</h3>
-        <p>Transférez vos fonds vers un autre service ou retirez-les.</p>
-        <div class="input-group">
-            <input type="number" [(ngModel)]="withdrawAmount" placeholder="Montant en TND...">
-            <button (click)="onWithdraw()" [disabled]="!withdrawAmount || withdrawAmount <= 0">
-                Retirer
-            </button>
+            <input type="number" [(ngModel)]="depositAmount" placeholder="Montant en DT..." min="1">
+            <button (click)="onDeposit()" [disabled]="!depositAmount || depositAmount <= 0">Déposer</button>
         </div>
     </div>
 </div>

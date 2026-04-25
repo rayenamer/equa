@@ -1,6 +1,8 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { ApiService } from '../../services/api.service';
+
 
 @Component({
     selector: 'app-transaction-form',
@@ -15,13 +17,13 @@ export class TransactionFormComponent {
     successMessage = '';
     errorMessage = '';
 
-    constructor(private fb: FormBuilder) {
+    constructor(private fb: FormBuilder, private apiService: ApiService) {
         this.transactionForm = this.fb.group({
-            transactionId: [null], // To be fed from background
-            fromWallet: ['0x71C765...d897'], // Mock session data
-            toWallet: ['', [Validators.required, Validators.pattern(/^0x[a-fA-F0-9]{40}$/)]],
-            amount: [null, [Validators.required, Validators.min(0.000001)]],
-            timestamp: [new Date().toISOString()] // Auto-generate current time
+            transactionId: [null],
+            fromWallet: ['0x12d1cd8f-a2af-44c8-91c9-f59678618884'], // Updated mock data or from auth
+            toWallet: ['', [Validators.required]],
+            amount: [null, [Validators.required, Validators.min(1)]],
+            timestamp: [new Date().toISOString()]
         });
     }
 
@@ -31,25 +33,30 @@ export class TransactionFormComponent {
             this.successMessage = '';
             this.errorMessage = '';
 
-            // Update timestamp just before submission to be precise
-            this.transactionForm.patchValue({ timestamp: new Date().toISOString() });
+            const request = {
+                ...this.transactionForm.value,
+                timestamp: new Date().toISOString()
+            };
 
-            // Simulate API call with the full object
-            const request = this.transactionForm.value;
-            console.log('Sending TransactionRequest to backend:', request);
-
-            setTimeout(() => {
-                this.isSubmitting = false;
-                this.successMessage = 'Transaction envoyée avec succès au réseau !';
-                this.transactionForm.reset({
-                    fromWallet: '0x71C765...d897'
-                });
-            }, 1500);
+            this.apiService.processTransaction(request).subscribe({
+                next: (response) => {
+                    this.isSubmitting = false;
+                    this.successMessage = `Transaction ${response.transactionHash} envoyée avec succès !`;
+                    this.transactionForm.reset({
+                        fromWallet: request.fromWallet
+                    });
+                },
+                error: (error) => {
+                    this.isSubmitting = false;
+                    this.errorMessage = 'Erreur lors du traitement de la transaction: ' + error.message;
+                }
+            });
         } else {
             this.errorMessage = 'Veuillez remplir tous les champs correctement.';
             this.markFormGroupTouched(this.transactionForm);
         }
     }
+
 
     private markFormGroupTouched(formGroup: FormGroup) {
         Object.values(formGroup.controls).forEach(control => {

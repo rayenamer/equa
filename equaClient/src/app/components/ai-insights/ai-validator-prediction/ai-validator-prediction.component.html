@@ -1,3 +1,4 @@
+@if (prediction) {
 <div class="prediction-card card-container">
     <div class="card-header">
         <div class="header-titles">
@@ -44,3 +45,9 @@
         </div>
     </div>
 </div>
+} @else {
+<div class="loading-state card-container">
+    <div class="shimmer"></div>
+    <p>Calcul des probabilités de minage...</p>
+</div>
+}

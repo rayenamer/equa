@@ -1,7 +1,7 @@
 .balance-card {
     position: relative;
-    background: linear-gradient(135deg, rgba(20, 20, 20, 0.9) 0%, rgba(5, 5, 5, 0.9) 100%);
-    border: 1px solid rgba(255, 255, 255, 0.1);
+    background: linear-gradient(135deg, rgba(20, 20, 20, 0.95) 0%, rgba(5, 5, 5, 0.95) 100%);
+    border: 1px solid rgba(255, 215, 0, 0.1);
     border-radius: 24px;
     padding: 2rem;
     height: 240px;
@@ -16,7 +16,7 @@
     right: -20%;
     width: 300px;
     height: 300px;
-    background: radial-gradient(circle, rgba(98, 126, 234, 0.15) 0%, transparent 70%);
+    background: radial-gradient(circle, rgba(255, 215, 0, 0.1) 0%, transparent 70%);
     z-index: 0;
 }
 
@@ -49,7 +49,8 @@
         .id {
             font-family: monospace;
             font-size: 0.9rem;
-            color: #627eea;
+            color: var(--primary-gold, #ffd700);
+            opacity: 0.8;
         }
     }
 
@@ -63,6 +64,7 @@
         justify-content: center;
         font-size: 1.25rem;
         color: rgba(0, 0, 0, 0.5);
+        box-shadow: 0 0 10px rgba(255, 215, 0, 0.3);
     }
 }
 
@@ -82,6 +84,7 @@
         font-weight: 800;
         color: #fff;
         letter-spacing: -0.02em;
+        text-shadow: 0 0 20px rgba(255, 255, 255, 0.1);
     }
 }
 

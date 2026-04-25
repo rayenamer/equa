@@ -11,6 +11,7 @@ export interface NavMenuItem {
   action?: () => void;
   icon?: string;
   styleType?: 'link' | 'button' | 'icon';
+  type?: 'link' | 'header';
 }
 
 @Component({

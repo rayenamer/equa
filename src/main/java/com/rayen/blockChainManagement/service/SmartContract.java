@@ -43,15 +43,18 @@ public class SmartContract {
         return String.valueOf(letter);
     }
 
-    private void validateTransaction(Integer transactionId) throws BadRequestException, InterruptedException, ExecutionException {
-        log.info("================================================================ VALIDATION START ================================================================");
+    private void validateTransaction(Integer transactionId)
+            throws BadRequestException, InterruptedException, ExecutionException {
+        log.info(
+                "================================================================ VALIDATION START ================================================================");
         Transaction transaction = transactionRepository.findById(transactionId)
                 .orElseThrow(() -> new BadRequestException("Transaction not found: " + transactionId));
         List<Node> nodes = nodeRepository.findAll();
         String target = transaction.getTransactionHash();
 
         log.info("🎯 Target hash: '{}' | {} nodes competing", target, nodes.size());
-        log.info("---------------------------------------------------------------- RACE BEGINS -----------------------------------------------------------------");
+        log.info(
+                "---------------------------------------------------------------- RACE BEGINS -----------------------------------------------------------------");
 
         ExecutorService executor = Executors.newFixedThreadPool(nodes.size());
         AtomicBoolean found = new AtomicBoolean(false);
@@ -61,11 +64,13 @@ public class SmartContract {
             while (!found.get()) {
                 round++;
                 long wait = node.getReputationScore().longValue();
-                log.info("⏳ [Node {}] round {} | waiting {}ms (reputation: {})", node.getNodeId(), round, wait, node.getReputationScore());
+                log.info("⏳ [Node {}] round {} | waiting {}ms (reputation: {})", node.getNodeId(), round, wait,
+                        node.getReputationScore());
                 Thread.sleep(wait);
 
                 String guess = guessHash();
-                log.info("🎲 [Node {}] round {} | guessed '{}' vs target '{}' → {}", node.getNodeId(), round, guess, target, guess.equals(target) ? "✅ CORRECT" : "❌ wrong");
+                log.info("🎲 [Node {}] round {} | guessed '{}' vs target '{}' → {}", node.getNodeId(), round, guess,
+                        target, guess.equals(target) ? "✅ CORRECT" : "❌ wrong");
 
                 if (guess.equals(target) && found.compareAndSet(false, true)) {
                     log.info("🏆 [Node {}] WON on round {} | total wait: {}ms", node.getNodeId(), round, wait * round);
@@ -80,18 +85,27 @@ public class SmartContract {
         executor.awaitTermination(Long.MAX_VALUE, TimeUnit.MILLISECONDS);
 
         Node winner = futures.stream()
-                .map(f -> { try { return f.get(); } catch (Exception e) { return null; } })
+                .map(f -> {
+                    try {
+                        return f.get();
+                    } catch (Exception e) {
+                        return null;
+                    }
+                })
                 .filter(n -> n != null)
                 .findFirst()
                 .orElseThrow(() -> new BadRequestException("Validation failed unexpectedly"));
 
-        log.info("---------------------------------------------------------------- RACE ENDS -------------------------------------------------------------------");
-        log.info("✅ Transaction {} validated by Node {} | reputation: {} → {}", transactionId, winner.getNodeId(), winner.getReputationScore(), winner.getReputationScore() - 1);
-        log.info("================================================================ VALIDATION END ==============================================================");
+        log.info(
+                "---------------------------------------------------------------- RACE ENDS -------------------------------------------------------------------");
+        log.info("✅ Transaction {} validated by Node {} | reputation: {} → {}", transactionId, winner.getNodeId(),
+                winner.getReputationScore(), winner.getReputationScore() - 1);
+        log.info(
+                "================================================================ VALIDATION END ==============================================================");
 
-        if(winner.getReputationScore()==0){
+        if (winner.getReputationScore() == 0) {
             winner.setReputationScore(50.0);
-        }else{
+        } else {
             winner.setReputationScore(winner.getReputationScore() - 0.5);
         }
         nodeRepository.save(winner);
@@ -100,18 +114,17 @@ public class SmartContract {
         transactionRepository.save(transaction);
     }
 
-    private void addToBlock(Integer transactionId){
+    private void addToBlock(Integer transactionId) {
         Block block = blockRepository.findLatestBlock()
                 .orElseThrow(() -> new IllegalStateException("No blocks found in blockchain"));
-        if(block.getBlockSize()==0){
+        if (block.getBlockSize() == 0) {
             Block newBlock = blockService.generateBlock();
             blockService.addTransactionToBlock(newBlock.getBlockId(), transactionId);
-            newBlock.setBlockSize(newBlock.getBlockSize()-1);
+            newBlock.setBlockSize(newBlock.getBlockSize() - 1);
             blockRepository.save(newBlock);
-        }
-        else{
+        } else {
             blockService.addTransactionToBlock(block.getBlockId(), transactionId);
-            block.setBlockSize(block.getBlockSize()-1);
+            block.setBlockSize(block.getBlockSize() - 1);
             blockRepository.save(block);
         }
     }
@@ -160,13 +173,14 @@ public class SmartContract {
         senderWallet.setEquaAmount(senderWallet.getEquaAmount() - amount.floatValue());
 
         receiverWallet.setBalance(receiverWallet.getBalance() + amount.floatValue());
-        receiverWallet.setEquaAmount(receiverWallet.getEquaAmount() - amount.floatValue());
+        receiverWallet.setEquaAmount(receiverWallet.getEquaAmount() + amount.floatValue());
 
         walletRepository.save(senderWallet);
         walletRepository.save(receiverWallet);
     }
 
-    public TransactionResponse processTransaction(TransactionRequest request) throws BadRequestException, JsonProcessingException, ExecutionException, InterruptedException {
+    public TransactionResponse processTransaction(TransactionRequest request)
+            throws BadRequestException, JsonProcessingException, ExecutionException, InterruptedException {
         validateSufficientBalance(request.getFromWallet(), request.getAmount());
         TransactionResponse response = transactionService.createTransaction(request);
         validateTransaction(response.getTransactionId());
@@ -175,6 +189,7 @@ public class SmartContract {
         updateNodes();
         return response;
     }
+
     public List<Node> getAllNodesWithBlockchain() {
         return nodeRepository.findAll();
     }

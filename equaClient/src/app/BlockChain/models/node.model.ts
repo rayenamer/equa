@@ -12,3 +12,10 @@ export interface Node {
     createdAt: Date;
     updatedAt: Date;
 }
+
+export interface NodeRequest {
+    nodeType: string;
+    ipAddress: string;
+    publicKey: string;
+    location: string;
+}

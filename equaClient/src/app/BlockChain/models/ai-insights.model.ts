@@ -25,3 +25,14 @@ export interface ValidatorPrediction {
     reasoning: string;
     allNodeOdds: NodeOdds[];
 }
+
+export interface ChatRequest {
+    sessionId: string;
+    message: string;
+}
+
+export interface ChatResponse {
+    sessionId: string;
+    response: string;
+}
+

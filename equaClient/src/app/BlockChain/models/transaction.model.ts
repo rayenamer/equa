@@ -15,3 +15,12 @@ export interface Transaction {
     transactionHash: string;
     fee: number;
 }
+
+export interface TransactionRequest {
+    transactionId?: number;
+    fromWallet: string;
+    toWallet: string;
+    amount: number;
+    timestamp?: string | Date;
+}
+

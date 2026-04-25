@@ -12,6 +12,7 @@ import lombok.NoArgsConstructor;
 public class BlockStats {
     private Long totalBlocks;
     private Double averageBlockSize;
+    private String latestBlockTime;
     private BlockResponse latestBlock;
     private BlockResponse genesisBlock;
 }
