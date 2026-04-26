@@ -15,6 +15,8 @@ if [ $? -ne 0 ]; then
     echo "Error: Failed to create branch."
     exit 1
 fi
+git add .
+git commit -m "Initial commit on $BRANCH_NAME"
 
 echo ""
 echo "Pushing branch to origin..."
