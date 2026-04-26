@@ -1,5 +1,6 @@
 package com.rayen.walletManagement.controller;
 
+import com.rayen.blockChainManagement.service.EquaValuationEngine;
 import com.rayen.walletManagement.entity.Wallet;
 import com.rayen.walletManagement.model.AnalyticsSummary;
 import com.rayen.walletManagement.model.ConversionRequest;
@@ -36,6 +37,7 @@ public class WalletController {
     private final LoyaltyService loyaltyService;
     private final GamificationService gamificationService;
     private final WalletMapper walletMapper;
+    private final EquaValuationEngine equaValuationEngine;
 
 //============================================================================================
 // This section has already been implemented by Rayen.
@@ -54,10 +56,11 @@ public class WalletController {
         return ResponseEntity.ok(walletMapper.toDTO(walletService.getMyWallet()));
     }
 
-    // POST /api/v1/wallets/convert?amount=100
     @PostMapping("/convert")
     public ResponseEntity<WalletDTO> convertDinarsToEqua(@RequestParam BigDecimal amount) {
-        return ResponseEntity.ok(walletMapper.toDTO(walletService.convertDinarsToEqua(amount)));
+        WalletDTO dto = walletMapper.toDTO(walletService.convertDinarsToEqua(amount));
+        equaValuationEngine.computeAndBroadcast();
+        return ResponseEntity.ok(dto);
     }
     //===========================================================================================
 

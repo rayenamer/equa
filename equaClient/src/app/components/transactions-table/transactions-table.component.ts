@@ -1,6 +1,7 @@
-import { Component, computed, signal, Input } from '@angular/core';
+import { Component, computed, signal, Input, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Transaction, TransactionStatus } from '../../BlockChain/models/transaction.model';
+import { ApiService } from '../../services/api.service';
 
 import { TransactionStatsComponent } from '../transaction-stats/transaction-stats.component';
 import { TransactionFiltersComponent, TransactionFilters } from '../transaction-filters/transaction-filters.component';
@@ -16,7 +17,7 @@ import { TransactionFiltersComponent, TransactionFilters } from '../transaction-
     templateUrl: './transactions-table.component.html',
     styleUrls: ['./transactions-table.component.scss'],
 })
-export class TransactionsTableComponent {
+export class TransactionsTableComponent implements OnInit {
     private transactionsSignal = signal<Transaction[]>([]);
 
     @Input() set transactions(value: Transaction[]) {
@@ -27,9 +28,9 @@ export class TransactionsTableComponent {
         return this.transactionsSignal();
     }
 
-    private userWallet = '0x71C765...d897';
+    private userWallet = signal<string>('');
 
-    activeFilter = signal<'all' | TransactionStatus | 'my'>('all');
+    activeFilter = signal<'all' | TransactionStatus | 'my'>('my');
     sortOrder = signal<'timestamp' | 'amount'>('timestamp');
     currentFilters = signal<TransactionFilters>({});
     currentPage = signal(1);
@@ -37,12 +38,17 @@ export class TransactionsTableComponent {
 
     statusTabs: { id: 'all' | TransactionStatus | 'my'; label: string }[] = [
         { id: 'all', label: 'TOUT' },
-        { id: 'my', label: 'MES TRANSACTIONS' },
-        { id: TransactionStatus.COMPLETED, label: 'COMPLÉTÉ' },
-        { id: TransactionStatus.PENDING, label: 'EN ATTENTE' },
-        { id: TransactionStatus.FAILED, label: 'ÉCHOUÉ' },
-        { id: TransactionStatus.PROCESSING, label: 'TRAITEMENT' },
+        { id: 'my', label: 'MES TRANSACTIONS' }
     ];
+
+    constructor(private apiService: ApiService) { }
+
+    ngOnInit(): void {
+        this.apiService.getMyWallet().subscribe({
+            next: (wallet) => this.userWallet.set(wallet.id.toString()),
+            error: (err) => console.error('Error fetching wallet for table:', err)
+        });
+    }
 
     filteredTransactions = computed(() => {
         let list = [...this.transactions];
@@ -52,7 +58,8 @@ export class TransactionsTableComponent {
 
         // Status/My Transactions Filter
         if (statusFilter === 'my') {
-            list = list.filter(t => t.fromWallet === this.userWallet || t.toWallet === this.userWallet);
+            const walletId = this.userWallet();
+            list = list.filter(t => t.fromWallet === walletId || t.toWallet === walletId);
         } else if (statusFilter !== 'all') {
             list = list.filter((t) => t.status === statusFilter);
         }

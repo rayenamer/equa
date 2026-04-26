@@ -1,0 +1,59 @@
+.blockchain-layout {
+    display: flex;
+    flex-direction: column;
+    min-height: calc(100vh - 80px); // Adjust based on header height
+    background: #050505;
+    color: #fff;
+
+    .content-container {
+        display: flex;
+        flex: 1;
+        width: 100%;
+        background: #050505;
+
+        app-blockchain-sidebar {
+            flex-shrink: 0;
+            // The component itself has a width of 260px defined in its scss
+        }
+
+        .page-content {
+            flex: 1;
+            min-width: 0;
+            padding: 2rem;
+            height: calc(100vh - 80px);
+            overflow-y: auto;
+
+            // Modern scrollbar for the content area
+            &::-webkit-scrollbar {
+                width: 6px;
+            }
+
+            &::-webkit-scrollbar-track {
+                background: transparent;
+            }
+
+            &::-webkit-scrollbar-thumb {
+                background: rgba(255, 255, 255, 0.1);
+                border-radius: 10px;
+            }
+
+            &::-webkit-scrollbar-thumb:hover {
+                background: rgba(255, 255, 255, 0.2);
+            }
+        }
+    }
+}
+
+@media (max-width: 1024px) {
+    .blockchain-layout {
+        .content-container {
+            flex-direction: column;
+
+            .page-content {
+                height: auto;
+                max-height: none;
+                overflow: visible;
+            }
+        }
+    }
+}

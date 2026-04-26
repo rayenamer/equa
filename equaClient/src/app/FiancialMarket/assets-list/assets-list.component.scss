@@ -1,0 +1,230 @@
+.assets-explorer {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+    color: #fff;
+
+    .explorer-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+
+        h1 {
+            font-size: 2rem;
+            margin-bottom: 0.5rem;
+            background: linear-gradient(135deg, #fff 0%, #94a3b8 100%);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        p {
+            color: #94a3b8;
+        }
+
+        .create-btn {
+            padding: 0.75rem 1.5rem;
+            background: #9b59b6;
+            color: #fff;
+            border: none;
+            border-radius: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+            box-shadow: 0 4px 12px rgba(155, 89, 182, 0.3);
+
+            &:hover {
+                background: #8e44ad;
+                transform: translateY(-2px);
+            }
+        }
+    }
+
+    .filters-bar {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 2rem;
+
+        @media (max-width: 768px) {
+            flex-direction: column;
+            align-items: stretch;
+        }
+
+        .search-box {
+            position: relative;
+            flex: 1;
+
+            i {
+                position: absolute;
+                left: 1rem;
+                top: 50%;
+                transform: translateY(-50%);
+                color: #94a3b8;
+            }
+
+            input {
+                width: 100%;
+                padding: 0.8rem 1rem 0.8rem 2.8rem;
+                background: rgba(255, 255, 255, 0.05);
+                border: 1px solid rgba(255, 255, 255, 0.1);
+                border-radius: 1rem;
+                color: #fff;
+                outline: none;
+
+                &:focus {
+                    border-color: #9b59b6;
+                    background: rgba(255, 255, 255, 0.08);
+                }
+            }
+        }
+
+        .category-filters {
+            display: flex;
+            gap: 0.5rem;
+            overflow-x: auto;
+            padding-bottom: 0.5rem;
+
+            button {
+                padding: 0.6rem 1.2rem;
+                background: rgba(255, 255, 255, 0.03);
+                border: 1px solid rgba(255, 255, 255, 0.05);
+                border-radius: 50px;
+                color: #94a3b8;
+                font-size: 0.9rem;
+                white-space: nowrap;
+                cursor: pointer;
+                transition: all 0.2s;
+
+                &:hover {
+                    background: rgba(255, 255, 255, 0.08);
+                    color: #fff;
+                }
+
+                &.active {
+                    background: rgba(155, 89, 182, 0.1);
+                    border-color: rgba(155, 89, 182, 0.3);
+                    color: #9b59b6;
+                }
+            }
+        }
+    }
+
+    .assets-table-container {
+        background: rgba(255, 255, 255, 0.02);
+        border: 1px solid rgba(255, 255, 255, 0.05);
+        border-radius: 1.5rem;
+        overflow: hidden;
+        backdrop-filter: blur(20px);
+
+        .assets-table {
+            width: 100%;
+            border-collapse: collapse;
+            text-align: left;
+
+            th {
+                padding: 1.25rem 1.5rem;
+                color: #94a3b8;
+                font-size: 0.85rem;
+                font-weight: 500;
+                border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            }
+
+            td {
+                padding: 1.25rem 1.5rem;
+                border-bottom: 1px solid rgba(255, 255, 255, 0.03);
+            }
+
+            tr:last-child td {
+                border-bottom: none;
+            }
+
+            tr:hover td {
+                background: rgba(255, 255, 255, 0.02);
+                cursor: pointer;
+            }
+
+            .asset-cell {
+                display: flex;
+                align-items: center;
+                gap: 1rem;
+
+                .icon {
+                    width: 36px;
+                    height: 36px;
+                    border-radius: 10px;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    font-weight: 800;
+                    font-size: 0.7rem;
+                    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+                }
+
+                .info {
+                    display: flex;
+                    flex-direction: column;
+
+                    .name {
+                        font-weight: 600;
+                        font-size: 0.95rem;
+                    }
+
+                    .symbol {
+                        font-size: 0.75rem;
+                        color: #94a3b8;
+                    }
+                }
+            }
+
+            .price {
+                font-weight: 600;
+            }
+
+            .change {
+                font-weight: 600;
+
+                &.pos {
+                    color: #2ecc71;
+                }
+
+                &.neg {
+                    color: #e74c3c;
+                }
+            }
+
+            .actions {
+                display: flex;
+                gap: 0.5rem;
+
+                .trade-btn {
+                    padding: 0.4rem 0.8rem;
+                    border-radius: 0.5rem;
+                    font-size: 0.8rem;
+                    font-weight: 600;
+                    border: 1px solid transparent;
+                    cursor: pointer;
+                    transition: all 0.2s;
+
+                    &.buy {
+                        background: rgba(46, 204, 113, 0.1);
+                        color: #2ecc71;
+
+                        &:hover {
+                            background: rgba(46, 204, 113, 0.2);
+                        }
+                    }
+
+                    &.sell {
+                        background: rgba(231, 76, 60, 0.1);
+                        color: #e74c3c;
+
+                        &:hover {
+                            background: rgba(231, 76, 60, 0.2);
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

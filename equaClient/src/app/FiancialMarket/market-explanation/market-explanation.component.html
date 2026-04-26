@@ -1,0 +1,57 @@
+<div class="explanation-container">
+    <header class="explanation-header">
+        <h1>Comment fonctionne le Marché ?</h1>
+        <p>Le marché financier EQUA permet l'échange décentralisé d'actifs réels et numériques.</p>
+    </header>
+
+    <div class="steps-grid">
+        <div class="step-card" *ngFor="let step of steps; let i = index">
+            <div class="step-number">0{{ i + 1 }}</div>
+            <div class="step-icon" [style.color]="step.color">
+                <i class="pi" [ngClass]="step.icon"></i>
+            </div>
+            <h3>{{ step.title }}</h3>
+            <p>{{ step.description }}</p>
+        </div>
+    </div>
+
+    <div class="info-sections">
+        <div class="info-card card-container">
+            <div class="icon-box purple">
+                <i class="pi pi-shield"></i>
+            </div>
+            <div class="content">
+                <h3>Sécurité et Transparence</h3>
+                <p>Chaque transaction est enregistrée sur la blockchain EQUA, garantissant qu'aucune manipulation n'est
+                    possible et que tous les échanges sont audités en temps réel.</p>
+            </div>
+        </div>
+
+        <div class="info-card card-container">
+            <div class="icon-box blue">
+                <i class="pi pi-bolt"></i>
+            </div>
+            <div class="content">
+                <h3>Liquidité Instantanée</h3>
+                <p>Grâce à nos pools de liquidité et notre moteur d'exécution haute performance, vous pouvez entrer et
+                    sortir de vos positions en quelques millisecondes.</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="faq-section card-container">
+        <h2>Questions Fréquentes</h2>
+        <div class="faq-list">
+            <div class="faq-item">
+                <h4>Quels sont les frais de transaction ?</h4>
+                <p>Nous appliquons un frais fixe de 0.1% sur chaque transaction pour maintenir le réseau et récompenser
+                    les validateurs.</p>
+            </div>
+            <div class="faq-item">
+                <h4>Puis-je créer mon propre actif ?</h4>
+                <p>Oui, toute entité vérifiée peut soumettre une demande de création d'actif pour lever des fonds ou
+                    tokeniser un projet.</p>
+            </div>
+        </div>
+    </div>
+</div>

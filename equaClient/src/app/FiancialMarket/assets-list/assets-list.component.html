@@ -1,0 +1,66 @@
+<div class="assets-explorer">
+    <header class="explorer-header">
+        <div class="header-text">
+            <h1>Explorateur d'Actifs</h1>
+            <p>Parcourez tous les actifs disponibles sur le marché EQUA.</p>
+        </div>
+        <div class="header-actions">
+            <button class="create-btn" routerLink="/financial-market/assets/create">
+                <i class="pi pi-plus"></i> Créer un Actif
+            </button>
+        </div>
+    </header>
+
+    <div class="filters-bar">
+        <div class="search-box">
+            <i class="pi pi-search"></i>
+            <input type="text" [(ngModel)]="searchQuery" placeholder="Rechercher par nom ou symbole...">
+        </div>
+        <div class="category-filters">
+            <button *ngFor="let cat of categories" [class.active]="selectedCategory === cat"
+                (click)="selectedCategory = cat">
+                {{ cat }}
+            </button>
+        </div>
+    </div>
+
+    <div class="assets-table-container">
+        <table class="assets-table">
+            <thead>
+                <tr>
+                    <th>Actif</th>
+                    <th>Prix</th>
+                    <th>Variation (24h)</th>
+                    <th>Market Cap</th>
+                    <th>Volume</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let asset of filteredAssets()" [routerLink]="['/financial-market/assets', asset.symbol]">
+                    <td>
+                        <div class="asset-cell">
+                            <div class="icon" [style.background]="asset.color">{{ asset.symbol.substring(0,2) }}</div>
+                            <div class="info">
+                                <span class="name">{{ asset.name }}</span>
+                                <span class="symbol">{{ asset.symbol }} • {{ asset.category }}</span>
+                            </div>
+                        </div>
+                    </td>
+                    <td class="price">{{ asset.price | number:'1.2-2' }} DT</td>
+                    <td class="change" [ngClass]="asset.change >= 0 ? 'pos' : 'neg'">
+                        {{ asset.change >= 0 ? '+' : '' }}{{ asset.change }}%
+                    </td>
+                    <td>{{ asset.cap }} DT</td>
+                    <td>{{ asset.volume }} DT</td>
+                    <td>
+                        <div class="actions">
+                            <button class="trade-btn buy">Acheter</button>
+                            <button class="trade-btn sell">Vendre</button>
+                        </div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>

@@ -76,5 +76,9 @@ export class ApiService {
   predictNextValidator(): Observable<ValidatorPrediction> {
     return this.http.get<ValidatorPrediction>(`${this.apiUrl}/v1/smartContract/predict`);
   }
+
+  getCurrentRate(): Observable<number> {
+    return this.http.get<number>(`${this.apiUrl}/v1/rates/current`);
+  }
 }
 

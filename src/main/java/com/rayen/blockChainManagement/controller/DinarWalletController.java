@@ -3,6 +3,7 @@ package com.rayen.blockChainManagement.controller;
 import com.rayen.blockChainManagement.entity.Dinar;
 import com.rayen.blockChainManagement.entity.DinarWallet;
 import com.rayen.blockChainManagement.service.DinarWalletService;
+import com.rayen.blockChainManagement.service.EquaValuationEngine;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.coyote.BadRequestException;
@@ -18,7 +19,7 @@ import java.util.List;
 public class DinarWalletController {
 
     private final DinarWalletService dinarWalletService;
-
+    private final EquaValuationEngine valuationEngine;
     @PostMapping("/create")
     public ResponseEntity<DinarWallet> createWallet() {
         return ResponseEntity.ok(dinarWalletService.createWallet());
@@ -27,7 +28,9 @@ public class DinarWalletController {
     @PostMapping("/{walletId}/deposit/{amount}")
     public ResponseEntity<DinarWallet> deposit(@PathVariable String walletId,
                                                @PathVariable int amount) {
-        return ResponseEntity.ok(dinarWalletService.deposit(walletId, amount));
+        DinarWallet wallet = dinarWalletService.deposit(walletId, amount);
+        valuationEngine.computeAndBroadcast();   // ← new Dinars entered the system
+        return ResponseEntity.ok(wallet);
     }
 
     @GetMapping("/{walletId}")
@@ -47,13 +50,12 @@ public class DinarWalletController {
 
     @PostMapping("/{walletId}/withdraw/{amount}")
     public ResponseEntity<DinarWallet> withdraw(@PathVariable String walletId,
-                                                @PathVariable int amount) throws BadRequestException {
+            @PathVariable int amount) throws BadRequestException {
         return ResponseEntity.ok(dinarWalletService.withdraw(walletId, amount));
     }
 
     @GetMapping("/myWallet")
-    public ResponseEntity<DinarWallet> getMyWallet()
-    {
+    public ResponseEntity<DinarWallet> getMyWallet() {
         return ResponseEntity.ok((dinarWalletService.getMyWallet()));
     }
 }

@@ -1,0 +1,57 @@
+<div class="portfolio-container">
+    <header class="header">
+        <h1>Mon Portefeuille</h1>
+        <p>Gérez vos investissements et suivez vos performances.</p>
+    </header>
+
+    <div class="stats-row">
+        <div class="stat-card" *ngFor="let stat of portfolioStats">
+            <span class="label">{{ stat.label }}</span>
+            <div class="value">{{ stat.value }}</div>
+            <span class="change" [ngClass]="{'pos': stat.isPos === true, 'neg': stat.isPos === false}">
+                {{ stat.change }}
+            </span>
+        </div>
+    </div>
+
+    <div class="assets-section card-container">
+        <h2>Mes Actifs</h2>
+        <div class="assets-list">
+            <div class="asset-item" *ngFor="let asset of myAssets"
+                [routerLink]="['/financial-market/assets', asset.symbol]">
+                <div class="asset-info">
+                    <div class="icon" [style.background]="asset.color">{{ asset.symbol.substring(0,2) }}</div>
+                    <div class="text">
+                        <span class="name">{{ asset.name }}</span>
+                        <span class="balance">{{ asset.balance }} {{ asset.symbol }}</span>
+                    </div>
+                </div>
+                <div class="asset-values">
+                    <div class="current-value">{{ asset.value | number:'1.2-2' }} DT</div>
+                    <div class="profit" [ngClass]="asset.profit >= 0 ? 'pos' : 'neg'">
+                        {{ asset.profit >= 0 ? '+' : '' }}{{ asset.profit | number:'1.2-2' }} DT
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="history-preview card-container">
+        <div class="header-row">
+            <h2>Derniers Mouvements</h2>
+            <button class="view-all">Voir tout</button>
+        </div>
+        <div class="history-list">
+            <div class="history-item">
+                <div class="type buy">ACHAT</div>
+                <div class="details">EQUA Token • 10.5 EQ</div>
+                <div class="date">Aujourd'hui, 09:42</div>
+            </div>
+            <div class="history-item">
+                <div class="type sell">VENTE</div>
+                <div class="details">Sousse Tech • 2.0 STK</div>
+                <div class="date">Hier, 15:20</div>
+            </div>
+        </div>
+    </div>
+</div>

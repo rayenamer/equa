@@ -56,7 +56,16 @@ export const routes: Routes = [
     },
     {
         path: 'financial-market',
-        component: FinancialMarketHomepage
+        component: FinancialMarketHomepage,
+        children: [
+            { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
+            { path: 'dashboard', loadComponent: () => import('./FiancialMarket/market-dashboard/market-dashboard.component').then(m => m.MarketDashboardComponent) },
+            { path: 'assets', loadComponent: () => import('./FiancialMarket/assets-list/assets-list.component').then(m => m.AssetsListComponent) },
+            { path: 'assets/create', loadComponent: () => import('./FiancialMarket/asset-creation/asset-creation.component').then(m => m.AssetCreationComponent) },
+            { path: 'assets/:id', loadComponent: () => import('./FiancialMarket/asset-trade/asset-trade.component').then(m => m.AssetTradeComponent) },
+            { path: 'portfolio', loadComponent: () => import('./FiancialMarket/portfolio/portfolio.component').then(m => m.PortfolioComponent) },
+            { path: 'explanation', loadComponent: () => import('./FiancialMarket/market-explanation/market-explanation.component').then(m => m.MarketExplanationComponent) }
+        ]
     },
     {
         path: 'forum',
@@ -82,6 +91,7 @@ export const routes: Routes = [
         ]
     },
     { path: 'forgot-password', loadComponent: () => import('./User/security/security.component').then(m => m.SecurityComponent) }, // Placeholder or separate component
+    { path: 'coming-soon', loadComponent: () => import('./pages/coming-soon/coming-soon.component').then(m => m.ComingSoonComponent) },
     {
         path: 'wallet',
         component: WalletHomepage
