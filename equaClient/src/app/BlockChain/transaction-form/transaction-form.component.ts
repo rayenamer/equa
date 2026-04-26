@@ -1,7 +1,8 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ApiService } from '../../services/api.service';
+import { WalletDTO } from '../models/dinar-wallet.model';
 
 
 @Component({
@@ -11,19 +12,39 @@ import { ApiService } from '../../services/api.service';
     templateUrl: './transaction-form.component.html',
     styleUrls: ['./transaction-form.component.scss']
 })
-export class TransactionFormComponent {
+export class TransactionFormComponent implements OnInit {
     transactionForm: FormGroup;
     isSubmitting = false;
     successMessage = '';
     errorMessage = '';
+    myWallet: WalletDTO | null = null;
 
     constructor(private fb: FormBuilder, private apiService: ApiService) {
         this.transactionForm = this.fb.group({
             transactionId: [null],
-            fromWallet: ['0x12d1cd8f-a2af-44c8-91c9-f59678618884'], // Updated mock data or from auth
+            fromWallet: ['', [Validators.required]],
             toWallet: ['', [Validators.required]],
-            amount: [null, [Validators.required, Validators.min(1)]],
+            amount: [null, [Validators.required, Validators.min(0.000001)]],
             timestamp: [new Date().toISOString()]
+        });
+    }
+
+    ngOnInit() {
+        this.loadMyWallet();
+    }
+
+    loadMyWallet() {
+        this.apiService.getMyWallet().subscribe({
+            next: (wallet) => {
+                this.myWallet = wallet;
+                this.transactionForm.patchValue({
+                    fromWallet: wallet.id.toString()
+                });
+            },
+            error: (error) => {
+                console.error('Error fetching wallet:', error);
+                this.errorMessage = 'Impossible de charger votre portefeuille. Vérifiez que vous en possédez un.';
+            }
         });
     }
 
@@ -37,6 +58,10 @@ export class TransactionFormComponent {
                 ...this.transactionForm.value,
                 timestamp: new Date().toISOString()
             };
+
+            // Force cast to string for the API
+            request.fromWallet = request.fromWallet.toString();
+            request.toWallet = request.toWallet.toString();
 
             this.apiService.processTransaction(request).subscribe({
                 next: (response) => {

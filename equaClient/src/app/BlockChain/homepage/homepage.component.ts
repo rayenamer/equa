@@ -34,6 +34,7 @@ export class HomepageComponent {
     { label: 'Blocs', sectionId: '/blockchain/blocks' },
     { label: 'Nœuds', sectionId: '/blockchain/nodes' },
     { label: 'IA Insights', sectionId: '/blockchain/ai-insights' },
+    { label: 'AIDE', type: 'header' },
     { label: 'Comment ça marche', sectionId: '/blockchain/explanation' }
   ];
 
