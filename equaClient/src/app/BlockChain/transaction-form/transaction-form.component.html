@@ -4,6 +4,18 @@
         <p>Saisissez les détails pour envoyer des fonds sur la blockchain EQUA.</p>
     </div>
 
+    <!-- Wallet Info Section -->
+    <div class="wallet-info" *ngIf="myWallet">
+        <div class="info-card">
+            <span class="label">Votre Portefeuille</span>
+            <span class="value">{{ myWallet.publicKey || 'ID: ' + myWallet.id }}</span>
+        </div>
+        <div class="info-card">
+            <span class="label">Solde Disponible</span>
+            <span class="value spotlight">{{ myWallet.equaAmount | number:'1.2-8' }} EQUA</span>
+        </div>
+    </div>
+
     <form [formGroup]="transactionForm" (ngSubmit)="onSubmit()" class="transaction-form">
         <div class="form-grid">
             <!-- To Wallet -->
