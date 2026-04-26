@@ -1,7 +1,9 @@
 package com.rayen.walletManagement.service;
 
 import com.rayen.AuthContextService;
+import com.rayen.blockChainManagement.entity.Conversion;
 import com.rayen.blockChainManagement.entity.DinarWallet;
+import com.rayen.blockChainManagement.repository.ConversionRepository;
 import com.rayen.blockChainManagement.repository.DinarWalletRepository;
 import com.rayen.blockChainManagement.service.EquaValuationEngine;
 import com.rayen.walletManagement.entity.DeviseWallet;
@@ -28,6 +30,7 @@ public class WalletService {
     private final EquaValuationEngine equaValuationEngine;
     private final AuthContextService authContextService;
     private final DeviseWalletService deviseWalletService;
+    private final ConversionRepository conversionRepository;
 
     // ─── CRUD ────────────────────────────────────────────────
 
@@ -107,7 +110,18 @@ public class WalletService {
         wallet.setEquaAmount(wallet.getEquaAmount() + equaReceived.floatValue());
         wallet.setBalance(wallet.getBalance() + equaReceived.floatValue());
         log.info("[WalletService] userId:{} converted {} DT → {} EQUA @ rate={}", userId, amountInDinars, equaReceived, rate);
-        
+
+
+        //for rate calculation
+        Conversion record = Conversion.builder()
+                .walletId(wallet.getWalletId().toString())
+                .dinarAmount(amountInDinars)
+                .equaAmount(equaReceived)
+                .rateAtConversion(rate)
+                .build();
+
+        conversionRepository.save(record);
+
         return walletRepository.save(wallet);
     }
 }

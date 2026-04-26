@@ -1,0 +1,70 @@
+<div class="asset-creation-container">
+    <header class="header">
+        <h1>Créer un Nouvel Actif</h1>
+        <p>Tokenisez votre projet ou votre entreprise sur la blockchain EQUA.</p>
+    </header>
+
+    <div class="form-card card-container">
+        <form (ngSubmit)="onSubmit()" #assetForm="ngForm">
+            <div class="form-grid">
+                <div class="form-group full">
+                    <label>Nom de l'actif</label>
+                    <input type="text" name="name" [(ngModel)]="asset.name" placeholder="Ex: Carthago Tech" required>
+                </div>
+
+                <div class="form-group">
+                    <label>Symbole (Ticker)</label>
+                    <input type="text" name="symbol" [(ngModel)]="asset.symbol" placeholder="Ex: CRT" required
+                        maxlength="5">
+                </div>
+
+                <div class="form-group">
+                    <label>Catégorie</label>
+                    <select name="category" [(ngModel)]="asset.category">
+                        <option *ngFor="let cat of categories" [value]="cat">{{ cat }}</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label>Prix Initial (DT)</label>
+                    <input type="number" name="price" [(ngModel)]="asset.initialPrice" placeholder="1.00" required>
+                </div>
+
+                <div class="form-group">
+                    <label>Offre Totale (Tokens)</label>
+                    <input type="number" name="supply" [(ngModel)]="asset.totalSupply" placeholder="1000000" required>
+                </div>
+
+                <div class="form-group full">
+                    <label>Description du projet</label>
+                    <textarea name="description" [(ngModel)]="asset.description" rows="5"
+                        placeholder="Décrivez votre projet, ses objectifs et son utilité..."></textarea>
+                </div>
+
+                <div class="form-group full">
+                    <label>Logo / Icône (Optionnel)</label>
+                    <div class="file-upload">
+                        <i class="pi pi-cloud-upload"></i>
+                        <span>Cliquez pour télécharger une image</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-actions">
+                <button type="button" class="cancel-btn" routerLink="/financial-market/assets">Annuler</button>
+                <button type="submit" class="submit-btn" [disabled]="!assetForm.valid">Soumettre pour
+                    vérification</button>
+            </div>
+        </form>
+    </div>
+
+    <div class="requirements-card card-container">
+        <h3>Exigences de Cotation</h3>
+        <ul>
+            <li><i class="pi pi-check-circle"></i> Votre compte doit être vérifié (KYC complété).</li>
+            <li><i class="pi pi-check-circle"></i> Un dépôt de garantie de 500 EQUA est requis.</li>
+            <li><i class="pi pi-check-circle"></i> Les documents légaux de l'entreprise doivent être fournis après
+                soumission.</li>
+        </ul>
+    </div>
+</div>

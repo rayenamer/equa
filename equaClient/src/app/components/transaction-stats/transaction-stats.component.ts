@@ -1,6 +1,8 @@
-import { Component, Input, computed } from '@angular/core';
+import { Component, Input, OnInit, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { Transaction } from '../../BlockChain/models/transaction.model';
+import { TransactionService } from '../../BlockChain/services/transaction.service';
+import { ApiService } from '../../services/api.service';
+import { forkJoin, switchMap } from 'rxjs';
 
 @Component({
     selector: 'app-transaction-stats',
@@ -9,33 +11,42 @@ import { Transaction } from '../../BlockChain/models/transaction.model';
     templateUrl: './transaction-stats.component.html',
     styleUrls: ['./transaction-stats.component.scss']
 })
-export class TransactionStatsComponent {
-    @Input() transactions: Transaction[] = [];
-    @Input() userWallet: string = '0x71C765...d897';
+export class TransactionStatsComponent implements OnInit {
+    userWallet = signal<string>('');
 
-    totalFees = computed(() =>
-        this.transactions.reduce((sum, tx) => sum + tx.fee, 0)
-    );
+    totalFees = signal(0);
+    avgAmount = signal(0);
+    totalSent = signal(0);
+    totalReceived = signal(0);
 
-    avgAmount = computed(() =>
-        this.transactions.length > 0
-            ? this.transactions.reduce((sum, tx) => sum + tx.amount, 0) / this.transactions.length
-            : 0
-    );
+    constructor(
+        private transactionService: TransactionService,
+        private apiService: ApiService
+    ) { }
 
-    totalSent = computed(() =>
-        this.transactions
-            .filter(tx => tx.fromWallet === this.userWallet)
-            .reduce((sum, tx) => sum + tx.amount, 0)
-    );
+    ngOnInit(): void {
+        this.loadStats();
+    }
 
-    totalReceived = computed(() =>
-        this.transactions
-            .filter(tx => tx.toWallet === this.userWallet)
-            .reduce((sum, tx) => sum + tx.amount, 0)
-    );
-
-    countByStatus(status: string) {
-        return this.transactions.filter(tx => tx.status === status).length;
+    loadStats(): void {
+        this.apiService.getMyWallet().pipe(
+            switchMap(wallet => {
+                const walletId = wallet.id.toString();
+                this.userWallet.set(walletId);
+                return forkJoin({
+                    average: this.transactionService.getAverageTransactionAmount(),
+                    sent: this.transactionService.getTotalSentByWallet(walletId),
+                    received: this.transactionService.getTotalReceivedByWallet(walletId)
+                });
+            })
+        ).subscribe({
+            next: (data) => {
+                this.avgAmount.set(data.average || 0);
+                this.totalSent.set(data.sent || 0);
+                this.totalReceived.set(data.received || 0);
+                this.totalFees.set(0); // Keep fee 0 as requested
+            },
+            error: (err) => console.error('Error loading transaction stats:', err)
+        });
     }
 }

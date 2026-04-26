@@ -2,68 +2,48 @@
     display: flex;
     flex-direction: column;
     gap: 2rem;
+    padding: 1rem;
+}
 
-    .section-header {
-        h1 {
-            font-size: 2.5rem;
-            margin-bottom: 0.5rem;
-            background: linear-gradient(135deg, #fff 0%, rgba(255, 255, 255, 0.7) 100%);
-            -webkit-background-clip: text;
-            background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
+.wallet-stats-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 1.25rem;
+}
 
-        p {
-            color: rgba(255, 255, 255, 0.5);
-        }
+.card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1.5rem;
+
+    h2 {
+        font-size: 1.25rem;
+        font-weight: 600;
+        color: #fff;
+        margin: 0;
     }
 
-    .stats-grid {
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-        gap: 1.5rem;
-    }
-
-    .card-container {
-        background: rgba(255, 255, 255, 0.03);
-        border: 1px solid rgba(255, 255, 255, 0.1);
-        border-radius: 20px;
-        padding: 1.5rem;
-        backdrop-filter: blur(20px);
-
-        .card-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 1.5rem;
-
-            h2 {
-                font-size: 1.25rem;
-                margin: 0;
-            }
-        }
-    }
-
-    .chart-section {
-        height: 400px;
+    .rate-badge {
         display: flex;
-        flex-direction: column;
+        align-items: center;
+        gap: 0.75rem;
+        padding: 0.4rem 1.25rem;
+        background: rgba(155, 89, 182, 0.1);
+        border: 1px solid rgba(155, 89, 182, 0.2);
+        border-radius: 50px;
+        color: #9b59b6;
+        font-weight: 700;
+        font-size: 0.85rem;
+        font-family: monospace;
 
-        .home-chart-container {
-            flex: 1;
-            min-height: 0;
-            width: 100%;
-            position: relative;
-
-            .home-chart {
-                width: 100%;
-                height: 100%;
-            }
-        }
-
-        app-price-chart {
-            flex: 1;
-            min-height: 0;
+        .rate-divider {
+            opacity: 0.4;
+            font-weight: 300;
         }
     }
+}
+
+.home-chart-container {
+    height: 300px;
 }
