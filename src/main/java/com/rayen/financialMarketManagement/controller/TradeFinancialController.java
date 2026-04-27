@@ -4,6 +4,7 @@ import com.rayen.AuthContextService;
 import com.rayen.financialMarketManagement.dto.*;
 import com.rayen.financialMarketManagement.service.TradeFinancialService;
 import lombok.RequiredArgsConstructor;
+import org.apache.coyote.BadRequestException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -16,7 +17,7 @@ public class TradeFinancialController {
     private final AuthContextService authContextService;
     @PostMapping("/buy")
     public ResponseEntity<TradeResponseFinancial> buy(
-            @RequestBody TradeRequestFinancial req) {
+            @RequestBody TradeRequestFinancial req) throws BadRequestException {
 
         String userId = authContextService.getLoggedInUserId().toString();
         return ResponseEntity.ok(tradeService.buy(req, Long.valueOf(userId)));

@@ -38,4 +38,12 @@ public class AssetFinancialController {
     public ResponseEntity<List<PriceHistoryResponseFinancial>> priceHistory(@PathVariable Long id) {
         return ResponseEntity.ok(assetService.getPriceHistory(id));
     }
+    @GetMapping("/aggregated")
+    public ResponseEntity<List<PriceHistoryResponseFinancial>> getAggregatedPriceHistory() {
+        return ResponseEntity.ok(assetService.getAggregatedPriceHistory());
+    }
+    @GetMapping("/market-summary")
+    public ResponseEntity<AssetMarketSummaryResponse> getMarketSummary() {
+        return ResponseEntity.ok(assetService.getMarketSummary());
+    }
 }
