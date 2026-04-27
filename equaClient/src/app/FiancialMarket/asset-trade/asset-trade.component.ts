@@ -92,10 +92,10 @@ export class AssetTradeComponent implements OnInit {
         this.financialService.getPriceHistory(this.assetId).subscribe({
             next: (history) => {
                 const labels = history.map(h => {
-                    const d = new Date(h.timestamp);
+                    const d = new Date(h.recordedAt);
                     return isNaN(d.getTime()) ? 'Live' : d.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
                 });
-                const prices = history.map(h => h.price);
+                const prices = history.map(h => h.priceEqua);
 
                 this.chartData = {
                     labels: labels.length > 0 ? labels : ['09:00', '10:00', '11:00', '12:00', '13:00', '14:00', '15:00'],
@@ -156,7 +156,17 @@ export class AssetTradeComponent implements OnInit {
         this.chartOptions = {
             maintainAspectRatio: false,
             plugins: {
-                legend: { display: false }
+                legend: { display: false },
+                tooltip: {
+                    enabled: true,
+                    mode: 'index',
+                    intersect: false,
+                    callbacks: {
+                        label: (context: any) => {
+                            return `Prix: ${context.parsed.y.toFixed(2)} Equa`;
+                        }
+                    }
+                }
             },
             scales: {
                 x: {

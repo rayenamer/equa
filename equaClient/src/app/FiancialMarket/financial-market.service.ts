@@ -8,7 +8,8 @@ import {
     PortfolioResponseFinancial,
     TransactionResponseFinancial,
     TradeRequestFinancial,
-    TradeResponseFinancial
+    TradeResponseFinancial,
+    AssetMarketSummaryResponse
 } from './models/financial-market.models';
 
 @Injectable({
@@ -34,6 +35,14 @@ export class FinancialMarketService {
 
     getPriceHistory(assetId: number): Observable<PriceHistoryResponseFinancial[]> {
         return this.http.get<PriceHistoryResponseFinancial[]>(`${this.apiUrl}/assets/${assetId}/price-history`);
+    }
+
+    getAggregatedPriceHistory(): Observable<PriceHistoryResponseFinancial[]> {
+        return this.http.get<PriceHistoryResponseFinancial[]>(`${this.apiUrl}/assets/aggregated`);
+    }
+
+    getMarketSummary(): Observable<AssetMarketSummaryResponse> {
+        return this.http.get<AssetMarketSummaryResponse>(`${this.apiUrl}/assets/market-summary`);
     }
 
     // Portfolio

@@ -29,8 +29,16 @@ export interface AssetRequestFinancial {
 }
 
 export interface PriceHistoryResponseFinancial {
-    timestamp: string;
-    price: number;
+    priceEqua: number;
+    recordedAt: string;
+}
+
+export interface AssetMarketSummaryResponse {
+    totalMarketCap: number;
+    totalVolume24h: number;
+    totalSupply: number;
+    totalCirculating: number;
+    assetCount: number;
 }
 
 export interface PortfolioResponseFinancial {
