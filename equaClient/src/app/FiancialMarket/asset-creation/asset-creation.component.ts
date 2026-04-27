@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { RouterLink, Router } from '@angular/router';
 import { FinancialMarketService } from '../financial-market.service';
-import { AssetRequestFinancial } from '../models/financial-market.models';
+import { AssetRequestFinancial, AssetCategory, AssetResponseFinancial } from '../models/financial-market.models';
 
 @Component({
     selector: 'app-asset-creation',
@@ -16,29 +16,50 @@ export class AssetCreationComponent {
     asset: AssetRequestFinancial = {
         name: '',
         ticker: '',
-        initialPrice: 0,
+        category: 'CRYPTO',
+        description: '',
+        logoUrl: '',
+        initialPriceEqua: 0,
         totalSupply: 0,
-        category: 'Technology',
-        description: ''
+        volume24h: 0
     };
 
-    categories = ['Agriculture', 'Technology', 'Real Estate', 'Crypto', 'Services'];
+    categories: AssetCategory[] = ['CRYPTO', 'AGRICULTURE', 'TECHNOLOGY', 'REAL_ESTATE'];
+
+    isLoading = false;
+    createdAsset: AssetResponseFinancial | null = null;
+    errorMessage: string | null = null;
 
     constructor(
         private financialService: FinancialMarketService,
         private router: Router
     ) { }
 
+    onTickerInput(event: Event) {
+        const input = event.target as HTMLInputElement;
+        input.value = input.value.toUpperCase();
+        this.asset.ticker = input.value;
+    }
+
     onSubmit() {
+        if (this.isLoading) return;
+        this.isLoading = true;
+        this.errorMessage = null;
+
         this.financialService.createAsset(this.asset).subscribe({
             next: (res) => {
-                alert('Votre actif a été créé avec succès.');
-                this.router.navigate(['/financial-market/assets']);
+                this.isLoading = false;
+                this.createdAsset = res;
             },
             error: (err) => {
+                this.isLoading = false;
+                this.errorMessage = err.error?.message || 'Erreur lors de la création de l\'actif.';
                 console.error('Error creating asset', err);
-                alert('Erreur lors de la création de l\'actif.');
             }
         });
+    }
+
+    goToAssets() {
+        this.router.navigate(['/financial-market/assets']);
     }
 }
