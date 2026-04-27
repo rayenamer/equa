@@ -1,6 +1,8 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterLink } from '@angular/router';
+import { FinancialMarketService } from '../financial-market.service';
+import { PortfolioResponseFinancial, TransactionResponseFinancial } from '../models/financial-market.models';
 
 @Component({
     selector: 'app-portfolio',
@@ -9,17 +11,46 @@ import { RouterLink } from '@angular/router';
     templateUrl: './portfolio.component.html',
     styleUrl: './portfolio.component.scss'
 })
-export class PortfolioComponent {
-    portfolioStats = [
-        { label: 'Valeur Totale', value: '1,540.20 DT', change: '+124.50 (8.1%)', isPos: true },
-        { label: 'Profit/Perte', value: '+350.10 DT', change: 'Ce mois', isPos: true },
-        { label: 'Actifs Détenus', value: '4', change: '2 secteurs', isPos: null }
-    ];
+export class PortfolioComponent implements OnInit {
+    portfolio: PortfolioResponseFinancial | null = null;
+    transactions: TransactionResponseFinancial[] = [];
 
-    myAssets = [
-        { name: 'EQUA Token', symbol: 'EQUA', balance: 120.5, value: 144.60, avgPrice: 1.15, profit: +6.05, color: '#627eea' },
-        { name: 'Sousse Tech', symbol: 'STK', balance: 50, value: 615.00, avgPrice: 10.20, profit: +105.00, color: '#f1c40f' },
-        { name: 'Olive Capital', symbol: 'OLV', balance: 10, value: 458.00, avgPrice: 47.00, profit: -12.00, color: '#27ae60' },
-        { name: 'Sahara Solaris', symbol: 'SOL', balance: 500, value: 425.00, avgPrice: 0.80, profit: +25.00, color: '#e67e22' }
-    ];
+    constructor(private financialService: FinancialMarketService) { }
+
+    ngOnInit(): void {
+        this.loadPortfolio();
+        this.loadTransactions();
+    }
+
+    loadPortfolio() {
+        this.financialService.getPortfolio().subscribe({
+            next: (data) => {
+                this.portfolio = data;
+            },
+            error: (err) => console.error('Error fetching portfolio', err)
+        });
+    }
+
+    loadTransactions() {
+        this.financialService.getTransactions().subscribe({
+            next: (data) => {
+                this.transactions = data;
+            },
+            error: (err) => console.error('Error fetching transactions', err)
+        });
+    }
+
+    get portfolioStats() {
+        if (!this.portfolio) return [];
+
+        const totalPnL = this.portfolio.items.reduce((sum, item) => sum + item.pnlEqua, 0);
+        const initialValue = this.portfolio.totalValueEqua - totalPnL;
+        const pnlPercentage = initialValue !== 0 ? (totalPnL / initialValue) * 100 : 0;
+
+        return [
+            { label: 'Valeur Totale', value: `${this.portfolio.totalValueEqua.toFixed(2)} Equa`, change: `${totalPnL >= 0 ? '+' : ''}${totalPnL.toFixed(2)} (${pnlPercentage.toFixed(1)}%)`, isPos: totalPnL >= 0 },
+            { label: 'Profit/Perte', value: `${totalPnL >= 0 ? '+' : ''}${totalPnL.toFixed(2)} Equa`, change: 'Total', isPos: totalPnL >= 0 },
+            { label: 'Actifs Détenus', value: this.portfolio.items.length.toString(), change: 'Secteurs variés', isPos: null }
+        ];
+    }
 }

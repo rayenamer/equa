@@ -1,7 +1,9 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { RouterLink } from '@angular/router';
+import { RouterLink, Router } from '@angular/router';
+import { FinancialMarketService } from '../financial-market.service';
+import { AssetRequestFinancial } from '../models/financial-market.models';
 
 @Component({
     selector: 'app-asset-creation',
@@ -11,20 +13,32 @@ import { RouterLink } from '@angular/router';
     styleUrl: './asset-creation.component.scss'
 })
 export class AssetCreationComponent {
-    asset = {
+    asset: AssetRequestFinancial = {
         name: '',
-        symbol: '',
+        ticker: '',
         initialPrice: 0,
         totalSupply: 0,
         category: 'Technology',
-        description: '',
-        logo: null
+        description: ''
     };
 
     categories = ['Agriculture', 'Technology', 'Real Estate', 'Crypto', 'Services'];
 
+    constructor(
+        private financialService: FinancialMarketService,
+        private router: Router
+    ) { }
+
     onSubmit() {
-        console.log('Asset creation request submitted:', this.asset);
-        alert('Votre demande de création d\'actif a été soumise avec succès et est en attente de vérification.');
+        this.financialService.createAsset(this.asset).subscribe({
+            next: (res) => {
+                alert('Votre actif a été créé avec succès.');
+                this.router.navigate(['/financial-market/assets']);
+            },
+            error: (err) => {
+                console.error('Error creating asset', err);
+                alert('Erreur lors de la création de l\'actif.');
+            }
+        });
     }
 }

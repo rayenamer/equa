@@ -1,4 +1,4 @@
-<div class="portfolio-container">
+<div class="portfolio-container" *ngIf="portfolio">
     <header class="header">
         <h1>Mon Portefeuille</h1>
         <p>Gérez vos investissements et suivez vos performances.</p>
@@ -17,21 +17,23 @@
     <div class="assets-section card-container">
         <h2>Mes Actifs</h2>
         <div class="assets-list">
-            <div class="asset-item" *ngFor="let asset of myAssets"
-                [routerLink]="['/financial-market/assets', asset.symbol]">
+            <div class="asset-item" *ngFor="let asset of portfolio.items">
                 <div class="asset-info">
-                    <div class="icon" [style.background]="asset.color">{{ asset.symbol.substring(0,2) }}</div>
+                    <div class="icon" [style.background]="'#627eea'">{{ asset.ticker.substring(0,2) }}</div>
                     <div class="text">
-                        <span class="name">{{ asset.name }}</span>
-                        <span class="balance">{{ asset.balance }} {{ asset.symbol }}</span>
+                        <span class="name">{{ asset.assetName }}</span>
+                        <span class="balance">{{ asset.quantity | number:'1.2-2' }} {{ asset.ticker }}</span>
                     </div>
                 </div>
                 <div class="asset-values">
-                    <div class="current-value">{{ asset.value | number:'1.2-2' }} DT</div>
-                    <div class="profit" [ngClass]="asset.profit >= 0 ? 'pos' : 'neg'">
-                        {{ asset.profit >= 0 ? '+' : '' }}{{ asset.profit | number:'1.2-2' }} DT
+                    <div class="current-value">{{ asset.totalValueEqua | number:'1.2-2' }} Equa</div>
+                    <div class="profit" [ngClass]="asset.pnlEqua >= 0 ? 'pos' : 'neg'">
+                        {{ asset.pnlEqua >= 0 ? '+' : '' }}{{ asset.pnlEqua | number:'1.2-2' }} Equa
                     </div>
                 </div>
+            </div>
+            <div *ngIf="portfolio.items.length === 0" class="empty-state">
+                Vous n'avez pas encore d'actifs. <a routerLink="/financial-market/assets">Explorez le marché</a>.
             </div>
         </div>
     </div>
@@ -39,19 +41,32 @@
     <div class="history-preview card-container">
         <div class="header-row">
             <h2>Derniers Mouvements</h2>
-            <button class="view-all">Voir tout</button>
         </div>
-        <div class="history-list">
-            <div class="history-item">
-                <div class="type buy">ACHAT</div>
-                <div class="details">EQUA Token • 10.5 EQ</div>
-                <div class="date">Aujourd'hui, 09:42</div>
+
+        <div class="tx-table" *ngIf="transactions.length > 0">
+            <div class="tx-header">
+                <span>Type</span>
+                <span>Actif</span>
+                <span>Quantité</span>
+                <span>Prix unit.</span>
+                <span>Total</span>
+                <span>Date</span>
             </div>
-            <div class="history-item">
-                <div class="type sell">VENTE</div>
-                <div class="details">Sousse Tech • 2.0 STK</div>
-                <div class="date">Hier, 15:20</div>
+            <div class="tx-row" *ngFor="let tx of transactions">
+                <span class="tx-badge" [ngClass]="tx.type.toLowerCase()">{{ tx.type }}</span>
+                <span class="tx-ticker">{{ tx.ticker }}</span>
+                <span>{{ tx.quantity | number:'1.4-4' }}</span>
+                <span>{{ tx.pricePerUnitEqua | number:'1.2-4' }} Equa</span>
+                <span>{{ tx.totalEqua != null ? (tx.totalEqua | number:'1.2-2') + ' Equa' : '—' }}</span>
+                <span class="tx-date">{{ tx.createdAt ? (tx.createdAt | date:'dd/MM HH:mm') : '—' }}</span>
             </div>
+        </div>
+
+        <div *ngIf="transactions.length === 0" class="empty-state">
+            Aucune transaction récente.
         </div>
     </div>
+</div>
+<div class="loading-state" *ngIf="!portfolio">
+    <p>Chargement du portefeuille...</p>
 </div>
