@@ -8,4 +8,5 @@ import java.util.List;
 @Repository
 public interface AssetPriceHistoryFinancialRepository extends JpaRepository<AssetPriceHistoryFinancial, Long> {
     List<AssetPriceHistoryFinancial> findByAssetIdOrderByRecordedAtAsc(Long assetId);
+    List<AssetPriceHistoryFinancial> findAllByOrderByRecordedAtAsc();
 }

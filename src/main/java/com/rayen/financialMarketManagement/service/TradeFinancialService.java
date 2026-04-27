@@ -3,7 +3,10 @@ package com.rayen.financialMarketManagement.service;
 import com.rayen.financialMarketManagement.dto.*;
 import com.rayen.financialMarketManagement.entity.*;
 import com.rayen.financialMarketManagement.repository.*;
+import com.rayen.walletManagement.entity.Wallet;
+import com.rayen.walletManagement.service.WalletService;
 import lombok.RequiredArgsConstructor;
+import org.apache.coyote.BadRequestException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import java.math.BigDecimal;
@@ -24,9 +27,10 @@ public class TradeFinancialService {
     private final HedgePortfolioItemFinancialRepository itemRepo;
     private final HedgeTransactionFinancialRepository   txRepo;
     private final AssetFinancialService                 assetService;
+    private final WalletService walletService;
 
     @Transactional
-    public TradeResponseFinancial buy(TradeRequestFinancial req, Long userId) {
+    public TradeResponseFinancial buy(TradeRequestFinancial req, Long userId) throws BadRequestException {
         AssetFinancial asset = assetService.findAsset(req.getAssetId());
         BigDecimal price     = asset.getCurrentPriceEqua();
 
@@ -35,7 +39,13 @@ public class TradeFinancialService {
         BigDecimal subtotal  = spendEqua.subtract(fees);
         BigDecimal qty       = subtotal.divide(price, 6, RoundingMode.HALF_UP);
 
-        // TODO: deduct `spendEqua` EQUA from wallet → walletService.debit(userId, spendEqua)
+        // DONE: deduct `spendEqua` EQUA from wallet → walletService.debit(userId, spendEqua)
+        Wallet wallet = walletService.getMyWallet();
+        try{
+            wallet.setEquaAmount(wallet.getEquaAmount() - spendEqua.floatValue());
+        }catch (Error e){
+            throw new BadRequestException("CANT_INVEST_UR_BROKE");
+        }
 
         BigDecimal impact   = subtotal.divide(marketCap(asset), 6, RoundingMode.HALF_UP).multiply(PRICE_SENSITIVITY);
         BigDecimal newPrice = price.multiply(BigDecimal.ONE.add(impact)).setScale(6, RoundingMode.HALF_UP);
@@ -85,7 +95,10 @@ public class TradeFinancialService {
         if (item.getQuantity().compareTo(qty) < 0)
             throw new RuntimeException("Insufficient holdings");
 
-        // TODO: credit `received` EQUA to wallet → walletService.credit(userId, received)
+        // DONE: credit `received` EQUA to wallet → walletService.credit(userId, received)
+        Wallet wallet = walletService.getMyWallet();
+        wallet.setEquaAmount(wallet.getEquaAmount() + received.floatValue());
+
 
         BigDecimal impact   = subtotal.divide(marketCap(asset), 6, RoundingMode.HALF_UP).multiply(PRICE_SENSITIVITY);
         BigDecimal newPrice = price.multiply(BigDecimal.ONE.subtract(impact)).setScale(6, RoundingMode.HALF_UP);
