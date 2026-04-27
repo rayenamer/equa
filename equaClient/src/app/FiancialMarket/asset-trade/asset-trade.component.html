@@ -1,4 +1,4 @@
-<div class="asset-trade-page">
+<div class="asset-trade-page" *ngIf="assetDetails">
     <div class="top-nav">
         <button class="back-btn" routerLink="/financial-market/assets">
             <i class="pi pi-arrow-left"></i> Retour au marché
@@ -9,27 +9,31 @@
         <div class="main-column">
             <div class="asset-header card-container">
                 <div class="header-left">
-                    <div class="icon">EQ</div>
+                    <div class="icon" [style.background]="'#627eea'">
+                        <img *ngIf="assetDetails.logoUrl && assetDetails.logoUrl !== 'string'"
+                            [src]="assetDetails.logoUrl" [alt]="assetDetails.name">
+                        <span *ngIf="!assetDetails.logoUrl || assetDetails.logoUrl === 'string'">{{
+                            assetDetails.ticker.substring(0,2) }}</span>
+                    </div>
                     <div class="info">
                         <h1>{{ assetDetails.name }}</h1>
-                        <span class="symbol">{{ assetDetails.symbol }} • Actif Vérifié</span>
+                        <span class="symbol">{{ assetDetails.ticker }} • Actif {{ assetDetails.verified ? 'Vérifié' :
+                            'Non Vérifié' }}</span>
                     </div>
                 </div>
                 <div class="header-right">
-                    <div class="current-price">{{ assetDetails.price | number:'1.2-2' }} DT</div>
-                    <div class="price-change pos">{{ assetDetails.change >= 0 ? '+' : '' }}{{ assetDetails.change }}%
-                        (24h)</div>
+                    <div class="current-price">{{ assetDetails.currentPriceEqua | number:'1.2-6' }} Equa</div>
+                    <div class="status-badge" [class.pending]="assetDetails.status === 'PENDING'">
+                        Statut: {{ assetDetails.status }}
+                    </div>
                 </div>
             </div>
 
             <div class="chart-section card-container">
                 <div class="card-header">
-                    <h2>Graphique de Prix</h2>
+                    <h2>Graphique de Prix (Simulation)</h2>
                     <div class="intervals">
-                        <button class="active">1H</button>
-                        <button>1D</button>
-                        <button>1W</button>
-                        <button>1M</button>
+                        <button class="active">Live</button>
                     </div>
                 </div>
                 <div class="chart-wrapper">
@@ -42,26 +46,55 @@
                 <p class="description">{{ assetDetails.description }}</p>
                 <div class="stats-grid">
                     <div class="stat">
-                        <span class="label">Haut (24h)</span>
-                        <span class="value">{{ assetDetails.high }} DT</span>
+                        <span class="label">Supply Totale</span>
+                        <span class="value">{{ assetDetails.totalSupply | number:'1.0-0' }}</span>
                     </div>
                     <div class="stat">
-                        <span class="label">Bas (24h)</span>
-                        <span class="value">{{ assetDetails.low }} DT</span>
+                        <span class="label">Supply Circulante</span>
+                        <span class="value">{{ assetDetails.circulatingSupply | number:'1.0-0' }}</span>
                     </div>
                     <div class="stat">
                         <span class="label">Market Cap</span>
-                        <span class="value">{{ assetDetails.marketCap }} DT</span>
+                        <span class="value">{{ (assetDetails.totalSupply * assetDetails.currentPriceEqua) |
+                            number:'1.0-0' }} Equa</span>
                     </div>
                     <div class="stat">
-                        <span class="label">Volume</span>
-                        <span class="value">{{ assetDetails.volume }} DT</span>
+                        <span class="label">Volume (24h)</span>
+                        <span class="value">{{ assetDetails.volume24h | number:'1.0-0' }} Equa</span>
                     </div>
                 </div>
             </div>
         </div>
 
         <div class="side-column">
+            <div class="holding-card card-container">
+                <div class="card-header">
+                    <h3>Votre Position</h3>
+                </div>
+                <div class="holding-stats">
+                    <div class="h-stat">
+                        <span class="label">Balance</span>
+                        <span class="value">{{ currentAssetHolding.quantity | number:'1.2-6' }} {{ assetDetails.ticker
+                            }}</span>
+                    </div>
+                    <div class="h-stat">
+                        <span class="label">Valeur</span>
+                        <span class="value">{{ currentAssetHolding.totalValueEqua | number:'1.2-2' }} Equa</span>
+                    </div>
+                    <div class="h-stat">
+                        <span class="label">Prix Moyen</span>
+                        <span class="value">{{ currentAssetHolding.avgBuyPriceEqua | number:'1.2-6' }} Equa</span>
+                    </div>
+                    <div class="h-stat">
+                        <span class="label">Profit/Perte</span>
+                        <span class="value" [ngClass]="currentAssetHolding.pnlEqua >= 0 ? 'pos' : 'neg'">
+                            {{ currentAssetHolding.pnlEqua >= 0 ? '+' : '' }}{{ currentAssetHolding.pnlEqua |
+                            number:'1.2-2' }} Equa
+                        </span>
+                    </div>
+                </div>
+            </div>
+
             <div class="trade-card card-container">
                 <div class="trade-tabs">
                     <button [class.active]="tradeType === 'buy'" (click)="setTradeType('buy')">Acheter</button>
@@ -70,55 +103,49 @@
 
                 <div class="trade-form">
                     <div class="input-group">
-                        <label>Montant en {{ assetDetails.symbol }}</label>
+                        <label>Montant en Equa</label>
                         <div class="input-wrapper">
                             <input type="number" [(ngModel)]="amount" placeholder="0.00">
-                            <span class="unit">{{ assetDetails.symbol }}</span>
+                            <span class="unit">Equa</span>
+                        </div>
+                        <div class="balance-info">
+                            <span *ngIf="tradeType === 'sell'">Disponible: </span>
+                            <span *ngIf="tradeType === 'buy'">Portefeuille: </span>
+                            <strong>{{ currentHoldingValue | number:'1.2-2' }} Equa</strong>
+                            <span *ngIf="currentBalance > 0" class="value-hint">
+                                (≈ {{ currentBalance | number:'1.2-6' }} {{ assetDetails.ticker }})
+                            </span>
                         </div>
                     </div>
 
                     <div class="price-info">
                         <div class="info-row">
                             <span>Prix unitaire</span>
-                            <span>{{ assetDetails.price }} DT</span>
+                            <span>{{ assetDetails.currentPriceEqua | number:'1.2-6' }} Equa</span>
+                        </div>
+                        <div class="info-row">
+                            <span>Quantité prévue</span>
+                            <strong>{{ estimatedQuantity() | number:'1.2-6' }} {{ assetDetails.ticker }}</strong>
                         </div>
                         <div class="info-row">
                             <span>Frais (0.1%)</span>
-                            <span>{{ (totalValue() * 0.001) | number:'1.2-4' }} DT</span>
+                            <span>{{ (amount * 0.001) | number:'1.2-4' }} Equa</span>
                         </div>
                         <div class="divider"></div>
                         <div class="info-row total">
-                            <span>Total à payer</span>
-                            <span>{{ totalValue() | number:'1.2-2' }} DT</span>
+                            <span>Total à {{ tradeType === 'buy' ? 'équilibrer' : 'récupérer' }}</span>
+                            <span>{{ amount | number:'1.2-2' }} Equa</span>
                         </div>
                     </div>
 
-                    <button class="submit-trade" [ngClass]="tradeType">
+                    <button class="submit-trade" [ngClass]="tradeType" (click)="executeTrade()">
                         {{ tradeType === 'buy' ? 'Confirmer l\'achat' : 'Confirmer la vente' }}
                     </button>
                 </div>
             </div>
-
-            <div class="recent-trades card-container">
-                <h3>Transactions récentes</h3>
-                <div class="trade-list">
-                    <div class="trade-item">
-                        <span class="type buy">ACHAT</span>
-                        <span class="amount">12.5 EQ</span>
-                        <span class="time">il y a 2m</span>
-                    </div>
-                    <div class="trade-item">
-                        <span class="type sell">VENTE</span>
-                        <span class="amount">5.0 EQ</span>
-                        <span class="time">il y a 5m</span>
-                    </div>
-                    <div class="trade-item">
-                        <span class="type buy">ACHAT</span>
-                        <span class="amount">100 EQ</span>
-                        <span class="time">il y a 12m</span>
-                    </div>
-                </div>
-            </div>
         </div>
     </div>
+</div>
+<div class="loading-state" *ngIf="!assetDetails">
+    <p>Chargement des détails de l'actif...</p>
 </div>

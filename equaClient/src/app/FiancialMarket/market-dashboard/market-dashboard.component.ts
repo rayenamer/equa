@@ -1,7 +1,9 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterLink } from '@angular/router';
 import { ChartModule } from 'primeng/chart';
+import { FinancialMarketService } from '../financial-market.service';
+import { AssetResponseFinancial } from '../models/financial-market.models';
 
 @Component({
     selector: 'app-market-dashboard',
@@ -10,7 +12,7 @@ import { ChartModule } from 'primeng/chart';
     templateUrl: './market-dashboard.component.html',
     styleUrl: './market-dashboard.component.scss'
 })
-export class MarketDashboardComponent {
+export class MarketDashboardComponent implements OnInit {
     marketStats = [
         { label: 'Volume 24h', value: '4.2M TND', trend: '+12.5%', trendClass: 'trend-up' },
         { label: 'Market Cap', value: '128.5M TND', trend: '+2.1%', trendClass: 'trend-up' },
@@ -18,11 +20,7 @@ export class MarketDashboardComponent {
         { label: 'Utilisateurs', value: '1.2K', trend: '+85', trendClass: 'trend-up' }
     ];
 
-    trendingAssets = [
-        { name: 'EQUA-TND', symbol: 'EQTND', price: '1.20', change: '+5.4%', color: '#627eea' },
-        { name: 'Olive Capital', symbol: 'OLV', price: '45.80', change: '-1.2%', color: '#27ae60' },
-        { name: 'Sousse Tech', symbol: 'STK', price: '12.30', change: '+15.8%', color: '#f1c40f' }
-    ];
+    trendingAssets: AssetResponseFinancial[] = [];
 
     chartData = {
         labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'],
@@ -48,4 +46,20 @@ export class MarketDashboardComponent {
             y: { display: false }
         }
     };
+
+    constructor(private financialService: FinancialMarketService) { }
+
+    ngOnInit(): void {
+        this.loadTrendingAssets();
+    }
+
+    loadTrendingAssets() {
+        this.financialService.getAllAssets().subscribe({
+            next: (data) => {
+                // Just take the first 3 for trending
+                this.trendingAssets = data.slice(0, 3);
+            },
+            error: (err) => console.error('Error fetching trending assets', err)
+        });
+    }
 }

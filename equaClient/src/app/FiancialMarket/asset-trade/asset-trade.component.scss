@@ -171,6 +171,47 @@
     }
 
     .side-column {
+        .holding-card {
+            margin-bottom: 1rem;
+
+            h3 {
+                font-size: 1.1rem;
+                margin: 0 0 1rem 0;
+            }
+
+            .holding-stats {
+                display: grid;
+                grid-template-columns: 1fr 1fr;
+                gap: 1.25rem;
+
+                .h-stat {
+                    display: flex;
+                    flex-direction: column;
+                    gap: 0.25rem;
+
+                    .label {
+                        font-size: 0.75rem;
+                        color: #94a3b8;
+                        text-transform: uppercase;
+                        letter-spacing: 0.05em;
+                    }
+
+                    .value {
+                        font-weight: 700;
+                        font-size: 0.95rem;
+
+                        &.pos {
+                            color: #2ecc71;
+                        }
+
+                        &.neg {
+                            color: #e74c3c;
+                        }
+                    }
+                }
+            }
+        }
+
         .trade-card {
             padding: 0;
             overflow: hidden;
@@ -250,6 +291,23 @@
                             color: #94a3b8;
                             font-weight: 600;
                             font-size: 0.9rem;
+                        }
+                    }
+
+                    .balance-info {
+                        font-size: 0.75rem;
+                        color: #94a3b8;
+                        margin-top: 0.25rem;
+                        text-align: right;
+
+                        strong {
+                            color: #fff;
+                        }
+
+                        .value-hint {
+                            margin-left: 0.25rem;
+                            font-style: italic;
+                            opacity: 0.8;
                         }
                     }
                 }

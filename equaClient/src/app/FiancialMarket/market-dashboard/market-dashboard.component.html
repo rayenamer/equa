@@ -31,20 +31,19 @@
             </div>
             <div class="trending-list">
                 <div class="trending-item" *ngFor="let asset of trendingAssets"
-                    [routerLink]="['/financial-market/assets', asset.symbol]">
-                    <div class="asset-icon" [style.background]="asset.color">
-                        {{ asset.symbol.substring(0,2) }}
+                    [routerLink]="['/financial-market/assets', asset.id]">
+                    <div class="asset-icon" [style.background]="'#627eea'">
+                        <img *ngIf="asset.logoUrl && asset.logoUrl !== 'string'" [src]="asset.logoUrl"
+                            [alt]="asset.name">
+                        <span *ngIf="!asset.logoUrl || asset.logoUrl === 'string'">{{ asset.ticker.substring(0,2)
+                            }}</span>
                     </div>
                     <div class="asset-info">
                         <span class="name">{{ asset.name }}</span>
-                        <span class="symbol">{{ asset.symbol }}</span>
+                        <span class="symbol">{{ asset.ticker }}</span>
                     </div>
                     <div class="asset-price">
-                        <span class="price">{{ asset.price }} DT</span>
-                        <span class="change"
-                            [ngClass]="{'pos': asset.change.startsWith('+'), 'neg': asset.change.startsWith('-')}">
-                            {{ asset.change }}
-                        </span>
+                        <span class="price">{{ asset.currentPriceEqua | number:'1.2-6' }} DT</span>
                     </div>
                 </div>
             </div>
