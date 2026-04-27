@@ -1,15 +1,18 @@
+export type AssetCategory = 'CRYPTO' | 'AGRICULTURE' | 'TECHNOLOGY' | 'REAL_ESTATE';
+export type AssetStatus = 'PENDING' | 'ACTIVE' | 'REJECTED';
+
 export interface AssetResponseFinancial {
     id: number;
     name: string;
     ticker: string;
-    category: string;
+    category: AssetCategory;
     description: string;
     logoUrl: string;
     currentPriceEqua: number;
     totalSupply: number;
     circulatingSupply: number;
     volume24h: number;
-    status: string;
+    status: AssetStatus;
     verified: boolean;
     createdAt: string | null;
 }
@@ -17,10 +20,12 @@ export interface AssetResponseFinancial {
 export interface AssetRequestFinancial {
     name: string;
     ticker: string;
+    category: AssetCategory;
     description: string;
-    initialPrice: number; // or initialPriceEqua if consistent
+    logoUrl: string;
+    initialPriceEqua: number;
     totalSupply: number;
-    category: string;
+    volume24h: number;
 }
 
 export interface PriceHistoryResponseFinancial {

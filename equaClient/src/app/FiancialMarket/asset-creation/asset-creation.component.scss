@@ -27,6 +27,111 @@
         backdrop-filter: blur(20px);
     }
 
+    // ── SUCCESS CARD ──────────────────────────────────────────
+    .success-card {
+        text-align: center;
+
+        .success-icon {
+            font-size: 3rem;
+            color: #2ecc71;
+            margin-bottom: 1rem;
+        }
+
+        h2 {
+            font-size: 1.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .success-sub {
+            color: #94a3b8;
+            margin-bottom: 2rem;
+        }
+
+        .asset-summary {
+            background: rgba(255, 255, 255, 0.04);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 1rem;
+            padding: 1.25rem 1.5rem;
+            margin-bottom: 1.75rem;
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+            text-align: left;
+
+            .summary-row {
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                font-size: 0.9rem;
+
+                .label {
+                    color: #94a3b8;
+                }
+
+                .value {
+                    font-weight: 600;
+                }
+
+                .ticker-badge {
+                    background: rgba(155, 89, 182, 0.2);
+                    color: #c39bd3;
+                    border: 1px solid rgba(155, 89, 182, 0.4);
+                    padding: 0.15rem 0.6rem;
+                    border-radius: 0.4rem;
+                    font-family: monospace;
+                    letter-spacing: 0.05em;
+                }
+
+                .status-badge {
+                    padding: 0.2rem 0.75rem;
+                    border-radius: 1rem;
+                    font-size: 0.8rem;
+                    font-weight: 700;
+                    text-transform: uppercase;
+                    letter-spacing: 0.05em;
+
+                    &.status-pending {
+                        background: rgba(241, 196, 15, 0.15);
+                        color: #f1c40f;
+                        border: 1px solid rgba(241, 196, 15, 0.3);
+                    }
+
+                    &.status-active {
+                        background: rgba(46, 204, 113, 0.15);
+                        color: #2ecc71;
+                        border: 1px solid rgba(46, 204, 113, 0.3);
+                    }
+
+                    &.status-rejected {
+                        background: rgba(231, 76, 60, 0.15);
+                        color: #e74c3c;
+                        border: 1px solid rgba(231, 76, 60, 0.3);
+                    }
+                }
+            }
+        }
+
+        .submit-btn {
+            background: #9b59b6;
+            color: #fff;
+            border: none;
+            padding: 0.8rem 1.75rem;
+            border-radius: 0.75rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+
+            &:hover {
+                background: #8e44ad;
+                transform: translateY(-2px);
+            }
+        }
+    }
+
+    // ── FORM ────────────────────────────────────────────────
     .form-grid {
         display: grid;
         grid-template-columns: 1fr 1fr;
@@ -45,6 +150,13 @@
                 font-size: 0.85rem;
                 color: #94a3b8;
                 font-weight: 500;
+
+                .optional {
+                    font-size: 0.75rem;
+                    color: #64748b;
+                    font-weight: 400;
+                    margin-left: 0.25rem;
+                }
             }
 
             input,
@@ -62,32 +174,26 @@
                     border-color: #9b59b6;
                     background: rgba(255, 255, 255, 0.08);
                 }
-            }
 
-            .file-upload {
-                border: 2px dashed rgba(255, 255, 255, 0.1);
-                border-radius: 1rem;
-                padding: 2rem;
-                text-align: center;
-                cursor: pointer;
-                display: flex;
-                flex-direction: column;
-                align-items: center;
-                gap: 1rem;
-                color: #94a3b8;
-                transition: all 0.2s;
-
-                i {
-                    font-size: 2rem;
-                }
-
-                &:hover {
-                    border-color: #9b59b6;
-                    color: #fff;
-                    background: rgba(155, 89, 182, 0.05);
+                &.ng-invalid.ng-touched {
+                    border-color: rgba(231, 76, 60, 0.5);
                 }
             }
         }
+    }
+
+    // ── ERROR BANNER ────────────────────────────────────────
+    .error-banner {
+        display: flex;
+        align-items: center;
+        gap: 0.6rem;
+        background: rgba(231, 76, 60, 0.1);
+        border: 1px solid rgba(231, 76, 60, 0.3);
+        color: #e74c3c;
+        border-radius: 0.75rem;
+        padding: 0.75rem 1rem;
+        margin-top: 1rem;
+        font-size: 0.9rem;
     }
 
     .form-actions {
@@ -102,6 +208,9 @@
             font-weight: 600;
             cursor: pointer;
             transition: all 0.2s;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
         }
 
         .cancel-btn {
@@ -157,6 +266,162 @@
                 i {
                     color: #2ecc71;
                 }
+            }
+        }
+    }
+}
+
+
+.header {
+    text-align: center;
+
+    h1 {
+        font-size: 2rem;
+        margin-bottom: 0.5rem;
+    }
+
+    p {
+        color: #94a3b8;
+    }
+}
+
+.card-container {
+    background: rgba(255, 255, 255, 0.02);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    border-radius: 1.5rem;
+    padding: 2rem;
+    backdrop-filter: blur(20px);
+}
+
+.form-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.5rem;
+
+    .form-group {
+        display: flex;
+        flex-direction: column;
+        gap: 0.5rem;
+
+        &.full {
+            grid-column: span 2;
+        }
+
+        label {
+            font-size: 0.85rem;
+            color: #94a3b8;
+            font-weight: 500;
+        }
+
+        input,
+        select,
+        textarea {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 0.75rem;
+            padding: 0.8rem 1rem;
+            color: #fff;
+            outline: none;
+            transition: all 0.2s;
+
+            &:focus {
+                border-color: #9b59b6;
+                background: rgba(255, 255, 255, 0.08);
+            }
+        }
+
+        .file-upload {
+            border: 2px dashed rgba(255, 255, 255, 0.1);
+            border-radius: 1rem;
+            padding: 2rem;
+            text-align: center;
+            cursor: pointer;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 1rem;
+            color: #94a3b8;
+            transition: all 0.2s;
+
+            i {
+                font-size: 2rem;
+            }
+
+            &:hover {
+                border-color: #9b59b6;
+                color: #fff;
+                background: rgba(155, 89, 182, 0.05);
+            }
+        }
+    }
+}
+
+.form-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 1rem;
+    margin-top: 2rem;
+
+    button {
+        padding: 0.8rem 1.5rem;
+        border-radius: 0.75rem;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.2s;
+    }
+
+    .cancel-btn {
+        background: rgba(255, 255, 255, 0.05);
+        color: #94a3b8;
+        border: 1px solid rgba(255, 255, 255, 0.1);
+
+        &:hover {
+            background: rgba(255, 255, 255, 0.1);
+            color: #fff;
+        }
+    }
+
+    .submit-btn {
+        background: #9b59b6;
+        color: #fff;
+        border: none;
+        box-shadow: 0 4px 12px rgba(155, 89, 182, 0.3);
+
+        &:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        &:hover:not(:disabled) {
+            background: #8e44ad;
+            transform: translateY(-2px);
+        }
+    }
+}
+
+.requirements-card {
+    h3 {
+        font-size: 1.1rem;
+        margin-bottom: 1rem;
+    }
+
+    ul {
+        list-style: none;
+        padding: 0;
+        display: flex;
+        flex-direction: column;
+        gap: 0.75rem;
+
+        li {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            color: #94a3b8;
+            font-size: 0.9rem;
+
+            i {
+                color: #2ecc71;
             }
         }
     }
