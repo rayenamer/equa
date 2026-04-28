@@ -35,7 +35,15 @@ jobs:
           # Define protected files (WITHOUT the equa/ prefix)
           PROTECTED_FILES=(
             "pom.xml"
-            "src/main/resources/application.properties"
+            "equaServer/src/main/resources/application.properties"
+            ".github/workflows/check-protected-files.yml"
+            ".github/workflows/main.yml"
+            "docker-compose.yml"
+            "equaServer/Dockerfile"
+            "push/new-push.sh"
+            "push/new-push.bat"  
+            "push/update.sh" 
+            "push/update.bat"
           )
           
           # Check if any protected file was modified
