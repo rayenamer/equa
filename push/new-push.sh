@@ -29,3 +29,6 @@ fi
 
 echo ""
 echo "Done! Branch \"$BRANCH_NAME\" created and pushed to origin. FOR BIG BOSS"
+echo "========================================================================"
+echo "Respect Rayen , optimizing and automating every detail."
+echo "========================================================================"
