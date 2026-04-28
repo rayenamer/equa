@@ -31,13 +31,27 @@
 
             <div class="chart-section card-container">
                 <div class="card-header">
-                    <h2>Graphique de Prix (Simulation)</h2>
+                    <h2>Historique des Prix</h2>
                     <div class="intervals">
-                        <button class="active">Live</button>
+                        <button class="active">Réel</button>
                     </div>
                 </div>
                 <div class="chart-wrapper">
-                    <p-chart type="line" [data]="chartData" [options]="chartOptions"></p-chart>
+                    <!-- Loading state -->
+                    <div *ngIf="!priceHistoryLoaded" class="chart-placeholder">
+                        <i class="pi pi-spin pi-spinner" style="font-size:1.5rem;color:#94a3b8"></i>
+                        <span>Chargement de l'historique...</span>
+                    </div>
+                    <!-- Empty state -->
+                    <div *ngIf="priceHistoryLoaded && hasNoPriceHistory" class="chart-placeholder">
+                        <i class="pi pi-chart-line" style="font-size:2rem;color:#475569"></i>
+                        <span>Aucun historique de prix disponible pour cet actif.</span>
+                        <small>Les données apparaîtront après les premières transactions.</small>
+                    </div>
+                    <!-- Real chart -->
+                    <p-chart *ngIf="priceHistoryLoaded && !hasNoPriceHistory && chartData" type="line"
+                        [data]="chartData" [options]="chartOptions">
+                    </p-chart>
                 </div>
             </div>
 

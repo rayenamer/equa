@@ -92,12 +92,6 @@ export class MarketDashboardComponent implements OnInit {
                         value: summary.assetCount.toString(),
                         trend: 'Vérifiés',
                         trendClass: 'trend-up'
-                    },
-                    {
-                        label: 'Offre Totale',
-                        value: `${(summary.totalSupply / 1000000).toFixed(1)}M`,
-                        trend: 'Unités',
-                        trendClass: 'trend-up'
                     }
                 ];
             },

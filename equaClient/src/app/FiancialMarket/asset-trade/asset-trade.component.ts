@@ -29,8 +29,10 @@ export class AssetTradeComponent implements OnInit {
         pnlEqua: 0
     };
     assetDetails: AssetResponseFinancial | null = null;
-    chartData: any;
+    chartData: any = null;
     chartOptions: any;
+    priceHistoryLoaded = false;
+    hasNoPriceHistory = false;
 
     constructor(
         private route: ActivatedRoute,
@@ -89,31 +91,54 @@ export class AssetTradeComponent implements OnInit {
     }
 
     loadPriceHistory() {
+        this.priceHistoryLoaded = false;
+        this.hasNoPriceHistory = false;
         this.financialService.getPriceHistory(this.assetId).subscribe({
             next: (history) => {
+                this.priceHistoryLoaded = true;
+                if (!history || history.length === 0) {
+                    this.hasNoPriceHistory = true;
+                    this.chartData = null;
+                    return;
+                }
+
                 const labels = history.map(h => {
                     const d = new Date(h.recordedAt);
-                    return isNaN(d.getTime()) ? 'Live' : d.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+                    return isNaN(d.getTime()) ? 'N/A' : d.toLocaleString('fr-FR', {
+                        month: 'short', day: 'numeric',
+                        hour: '2-digit', minute: '2-digit'
+                    });
                 });
                 const prices = history.map(h => h.priceEqua);
 
+                // Determine trend color: green if last >= first, red otherwise
+                const trend = prices[prices.length - 1] >= prices[0] ? '#22c55e' : '#ef4444';
+                const trendBg = prices[prices.length - 1] >= prices[0]
+                    ? 'rgba(34,197,94,0.08)' : 'rgba(239,68,68,0.08)';
+
                 this.chartData = {
-                    labels: labels.length > 0 ? labels : ['09:00', '10:00', '11:00', '12:00', '13:00', '14:00', '15:00'],
+                    labels,
                     datasets: [
                         {
-                            label: 'Prix',
-                            data: prices.length > 0 ? prices : [1.18, 1.22, 1.21, 1.24, 1.23, 1.25, 1.20],
+                            label: 'Prix (Equa)',
+                            data: prices,
                             fill: true,
-                            borderColor: '#627eea',
+                            borderColor: trend,
                             tension: 0.4,
-                            backgroundColor: 'rgba(98, 126, 234, 0.1)',
-                            pointRadius: 4,
-                            pointBackgroundColor: '#627eea'
+                            backgroundColor: trendBg,
+                            pointRadius: prices.length <= 30 ? 4 : 2,
+                            pointBackgroundColor: trend,
+                            pointBorderColor: 'transparent',
+                            borderWidth: 2
                         }
                     ]
                 };
             },
-            error: (err) => console.error('Error loading price history', err)
+            error: (err) => {
+                console.error('Error loading price history', err);
+                this.priceHistoryLoaded = true;
+                this.hasNoPriceHistory = true;
+            }
         });
     }
 
