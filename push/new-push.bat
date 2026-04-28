@@ -25,6 +25,9 @@ git push origin "%BRANCH_NAME%"
 
 if errorlevel 1 (
     echo Error: Failed to push branch.
+    echo MATA3MEL SHAY KALEM RAYEN
+    echo MATA3MEL SHAY KALEM RAYEN 
+    echo MATA3MEL SHAY KALEM RAYEN
     exit /b 1
 )
 

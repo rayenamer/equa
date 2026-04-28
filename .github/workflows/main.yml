@@ -36,6 +36,7 @@ jobs:
           cache: maven
 
       - name: Build with Maven
+        working-directory: ./equaServer
         env:
           DB_URL: jdbc:postgresql://127.0.0.1:5433/equadb
           DB_USERNAME: equauser

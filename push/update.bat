@@ -14,7 +14,10 @@ echo Pulling latest changes from origin/main...LMSATEK
 git pull origin main
 
 if %ERRORLEVEL% neq 0 (
-    echo Error: Failed to pull from origin/main.
+    echo Error: Failed to pull from origin/main. MATA3MEL SHAY KALEM RAYEN
+    echo MATA3MEL SHAY KALEM RAYEN
+    echo MATA3MEL SHAY KALEM RAYEN 
+    echo MATA3MEL SHAY KALEM RAYEN
     exit /b 1
 )
 
