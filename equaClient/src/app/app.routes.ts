@@ -23,6 +23,7 @@ import { LoginComponent } from './User/login/login.component';
 import { RegisterComponent } from './User/register/register.component';
 import { UsersDashboardComponent } from './User/users-dashboard/users-dashboard.component';
 import { KycManagementComponent } from './User/kyc-management/kyc-management.component';
+import { LandingPage } from './landing-page/landing-page';
 
 export const routes: Routes = [
     {
@@ -32,6 +33,10 @@ export const routes: Routes = [
     {
         path: 'home',
         component: HomeComponent
+    },
+    {
+        path : 'landingPage',
+        component: LandingPage
     },
     {
         path: 'blockchain',
