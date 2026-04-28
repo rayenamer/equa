@@ -6,7 +6,7 @@
                     <th>ID Bloc</th>
                     <th>Hash du Bloc</th>
                     <th>Hash Précédent</th>
-                    <th>Taille</th>
+                    <th>Transactions</th>
                     <th>Timestamp</th>
                     <th>Créé à</th>
                 </tr>
@@ -23,7 +23,7 @@
                     <td class="col-hash">
                         <span class="hash-text" [title]="block.previousHash">{{ block.previousHash }}</span>
                     </td>
-                    <td class="col-size">{{ formatBytes(block.blockSize) }}</td>
+                    <td class="col-size">{{ block.blockSize }} tx</td>
                     <td class="col-date">{{ block.timestamp | date:'medium' }}</td>
                     <td class="col-date">{{ block.createdAt | date:'shortTime' }}</td>
                 </tr>

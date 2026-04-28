@@ -1,0 +1,72 @@
+<div class="portfolio-container" *ngIf="portfolio">
+    <header class="header">
+        <h1>Mon Portefeuille</h1>
+        <p>Gérez vos investissements et suivez vos performances.</p>
+    </header>
+
+    <div class="stats-row">
+        <div class="stat-card" *ngFor="let stat of portfolioStats">
+            <span class="label">{{ stat.label }}</span>
+            <div class="value">{{ stat.value }}</div>
+            <span class="change" [ngClass]="{'pos': stat.isPos === true, 'neg': stat.isPos === false}">
+                {{ stat.change }}
+            </span>
+        </div>
+    </div>
+
+    <div class="assets-section card-container">
+        <h2>Mes Actifs</h2>
+        <div class="assets-list">
+            <div class="asset-item" *ngFor="let asset of portfolio.items">
+                <div class="asset-info">
+                    <div class="icon" [style.background]="'#627eea'">{{ asset.ticker.substring(0,2) }}</div>
+                    <div class="text">
+                        <span class="name">{{ asset.assetName }}</span>
+                        <span class="balance">{{ asset.quantity | number:'1.2-2' }} {{ asset.ticker }}</span>
+                    </div>
+                </div>
+                <div class="asset-values">
+                    <div class="current-value">{{ asset.totalValueEqua | number:'1.2-2' }} Equa</div>
+                    <div class="profit" [ngClass]="asset.pnlEqua >= 0 ? 'pos' : 'neg'">
+                        {{ asset.pnlEqua >= 0 ? '+' : '' }}{{ asset.pnlEqua | number:'1.2-2' }} Equa
+                    </div>
+                </div>
+            </div>
+            <div *ngIf="portfolio.items.length === 0" class="empty-state">
+                Vous n'avez pas encore d'actifs. <a routerLink="/financial-market/assets">Explorez le marché</a>.
+            </div>
+        </div>
+    </div>
+
+    <div class="history-preview card-container">
+        <div class="header-row">
+            <h2>Derniers Mouvements</h2>
+        </div>
+
+        <div class="tx-table" *ngIf="transactions.length > 0">
+            <div class="tx-header">
+                <span>Type</span>
+                <span>Actif</span>
+                <span>Quantité</span>
+                <span>Prix unit.</span>
+                <span>Total</span>
+                <span>Date</span>
+            </div>
+            <div class="tx-row" *ngFor="let tx of transactions">
+                <span class="tx-badge" [ngClass]="tx.type.toLowerCase()">{{ tx.type }}</span>
+                <span class="tx-ticker">{{ tx.ticker }}</span>
+                <span>{{ tx.quantity | number:'1.4-4' }}</span>
+                <span>{{ tx.pricePerUnitEqua | number:'1.2-4' }} Equa</span>
+                <span>{{ tx.totalEqua != null ? (tx.totalEqua | number:'1.2-2') + ' Equa' : '—' }}</span>
+                <span class="tx-date">{{ tx.createdAt ? (tx.createdAt | date:'dd/MM HH:mm') : '—' }}</span>
+            </div>
+        </div>
+
+        <div *ngIf="transactions.length === 0" class="empty-state">
+            Aucune transaction récente.
+        </div>
+    </div>
+</div>
+<div class="loading-state" *ngIf="!portfolio">
+    <p>Chargement du portefeuille...</p>
+</div>

@@ -1,6 +1,7 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { ApiService } from '../../../services/api.service';
 
 interface ChatMessage {
     role: 'user' | 'ai';
@@ -15,7 +16,8 @@ interface ChatMessage {
     templateUrl: './ai-chat.component.html',
     styleUrls: ['./ai-chat.component.scss']
 })
-export class AiChatComponent {
+export class AiChatComponent implements OnInit {
+
     messages: ChatMessage[] = [
         {
             role: 'ai',
@@ -25,6 +27,14 @@ export class AiChatComponent {
     ];
     userInput = '';
     isTyping = false;
+    sessionId = '';
+
+    constructor(private apiService: ApiService) { }
+
+    ngOnInit() {
+        this.sessionId = 'session-' + Math.random().toString(36).substring(2, 9);
+    }
+
 
     sendMessage() {
         if (!this.userInput.trim()) return;
@@ -39,31 +49,41 @@ export class AiChatComponent {
         this.userInput = '';
         this.isTyping = true;
 
-        // Simulate API call to /chat
-        setTimeout(() => {
-            this.isTyping = false;
-            const aiMsg: ChatMessage = {
-                role: 'ai',
-                content: this.generateMockResponse(query),
-                timestamp: new Date()
-            };
-            this.messages.push(aiMsg);
-            this.scrollToBottom();
-        }, 1500);
+        this.apiService.chatWithBlockchain({
+            sessionId: this.sessionId,
+            message: query
+        }).subscribe({
+            next: (data) => {
+                this.isTyping = false;
+                const aiMsg: ChatMessage = {
+                    role: 'ai',
+                    content: data.response,
+                    timestamp: new Date()
+                };
+                this.messages.push(aiMsg);
+                this.scrollToBottom();
+            },
+            error: (err) => {
+                this.isTyping = false;
+                const aiMsg: ChatMessage = {
+                    role: 'ai',
+                    content: 'Désolé, je rencontre des difficultés techniques : ' + err.message,
+                    timestamp: new Date()
+                };
+                this.messages.push(aiMsg);
+                this.scrollToBottom();
+            }
+        });
     }
 
     clearChat() {
-        this.messages = [this.messages[0]];
-        // Simulate DELETE /chat/{sessionId}
+        this.apiService.clearChatSession(this.sessionId).subscribe({
+            next: () => {
+                this.messages = [this.messages[0]];
+            }
+        });
     }
 
-    private generateMockResponse(query: string): string {
-        const q = query.toLowerCase();
-        if (q.includes('santé') || q.includes('health')) return 'Le score de santé actuel est de 98%. Tous les validateurs sont opérationnels.';
-        if (q.includes('bloc') || q.includes('block')) return 'Le dernier bloc miné est le #2,456,891. Il contient 45 transactions.';
-        if (q.includes('dinar')) return 'Votre solde actuel est de 45,280 TND. Le taux de conversion EQUA est stable.';
-        return 'D\'après mon analyse de la blockchain EQUA, le réseau maintient une stabilité élevée avec un temps de bloc moyen de 1.2s.';
-    }
 
     private scrollToBottom() {
         setTimeout(() => {

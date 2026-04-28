@@ -1,0 +1,53 @@
+<div class="market-dashboard">
+    <header class="dashboard-header">
+        <h1>Marché Financier Virtual</h1>
+        <p>Explorez, analysez et investissez dans les actifs de l'écosystème EQUA.</p>
+    </header>
+
+    <div class="stats-grid">
+        <div class="stat-card" *ngFor="let stat of marketStats">
+            <span class="label">{{ stat.label }}</span>
+            <div class="value-row">
+                <span class="value">{{ stat.value }}</span>
+                <span class="trend" [ngClass]="stat.trendClass">{{ stat.trend }}</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="main-content">
+        <div class="chart-container card-container">
+            <div class="card-header">
+                <h2>Activité du Marché</h2>
+                <div class="chart-period">7 derniers jours</div>
+            </div>
+            <div class="canvas-wrapper">
+                <p-chart type="line" [data]="chartData" [options]="chartOptions"></p-chart>
+            </div>
+        </div>
+
+        <div class="trending-section card-container">
+            <div class="card-header">
+                <h2>Tendances</h2>
+            </div>
+            <div class="trending-list">
+                <div class="trending-item" *ngFor="let asset of trendingAssets"
+                    [routerLink]="['/financial-market/assets', asset.id]">
+                    <div class="asset-icon" [style.background]="'#627eea'">
+                        <img *ngIf="asset.logoUrl && asset.logoUrl !== 'string'" [src]="asset.logoUrl"
+                            [alt]="asset.name">
+                        <span *ngIf="!asset.logoUrl || asset.logoUrl === 'string'">{{ asset.ticker.substring(0,2)
+                            }}</span>
+                    </div>
+                    <div class="asset-info">
+                        <span class="name">{{ asset.name }}</span>
+                        <span class="symbol">{{ asset.ticker }}</span>
+                    </div>
+                    <div class="asset-price">
+                        <span class="price">{{ asset.currentPriceEqua | number:'1.2-6' }} Equa</span>
+                    </div>
+                </div>
+            </div>
+            <button class="view-all" routerLink="/financial-market/assets">Voir tous les actifs</button>
+        </div>
+    </div>
+</div>

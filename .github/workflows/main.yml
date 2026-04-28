@@ -5,7 +5,7 @@ on:
     branches: [ '**' ]
 
 jobs:
-  build:
+  build-backend:
     runs-on: ubuntu-latest
 
     # Spin up a Postgres service container for tests
@@ -36,6 +36,7 @@ jobs:
           cache: maven
 
       - name: Build with Maven
+        working-directory: ./equaServer
         env:
           DB_URL: jdbc:postgresql://127.0.0.1:5433/equadb
           DB_USERNAME: equauser
@@ -47,3 +48,30 @@ jobs:
           PASSWORD_RESET_BASE_URL: http://localhost:8081/swagger-ui.html
         run: mvn clean verify
 
+  build-frontend:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+          cache-dependency-path: equaClient/package-lock.json
+      
+      - name: Install dependencies
+        working-directory: ./equaClient
+        run: npm ci
+      
+      - name: Build Angular application
+        working-directory: ./equaClient
+        run: npm run build
+      
+      - name: Upload frontend build artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: frontend-dist
+          path: equaClient/dist/

@@ -11,6 +11,7 @@ export interface NavMenuItem {
   action?: () => void;
   icon?: string;
   styleType?: 'link' | 'button' | 'icon';
+  type?: 'link' | 'header';
 }
 
 @Component({
@@ -44,7 +45,8 @@ export class NavMenuComponent implements OnDestroy {
   private readonly authenticatedItems: NavMenuItem[] = [
     { label: 'Send / Receive', route: '/blockchain' },
     { label: 'Invest', route: '/financial-market' },
-    { label: 'Borrow', route: '/loan' }
+    { label: 'Wallet Overview', route: 'coming-soon' },
+    { label: 'Borrow', route: '/coming-soon' }
   ];
 
   private readonly authenticatedActionItems: NavMenuItem[] = [

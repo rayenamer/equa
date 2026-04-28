@@ -25,6 +25,44 @@
     }
 }
 
+.wallet-info {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+    margin-bottom: 2rem;
+    padding: 1.25rem;
+    background: rgba(98, 126, 234, 0.08);
+    border: 1px solid rgba(98, 126, 234, 0.2);
+    border-radius: 16px;
+
+    .info-card {
+        display: flex;
+        flex-direction: column;
+        gap: 0.25rem;
+
+        .label {
+            font-size: 0.75rem;
+            color: rgba(255, 255, 255, 0.5);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .value {
+            font-size: 1rem;
+            color: #fff;
+            font-weight: 600;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+
+            &.spotlight {
+                color: #818cf8;
+                font-size: 1.1rem;
+            }
+        }
+    }
+}
+
 .form-grid {
     display: grid;
     grid-template-columns: 1fr 1fr;

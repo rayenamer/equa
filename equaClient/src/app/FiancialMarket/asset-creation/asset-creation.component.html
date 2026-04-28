@@ -1,0 +1,130 @@
+<div class="asset-creation-container">
+    <header class="header">
+        <h1>Créer un Nouvel Actif</h1>
+        <p>Tokenisez votre projet ou votre entreprise sur la blockchain EQUA.</p>
+    </header>
+
+    <!-- ── SUCCESS STATE ── -->
+    <div class="success-card card-container" *ngIf="createdAsset">
+        <div class="success-icon"><i class="pi pi-check-circle"></i></div>
+        <h2>Actif créé avec succès !</h2>
+        <p class="success-sub">Votre actif est en attente de vérification par l'équipe EQUA.</p>
+
+        <div class="asset-summary">
+            <div class="summary-row">
+                <span class="label">Nom</span>
+                <span class="value">{{ createdAsset.name }}</span>
+            </div>
+            <div class="summary-row">
+                <span class="label">Ticker</span>
+                <span class="value ticker-badge">{{ createdAsset.ticker }}</span>
+            </div>
+            <div class="summary-row">
+                <span class="label">Catégorie</span>
+                <span class="value">{{ createdAsset.category }}</span>
+            </div>
+            <div class="summary-row">
+                <span class="label">Prix initial</span>
+                <span class="value">{{ createdAsset.currentPriceEqua }} EQUA</span>
+            </div>
+            <div class="summary-row">
+                <span class="label">Offre totale</span>
+                <span class="value">{{ createdAsset.totalSupply | number }}</span>
+            </div>
+            <div class="summary-row">
+                <span class="label">Statut</span>
+                <span class="value status-badge status-{{ createdAsset.status | lowercase }}">
+                    {{ createdAsset.status }}
+                </span>
+            </div>
+        </div>
+
+        <button class="submit-btn" (click)="goToAssets()">
+            <i class="pi pi-arrow-left"></i> Retour aux actifs
+        </button>
+    </div>
+
+    <!-- ── FORM STATE ── -->
+    <div class="form-card card-container" *ngIf="!createdAsset">
+        <form (ngSubmit)="onSubmit()" #assetForm="ngForm">
+            <div class="form-grid">
+
+                <div class="form-group full">
+                    <label>Nom de l'actif</label>
+                    <input type="text" name="name" [(ngModel)]="asset.name" placeholder="Ex: Carthago Tech" required>
+                </div>
+
+                <div class="form-group">
+                    <label>Symbole (Ticker)</label>
+                    <input type="text" name="ticker" [(ngModel)]="asset.ticker" (input)="onTickerInput($event)"
+                        placeholder="Ex: CRT" required minlength="2" maxlength="5">
+                </div>
+
+                <div class="form-group">
+                    <label>Catégorie</label>
+                    <select name="category" [(ngModel)]="asset.category" required>
+                        <option value="CRYPTO">Crypto</option>
+                        <option value="AGRICULTURE">Agriculture</option>
+                        <option value="TECHNOLOGY">Technologie</option>
+                        <option value="REAL_ESTATE">Immobilier</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label>Prix Initial (EQUA)</label>
+                    <input type="number" name="initialPriceEqua" [(ngModel)]="asset.initialPriceEqua" placeholder="1.00"
+                        required min="0" step="0.01">
+                </div>
+
+                <div class="form-group">
+                    <label>Offre Totale (Tokens)</label>
+                    <input type="number" name="totalSupply" [(ngModel)]="asset.totalSupply" placeholder="1000000"
+                        required min="1">
+                </div>
+
+                <div class="form-group">
+                    <label>Volume 24h initial <span class="optional">(optionnel)</span></label>
+                    <input type="number" name="volume24h" [(ngModel)]="asset.volume24h" placeholder="0" min="0">
+                </div>
+
+                <div class="form-group full">
+                    <label>Description du projet</label>
+                    <textarea name="description" [(ngModel)]="asset.description" rows="5"
+                        placeholder="Décrivez votre projet, ses objectifs et son utilité..." required>
+                    </textarea>
+                </div>
+
+                <div class="form-group full">
+                    <label>URL du Logo <span class="optional">(optionnel)</span></label>
+                    <input type="url" name="logoUrl" [(ngModel)]="asset.logoUrl"
+                        placeholder="https://example.com/logo.png">
+                </div>
+            </div>
+
+            <!-- Error -->
+            <div class="error-banner" *ngIf="errorMessage">
+                <i class="pi pi-exclamation-triangle"></i> {{ errorMessage }}
+            </div>
+
+            <div class="form-actions">
+                <button type="button" class="cancel-btn" routerLink="/financial-market/assets">
+                    Annuler
+                </button>
+                <button type="submit" class="submit-btn" [disabled]="!assetForm.valid || isLoading">
+                    <span *ngIf="!isLoading">Soumettre pour vérification</span>
+                    <span *ngIf="isLoading"><i class="pi pi-spin pi-spinner"></i> Envoi en cours...</span>
+                </button>
+            </div>
+        </form>
+    </div>
+
+    <div class="requirements-card card-container" *ngIf="!createdAsset">
+        <h3>Exigences de Cotation</h3>
+        <ul>
+            <li><i class="pi pi-check-circle"></i> Votre compte doit être vérifié (KYC complété).</li>
+            <li><i class="pi pi-check-circle"></i> Un dépôt de garantie de 500 EQUA est requis.</li>
+            <li><i class="pi pi-check-circle"></i> Les documents légaux de l'entreprise doivent être fournis après
+                soumission.</li>
+        </ul>
+    </div>
+</div>

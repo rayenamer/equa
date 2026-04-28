@@ -13,7 +13,6 @@ export class DinarActionsComponent {
     @Output() action = new EventEmitter<{ type: 'deposit' | 'withdraw', amount: number }>();
 
     depositAmount: number | null = null;
-    withdrawAmount: number | null = null;
 
     onDeposit() {
         if (this.depositAmount && this.depositAmount > 0) {
@@ -22,10 +21,4 @@ export class DinarActionsComponent {
         }
     }
 
-    onWithdraw() {
-        if (this.withdrawAmount && this.withdrawAmount > 0) {
-            this.action.emit({ type: 'withdraw', amount: this.withdrawAmount });
-            this.withdrawAmount = null;
-        }
-    }
 }

@@ -1,10 +1,17 @@
 <aside class="sidebar">
     <nav>
         <ul>
-            <li *ngFor="let item of navItems">
-                <a [routerLink]="item.sectionId" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">
-                    {{ item.label }}
-                </a>
+            <li *ngFor="let item of navItems" [class.nav-header]="item.type === 'header'"
+                [class.nav-link]="item.type !== 'header'">
+                <ng-container *ngIf="item.type === 'header'">
+                    <span class="group-title">{{ item.label }}</span>
+                </ng-container>
+                <ng-container *ngIf="item.type !== 'header'">
+                    <a [routerLink]="item.sectionId" routerLinkActive="active"
+                        [routerLinkActiveOptions]="{exact: true}">
+                        <span class="item-label">{{ item.label }}</span>
+                    </a>
+                </ng-container>
             </li>
         </ul>
     </nav>

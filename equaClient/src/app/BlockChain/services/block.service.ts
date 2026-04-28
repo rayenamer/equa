@@ -7,6 +7,7 @@ import { Block } from '../models/block.model';
 export interface BlockStats {
   totalBlocks?: number;
   averageSize?: number;
+  averageBlockSize?: number;
   latestBlockTime?: string;
   [key: string]: any;
 }
@@ -17,7 +18,7 @@ export interface BlockStats {
 export class BlockService {
   private baseUrl = `${environment.apiUrl}/v1/blocks`;
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient) { }
 
   getAllBlocks(): Observable<Block[]> {
     return this.http.get<Block[]>(this.baseUrl);
