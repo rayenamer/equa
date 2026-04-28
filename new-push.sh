@@ -1,6 +1,6 @@
 #!/bin/bash
 
-read -p "Enter new branch name SI ZEBI: " BRANCH_NAME
+read -p "Enter new branch name SI LMSATEK: " BRANCH_NAME
 
 if [ -z "$BRANCH_NAME" ]; then
     echo "Error: Branch name cannot be empty."
