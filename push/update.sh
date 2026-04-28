@@ -19,3 +19,7 @@ fi
 
 echo ""
 echo "Done! You are now on main with the latest changes. FOR BIG BOSS"
+echo "Done! Branch \"$BRANCH_NAME\" created and pushed to origin. FOR BIG BOSS"
+echo "========================================================================"
+echo "Respect Rayen , optimizing and automating every detail."
+echo "========================================================================"
