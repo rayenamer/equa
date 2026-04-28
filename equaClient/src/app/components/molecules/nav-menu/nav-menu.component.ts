@@ -35,7 +35,7 @@ export class NavMenuComponent implements OnDestroy {
   private readonly destroy$ = new Subject<void>();
 
   private readonly defaultItems: NavMenuItem[] = [
-    { label: 'Features', sectionId: 'token-intro' },
+    { label: 'Features', sectionId: 'token-intro', route: '/landingPage' },
     { label: 'Docs', sectionId: 'token-intro' }
   ];
 
