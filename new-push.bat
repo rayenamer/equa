@@ -1,14 +1,14 @@
 @echo off
 
-set /p BRANCH_NAME=Enter new branch name YA BHIM: 
+set /p BRANCH_NAME=Enter new branch name big boss: 
 
 if "%BRANCH_NAME%"=="" (
-    echo Error: Branch name cannot be empty. YA BHIM
+    echo Error: Branch name cannot be empty. big boss
     exit /b 1
 )
 
 echo.
-echo Creating and switching to branch: %BRANCH_NAME% YA BHIM
+echo Creating and switching to branch: %BRANCH_NAME% big boss
 git checkout -b "%BRANCH_NAME%"
 
 if errorlevel 1 (
@@ -20,19 +20,16 @@ git add .
 git commit -m "Initial commit on %BRANCH_NAME%"
 
 echo.
-echo Pushing branch to origin... LEL BHIM
+echo Pushing branch to origin... big boss
 git push origin "%BRANCH_NAME%"
 
 if errorlevel 1 (
     echo Error: Failed to push branch.
-    echo MATA3MEL SHAY KALEM RAYEN
-    echo MATA3MEL SHAY KALEM RAYEN 
-    echo MATA3MEL SHAY KALEM RAYEN
     exit /b 1
 )
 
 echo.
 echo Done! Branch "%BRANCH_NAME%" created and pushed to origin.
 echo =========================================================
-echo mataresh tpushi ???? mala BHIM
+echo pushed to new branch Boss , wait for merge and then update using ./update.bat
 echo =========================================================
