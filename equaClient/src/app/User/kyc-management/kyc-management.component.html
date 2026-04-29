@@ -4,8 +4,12 @@
         <p class="subtitle">Examinez les profils des observateurs et validez leurs identités.</p>
     </header>
 
+    <div *ngIf="loading" class="table-message">Chargement des demandes KYC...</div>
+    <div *ngIf="errorMessage && !loading" class="table-message error">{{ errorMessage }}</div>
+    <div *ngIf="successMessage" class="table-message success">{{ successMessage }}</div>
+
     <div class="content-card">
-        <div class="table-container">
+        <div class="table-container" *ngIf="!loading && users.length">
             <table class="kyc-table">
                 <thead>
                     <tr>
@@ -27,19 +31,19 @@
                         <td>{{ user.email }}</td>
                         <td>{{ user.lastSubmitted | date:'medium' }}</td>
                         <td>
-                            <span class="kyc-status" [ngClass]="user.kycStatus.toLowerCase()">
-                                {{ user.kycStatus }}
+                            <span class="kyc-status" [ngClass]="user.displayStatus.toLowerCase()">
+                                {{ user.displayStatus }}
                             </span>
                         </td>
                         <td>
                             <app-ui-button 
-                                *ngIf="user.kycStatus !== 'APPROVED'"
+                                *ngIf="user.displayStatus !== 'APPROVED'"
                                 label="Valider" 
                                 (clicked)="openReview(user)" 
                                 variant="primary" 
                                 size="md">
                             </app-ui-button>
-                            <span *ngIf="user.kycStatus === 'APPROVED'" class="validated-label">
+                            <span *ngIf="user.displayStatus === 'APPROVED'" class="validated-label">
                                 ✓ Validé
                             </span>
                         </td>
@@ -47,6 +51,7 @@
                 </tbody>
             </table>
         </div>
+        <div *ngIf="!loading && !users.length" class="table-message">Aucun utilisateur OBSERVER à traiter.</div>
     </div>
 
     <!-- Review Modal Overlay -->
@@ -73,16 +78,18 @@
 
             <footer class="modal-footer">
                 <app-ui-button 
-                    label="Rejeter" 
+                    [label]="actionLoading ? 'Traitement...' : 'Rejeter'" 
                     (clicked)="updateStatus('REJECTED')" 
                     variant="secondary" 
-                    size="md">
+                    size="md"
+                    [disabled]="actionLoading">
                 </app-ui-button>
                 <app-ui-button 
-                    label="Approuver" 
+                    [label]="actionLoading ? 'Traitement...' : 'Approuver'" 
                     (clicked)="updateStatus('APPROVED')" 
                     variant="primary" 
-                    size="md">
+                    size="md"
+                    [disabled]="actionLoading">
                 </app-ui-button>
             </footer>
         </div>

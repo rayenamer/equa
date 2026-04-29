@@ -44,7 +44,7 @@ public class AuthService {
     private final EmailService emailService;
     private final RecaptchaService recaptchaService;
 
-    @Value("${app.password-reset.base-url:http://localhost:8081/swagger-ui.html}")
+    @Value("${app.password-reset.base-url:http://localhost:4200/user/reset-password}")
     private String passwordResetBaseUrl;
     @Value("${app.password-reset.token-validity-minutes:60}")
     private int passwordResetTokenValidityMinutes;

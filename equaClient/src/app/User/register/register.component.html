@@ -57,6 +57,15 @@
                 </div>
             </form>
 
+            <div class="divider">
+                <span>ou continuer avec</span>
+            </div>
+
+            <button (click)="signupWithGoogle()" class="google-btn">
+                <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" alt="Google">
+                Google
+            </button>
+
             <footer class="auth-footer">
                 Vous avez déjà un compte ? <a routerLink="/user/login">Connectez-vous</a>
             </footer>

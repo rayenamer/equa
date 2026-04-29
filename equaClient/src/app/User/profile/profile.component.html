@@ -4,7 +4,11 @@
         <p class="subtitle">Gérez vos informations personnelles et configurez vos accès.</p>
     </header>
 
-    <div class="profile-layout">
+    <div *ngIf="loading" class="state-message">Chargement du profil...</div>
+    <div *ngIf="errorMessage && !loading" class="state-message error">{{ errorMessage }}</div>
+    <div *ngIf="successMessage" class="state-message success">{{ successMessage }}</div>
+
+    <div class="profile-layout" *ngIf="!loading && !errorMessage">
         <!-- Main Info Card -->
         <div class="profile-main">
             <div class="profile-card user-identity">
@@ -80,10 +84,11 @@
 
                 <div class="card-footer">
                     <app-ui-button 
-                        label="Enregistrer les modifications" 
+                        [label]="saving ? 'Enregistrement...' : 'Enregistrer les modifications'" 
                         (clicked)="saveProfile()" 
                         variant="primary" 
-                        size="md">
+                        size="md"
+                        [disabled]="saving">
                     </app-ui-button>
                 </div>
             </div>

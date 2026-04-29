@@ -4,7 +4,11 @@
         <p class="subtitle">Complétez votre profil pour débloquer toutes les fonctionnalités financières.</p>
     </header>
 
-    <div class="kyc-content">
+    <div *ngIf="loading" class="state-message">Chargement du profil KYC...</div>
+    <div *ngIf="errorMessage && !loading" class="state-message error">{{ errorMessage }}</div>
+    <div *ngIf="successMessage" class="state-message success">{{ successMessage }}</div>
+
+    <div class="kyc-content" *ngIf="!loading">
         <aside class="kyc-steps">
             <div class="step-item" *ngFor="let step of kycSteps; let i = index" [class.active]="step.status === 'current'" [class.completed]="step.status === 'completed'">
                 <div class="step-number">
@@ -41,7 +45,7 @@
                             <app-ui-input 
                                 type="text" 
                                 name="dateOfBirth" 
-                                placeholder="AAAA-MM-JJ" 
+                                placeholder="AAAA-MM-JJ ou JJ/MM/AAAA" 
                                 [(value)]="kycProfile.dateOfBirth"
                                 [required]="true">
                             </app-ui-input>
@@ -70,7 +74,7 @@
 
                     <div class="form-actions">
                         <app-ui-button 
-                            label="Suivant" 
+                            label="Suivant"
                             (clicked)="nextStep()" 
                             variant="primary" 
                             size="lg">
@@ -129,10 +133,11 @@
                     </app-ui-button>
                     <app-ui-button 
                         *ngIf="currentStepIndex === kycSteps.length - 1"
-                        label="Soumettre" 
+                        [label]="saving ? 'Soumission...' : 'Soumettre'" 
                         (clicked)="onSubmit()" 
                         variant="primary" 
-                        size="lg">
+                        size="lg"
+                        [disabled]="saving">
                     </app-ui-button>
                 </div>
             </div>

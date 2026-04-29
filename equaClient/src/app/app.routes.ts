@@ -21,6 +21,8 @@ import { AuditLogsComponent } from './User/audit-logs/audit-logs.component';
 import { SecurityComponent } from './User/security/security.component';
 import { LoginComponent } from './User/login/login.component';
 import { RegisterComponent } from './User/register/register.component';
+import { ForgotPasswordComponent } from './User/forgot-password/forgot-password.component';
+import { ResetPasswordComponent } from './User/reset-password/reset-password.component';
 import { UsersDashboardComponent } from './User/users-dashboard/users-dashboard.component';
 import { KycManagementComponent } from './User/kyc-management/kyc-management.component';
 import { LandingPage } from './landing-page/landing-page';
@@ -92,10 +94,11 @@ export const routes: Routes = [
             { path: 'audit-logs', component: AuditLogsComponent },
             { path: 'security', component: SecurityComponent },
             { path: 'login', component: LoginComponent },
-            { path: 'register', component: RegisterComponent }
+            { path: 'register', component: RegisterComponent },
+            { path: 'forgot-password', component: ForgotPasswordComponent },
+            { path: 'reset-password', component: ResetPasswordComponent }
         ]
     },
-    { path: 'forgot-password', loadComponent: () => import('./User/security/security.component').then(m => m.SecurityComponent) }, // Placeholder or separate component
     { path: 'coming-soon', loadComponent: () => import('./pages/coming-soon/coming-soon.component').then(m => m.ComingSoonComponent) },
     {
         path: 'wallet',

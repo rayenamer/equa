@@ -29,13 +29,14 @@ public class AuthController {
 
     private final AuthService authService;
 
+//doner
     @PostMapping("/signup")
     @Operation(summary = "Inscription", description = "Créer un compte (ASSISTANT ou OBSERVER). Si reCAPTCHA est activé (app.recaptcha.secret-key), envoyer recaptchaToken (token « Je ne suis pas un robot »).")
     public ResponseEntity<AuthResponseDTO> signup(@RequestBody SignupRequestDTO request) {
         AuthResponseDTO response = authService.signup(request);
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
-
+//done
     @PostMapping("/signin")
     @Operation(summary = "Connexion", description = "Se connecter avec email et mot de passe. Retourne un token JWT. Si reCAPTCHA est activé, envoyer recaptchaToken.")
     public ResponseEntity<AuthResponseDTO> signin(@RequestBody SigninRequestDTO request) {
