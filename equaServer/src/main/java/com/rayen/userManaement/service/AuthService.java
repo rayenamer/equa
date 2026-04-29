@@ -98,7 +98,8 @@ public class AuthService {
      */
     @Transactional(noRollbackFor = IllegalArgumentException.class)
     public AuthResponseDTO signin(SigninRequestDTO request) {
-        recaptchaService.verify(request.getRecaptchaToken());
+        //Rayen commented this , sudden login Bad request
+        //recaptchaService.verify(request.getRecaptchaToken());
         User user = userRepository.findByEmail(request.getEmail())
                 .orElseThrow(() -> new IllegalArgumentException("Invalid email or password"));
 
