@@ -7,20 +7,25 @@
     <div class="security-grid">
         <section class="security-card">
             <h2>Changer le mot de passe</h2>
-            <form class="security-form">
+            <form class="security-form" (submit)="$event.preventDefault(); updatePassword()">
                 <div class="form-group">
                     <label>Mot de passe actuel</label>
-                    <input type="password" placeholder="••••••••">
+                    <input type="password" placeholder="••••••••" [(ngModel)]="passwordForm.currentPassword" name="currentPassword">
                 </div>
                 <div class="form-group">
                     <label>Nouveau mot de passe</label>
-                    <input type="password" placeholder="••••••••">
+                    <input type="password" placeholder="••••••••" [(ngModel)]="passwordForm.newPassword" name="newPassword">
                 </div>
                 <div class="form-group">
                     <label>Confirmer le nouveau mot de passe</label>
-                    <input type="password" placeholder="••••••••">
+                    <input type="password" placeholder="••••••••" [(ngModel)]="passwordForm.confirmPassword" name="confirmPassword">
                 </div>
-                <button class="btn btn-primary">Mettre à jour le mot de passe</button>
+                <button class="btn btn-primary" [disabled]="passwordLoading">
+                    <span *ngIf="!passwordLoading">Mettre à jour le mot de passe</span>
+                    <span *ngIf="passwordLoading">Mise à jour...</span>
+                </button>
+                <p *ngIf="passwordSuccessMessage" class="status-message success">{{ passwordSuccessMessage }}</p>
+                <p *ngIf="passwordErrorMessage" class="status-message error">{{ passwordErrorMessage }}</p>
             </form>
         </section>
 
@@ -40,7 +45,12 @@
             <section class="security-card compact danger-zone">
                 <h3>Désactiver le compte</h3>
                 <p>Cette action est irréversible. Toutes vos données seront inaccessibles.</p>
-                <button class="btn btn-danger">Désactiver mon compte</button>
+                <button class="btn btn-danger" (click)="disableAccount()" [disabled]="disableLoading">
+                    <span *ngIf="!disableLoading">Désactiver mon compte</span>
+                    <span *ngIf="disableLoading">Désactivation...</span>
+                </button>
+                <p *ngIf="disableSuccessMessage" class="status-message success">{{ disableSuccessMessage }}</p>
+                <p *ngIf="disableErrorMessage" class="status-message error">{{ disableErrorMessage }}</p>
             </section>
         </div>
     </div>

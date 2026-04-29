@@ -4,8 +4,11 @@
         <p class="subtitle">Consultez toutes les actions effectuées sur votre compte.</p>
     </header>
 
+    <div *ngIf="loading" class="state-message">Chargement de l'historique...</div>
+    <div *ngIf="errorMessage && !loading" class="state-message error">{{ errorMessage }}</div>
+
     <div class="logs-card">
-        <div class="table-container">
+        <div class="table-container" *ngIf="!loading && logs.length">
             <table class="logs-table">
                 <thead>
                     <tr>
@@ -30,5 +33,6 @@
                 </tbody>
             </table>
         </div>
+        <div *ngIf="!loading && !logs.length" class="state-message">Aucune activite enregistree pour le moment.</div>
     </div>
 </div>

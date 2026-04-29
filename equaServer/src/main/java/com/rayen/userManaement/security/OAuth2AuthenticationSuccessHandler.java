@@ -29,7 +29,7 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
     private final JwtUtils jwtUtils;
     private final UserRepository userRepository;
 
-    @Value("${app.oauth2.redirect-uri:http://localhost:8081/swagger-ui.html}")
+    @Value("${app.oauth2.redirect-uri:http://localhost:4200/user/login}")
     private String redirectUri;
 
     @Override

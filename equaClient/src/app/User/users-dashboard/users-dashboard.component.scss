@@ -72,6 +72,21 @@
     overflow-x: auto;
 }
 
+.table-message {
+    margin-bottom: 1rem;
+    padding: 0.85rem 1rem;
+    border-radius: 10px;
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    color: rgba(255, 255, 255, 0.82);
+
+    &.error {
+        color: #f87171;
+        background: rgba(248, 113, 113, 0.1);
+        border-color: rgba(248, 113, 113, 0.25);
+    }
+}
+
 .users-table {
     width: 100%;
     border-collapse: collapse;
@@ -148,6 +163,7 @@
     
     &-primary { background: #627eea; color: #fff; border: none; &:hover { background: #4f69d6; } }
     &-outline { background: transparent; color: #fff; border: 1px solid rgba(255,255,255,0.1); &:hover { background: rgba(255,255,255,0.05); } }
+    &:disabled { opacity: 0.6; cursor: not-allowed; }
 }
 
 @keyframes fadeIn {

@@ -42,11 +42,15 @@
             <h2>Liste des Utilisateurs</h2>
             <div class="header-actions">
                 <button class="btn btn-outline">Filtrer</button>
-                <button class="btn btn-primary">Exporter</button>
+                <button class="btn btn-primary" (click)="exportUsers()" [disabled]="!users.length">Exporter</button>
             </div>
         </div>
 
-        <div class="table-container">
+        <div *ngIf="loading" class="table-message">Chargement des utilisateurs...</div>
+        <div *ngIf="!loading && errorMessage" class="table-message error">{{ errorMessage }}</div>
+        <div *ngIf="!loading && !errorMessage && !users.length" class="table-message">Aucun utilisateur trouvé.</div>
+
+        <div class="table-container" *ngIf="!loading && !errorMessage && users.length">
             <table class="users-table">
                 <thead>
                     <tr>

@@ -60,7 +60,7 @@ public class RecaptchaServiceImpl implements RecaptchaService {
         if (!success) {
             String errors = json.has("error-codes") ? json.get("error-codes").toString() : "unknown";
             log.warn("reCAPTCHA échoué: {}", errors);
-            throw new IllegalArgumentException("Vérification « Je ne suis pas un robot » échouée. Réessayez.");
+            throw new IllegalArgumentException("Verification reCAPTCHA echouee (" + errors + ").");
         }
         return true;
     }

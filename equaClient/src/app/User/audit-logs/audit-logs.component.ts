@@ -1,5 +1,7 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { catchError, switchMap } from 'rxjs';
+import { AuditLogDTO, UserService } from '../services/user.service';
 
 @Component({
   selector: 'app-audit-logs',
@@ -9,10 +11,52 @@ import { CommonModule } from '@angular/common';
   styleUrl: './audit-logs.component.scss'
 })
 export class AuditLogsComponent {
-  logs = [
-    { id: 1, action: 'CONNEXION', timestamp: new Date(), details: 'Connexion réussie depuis 192.168.1.1' },
-    { id: 2, action: 'MODIF_PROFIL', timestamp: new Date(Date.now() - 3600000), details: 'Changement d\'adresse email' },
-    { id: 3, action: 'KYC_SOUMISSION', timestamp: new Date(Date.now() - 86400000), details: 'Documents d\'identité envoyés' },
-    { id: 4, action: 'CHANGE_PWD', timestamp: new Date(Date.now() - 172800000), details: 'Mot de passe mis à jour' }
-  ];
+  logs: Array<{ id: number; action: string; timestamp: Date; details: string }> = [];
+  loading = false;
+  errorMessage = '';
+
+  constructor(private userService: UserService) {
+    this.loadMyAuditLogs();
+  }
+
+  private loadMyAuditLogs() {
+    this.loading = true;
+    this.errorMessage = '';
+
+    this.userService.getCurrentUserId().pipe(
+      switchMap((userId) =>
+        this.userService.getAuditLogsByObserver(userId).pipe(
+          catchError(() => this.userService.getAllAuditLogs())
+        )
+      )
+    ).subscribe({
+      next: (logs) => {
+        this.logs = logs.map((log) => this.mapAuditLog(log));
+        this.loading = false;
+      },
+      error: (error) => {
+        this.loading = false;
+        this.errorMessage = error.error?.message || 'Impossible de charger l\'historique d\'activite.';
+      }
+    });
+  }
+
+  private mapAuditLog(log: AuditLogDTO) {
+    return {
+      id: log.logId,
+      action: log.action,
+      timestamp: new Date(log.timestamp),
+      details: this.toReadableDetail(log.action)
+    };
+  }
+
+  private toReadableDetail(action: string): string {
+    const value = (action || '').toUpperCase();
+    if (value.includes('KYC_APPROVED')) return 'Demande KYC approuvee';
+    if (value.includes('KYC_REJECTED')) return 'Demande KYC rejetee';
+    if (value.includes('CONNEXION') || value.includes('SIGNIN')) return 'Connexion au compte';
+    if (value.includes('MODIF') || value.includes('PROFILE')) return 'Mise a jour du profil';
+    if (value.includes('PWD') || value.includes('PASSWORD')) return 'Modification de mot de passe';
+    return action;
+  }
 }

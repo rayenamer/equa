@@ -1,8 +1,10 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { forkJoin } from 'rxjs';
 import { UiButtonComponent } from '../../components/atoms/ui-button/ui-button.component';
 import { UiInputComponent } from '../../components/atoms/ui-input/ui-input.component';
+import { KycStatus, UserDTO, UserService } from '../services/user.service';
 
 @Component({
   selector: 'app-kyc-management',
@@ -12,28 +14,93 @@ import { UiInputComponent } from '../../components/atoms/ui-input/ui-input.compo
   styleUrl: './kyc-management.component.scss'
 })
 export class KycManagementComponent {
-  users = [
-    { id: 1, username: 'johndoe', email: 'john@example.com', kycStatus: 'PENDING', lastSubmitted: new Date() },
-    { id: 2, username: 'janedoe', email: 'jane@example.com', kycStatus: 'APPROVED', lastSubmitted: new Date(Date.now() - 86400000) },
-    { id: 3, username: 'bobsmith', email: 'bob@example.com', kycStatus: 'REJECTED', lastSubmitted: new Date(Date.now() - 172800000) },
-    { id: 4, username: 'alice_w', email: 'alice@example.com', kycStatus: 'PENDING', lastSubmitted: new Date() }
-  ];
+  users: Array<UserDTO & { kycStatus: KycStatus; displayStatus: string; lastSubmitted: Date }> = [];
+  loading = false;
+  actionLoading = false;
+  errorMessage = '';
+  successMessage = '';
 
-  selectedUser: any = null;
+  selectedUser: (UserDTO & { kycStatus: KycStatus; displayStatus: string; lastSubmitted: Date }) | null = null;
   reviewNote = '';
 
-  openReview(user: any) {
+  constructor(private userService: UserService) {
+    this.loadKycUsers();
+  }
+
+  openReview(user: UserDTO & { kycStatus: KycStatus; displayStatus: string; lastSubmitted: Date }) {
     this.selectedUser = user;
     this.reviewNote = '';
+    this.successMessage = '';
   }
 
   updateStatus(status: 'APPROVED' | 'REJECTED') {
     if (!this.selectedUser) return;
-    
-    console.log(`Updating KYC for ${this.selectedUser.username} to ${status} with note: ${this.reviewNote}`);
-    
-    // Logic to call UserController.updateObserverKycStatus
-    this.selectedUser.kycStatus = status;
-    this.selectedUser = null;
+
+    this.actionLoading = true;
+    this.errorMessage = '';
+
+    const backendStatus = status === 'APPROVED' ? 'VERIFIED' : 'REJECTED';
+    this.userService.updateObserverKycStatus(this.selectedUser.id, backendStatus, this.reviewNote.trim()).subscribe({
+      next: (response) => {
+        this.selectedUser!.kycStatus = response.kycStatus || backendStatus;
+        this.selectedUser!.displayStatus = this.toDisplayStatus(this.selectedUser!.kycStatus);
+        this.successMessage = `Statut KYC mis a jour pour ${this.selectedUser!.username}.`;
+        this.actionLoading = false;
+        this.selectedUser = null;
+      },
+      error: (error) => {
+        this.actionLoading = false;
+        this.errorMessage = error.error?.message || 'Echec de mise a jour du statut KYC.';
+      }
+    });
+  }
+
+  private loadKycUsers() {
+    this.loading = true;
+    this.errorMessage = '';
+
+    this.userService.getAllUsers().subscribe({
+      next: (users) => {
+        const observerUsers = users.filter(user => user.userType === 'OBSERVER');
+        if (!observerUsers.length) {
+          this.users = [];
+          this.loading = false;
+          return;
+        }
+
+        const statusCalls = observerUsers.map(user => this.userService.getKycStatus(user.id));
+        forkJoin(statusCalls).subscribe({
+          next: (statuses) => {
+            this.users = observerUsers.map((user, index) => ({
+              ...user,
+              kycStatus: statuses[index]?.kycStatus ?? 'PENDING',
+              displayStatus: this.toDisplayStatus(statuses[index]?.kycStatus ?? 'PENDING'),
+              lastSubmitted: new Date((user as any).kycSubmittedAt || user.updatedAt || user.createdAt)
+            }));
+            this.loading = false;
+          },
+          error: () => {
+            // Fallback: show users even if KYC status endpoint fails for some
+            this.users = observerUsers.map(user => ({
+              ...user,
+              kycStatus: 'PENDING',
+              displayStatus: this.toDisplayStatus('PENDING'),
+              lastSubmitted: new Date((user as any).kycSubmittedAt || user.updatedAt || user.createdAt)
+            }));
+            this.loading = false;
+          }
+        });
+      },
+      error: (error) => {
+        this.loading = false;
+        this.errorMessage = error.error?.message || 'Impossible de charger la liste KYC.';
+      }
+    });
+  }
+
+  private toDisplayStatus(status: string): string {
+    const value = (status || '').toUpperCase();
+    if (value === 'VERIFIED') return 'APPROVED';
+    return value || 'PENDING';
   }
 }
