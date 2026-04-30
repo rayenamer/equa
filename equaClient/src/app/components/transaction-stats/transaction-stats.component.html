@@ -16,3 +16,47 @@
         <span class="value">{{ totalReceived() | number:'1.2-2' }} EQUA</span>
     </div>
 </div>
+
+<div class="request-container">
+    <button class="request-btn" (click)="openRequestModal()">Request EQUA Link</button>
+
+    <div class="link-display" *ngIf="generatedLink()">
+        <p>Envoyez ce lien pour recevoir des EQUA :</p>
+        <div class="link-box">
+            <input type="text" [value]="generatedLink()" readonly #linkInput>
+            <button class="copy-btn" (click)="copyLink()">Copy</button>
+        </div>
+    </div>
+</div>
+
+<!-- Glassmorphism Modal -->
+<div class="modal-overlay" *ngIf="isModalOpen()">
+    <div class="glass-modal">
+        <div class="modal-header">
+            <h3>Demander des EQUA</h3>
+            <button class="close-btn" (click)="closeModal()">×</button>
+        </div>
+        <div class="modal-body">
+            <p class="modal-subtitle">Entrez le montant que vous souhaitez recevoir</p>
+
+            <div class="input-wrapper">
+                <span class="currency-label">EQUA</span>
+                <input type="number" step="0.0001" min="0" [(ngModel)]="requestAmount" placeholder="0.00"
+                    class="amount-input">
+            </div>
+
+            <div class="error-msg" *ngIf="modalError()">
+                {{ modalError() }}
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button class="cancel-btn" (click)="closeModal()">Annuler</button>
+            <button class="confirm-btn" (click)="confirmRequest()">Générer le lien</button>
+        </div>
+    </div>
+</div>
+
+<!-- Toast notification -->
+<div class="toast-notification" [class.show]="toastMessage()">
+    {{ toastMessage() }}
+</div>
