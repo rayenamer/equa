@@ -1,24 +1,5 @@
 <div class="business-layout">
-  <!-- Minimal top bar for business mode (no main nav items) -->
-  <header class="business-topbar">
-    <div class="topbar-inner">
-      <a class="logo" routerLink="/business/mouvements">
-        <span class="logo-icon">⬡</span>
-        <span class="logo-text">EQUA <span class="mode-badge">Business</span></span>
-      </a>
-      <div class="topbar-spacer"></div>
-      <!-- No nav items here per requirement -->
-      <button class="mode-toggle-btn indiv" (click)="switchToIndividual()">
-        <span class="toggle-icon">👤</span>
-        Mode Individuel
-      </button>
-    </div>
-  </header>
-
-  <div class="content-wrapper">
-    <app-blockchain-sidebar [navItems]="navItems"></app-blockchain-sidebar>
-    <main class="page-content">
-      <router-outlet></router-outlet>
-    </main>
-  </div>
+  <main class="page-content" style="padding-top: 80px;">
+    <router-outlet></router-outlet>
+  </main>
 </div>

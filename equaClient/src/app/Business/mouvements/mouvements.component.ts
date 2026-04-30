@@ -6,7 +6,7 @@ export interface Mouvement {
     id: number;
     date: string;
     libelle: string;
-    type: 'debit' | 'credit';
+    type: 'sortant' | 'entrant';
     compte: string;
     montant: number;
     categorie: string;
@@ -22,24 +22,23 @@ export interface Mouvement {
 })
 export class MouvementsComponent {
     activeTab: 'comptabilite' | 'nouveau' = 'comptabilite';
-    filterType: 'all' | 'debit' | 'credit' = 'all';
+    filterType: 'all' | 'sortant' | 'entrant' = 'all';
     searchTerm = '';
 
     // ─── Sample data for analytical accounting display ───────────────────────
     mouvements: Mouvement[] = [
-        { id: 1, date: '2026-04-28', libelle: 'Vente produit A', type: 'credit', compte: '701 – Ventes marchandises', montant: 125000, categorie: 'Chiffre d\'affaires', statut: 'valide' },
-        { id: 2, date: '2026-04-27', libelle: 'Achat matières premières', type: 'debit', compte: '601 – Achats matières', montant: 48000, categorie: 'Charges opérationnelles', statut: 'valide' },
-        { id: 3, date: '2026-04-26', libelle: 'Salaires Avril', type: 'debit', compte: '641 – Charges de personnel', montant: 72000, categorie: 'Charges de personnel', statut: 'valide' },
-        { id: 4, date: '2026-04-25', libelle: 'Loyer bureau', type: 'debit', compte: '613 – Locations', montant: 18000, categorie: 'Charges générales', statut: 'valide' },
-        { id: 5, date: '2026-04-24', libelle: 'Remboursement client', type: 'debit', compte: '411 – Clients', montant: 5000, categorie: 'Clients', statut: 'en_attente' },
-        { id: 6, date: '2026-04-23', libelle: 'Service consulting', type: 'credit', compte: '706 – Prestations services', montant: 37500, categorie: 'Chiffre d\'affaires', statut: 'valide' },
+        { id: 1, date: '2026-04-28', libelle: 'Vente produit A', type: 'entrant', compte: '701 – Ventes marchandises', montant: 125000, categorie: 'Chiffre d\'affaires', statut: 'valide' },
+        { id: 2, date: '2026-04-27', libelle: 'Achat matières premières', type: 'sortant', compte: '601 – Achats matières', montant: 48000, categorie: 'Charges opérationnelles', statut: 'valide' },
+        { id: 3, date: '2026-04-26', libelle: 'Salaires Avril', type: 'sortant', compte: '641 – Charges de personnel', montant: 72000, categorie: 'Charges de personnel', statut: 'valide' },
+        { id: 4, date: '2026-04-25', libelle: 'Loyer bureau', type: 'sortant', compte: '613 – Locations', montant: 18000, categorie: 'Charges générales', statut: 'valide' },
+        { id: 6, date: '2026-04-23', libelle: 'Service consulting', type: 'entrant', compte: '706 – Prestations services', montant: 37500, categorie: 'Chiffre d\'affaires', statut: 'valide' },
     ];
 
     // ─── New movement form ────────────────────────────────────────────────────
     newMouvement = {
         date: new Date().toISOString().slice(0, 10),
         libelle: '',
-        type: 'credit' as 'credit' | 'debit',
+        type: 'entrant' as 'entrant' | 'sortant',
         compte: '',
         montant: null as number | null,
         categorie: '',
@@ -48,9 +47,6 @@ export class MouvementsComponent {
     };
 
     comptes = [
-        '411 – Clients',
-        '401 – Fournisseurs',
-        '512 – Banque',
         '601 – Achats matières',
         '606 – Fournitures bureau',
         '613 – Locations',
@@ -68,10 +64,6 @@ export class MouvementsComponent {
         'Charges opérationnelles',
         'Charges de personnel',
         'Charges générales',
-        'Clients',
-        'Fournisseurs',
-        'Investissements',
-        'Financier',
         'Exceptionnel',
     ];
 
@@ -90,11 +82,11 @@ export class MouvementsComponent {
     }
 
     get totalCredit(): number {
-        return this.mouvements.filter(m => m.type === 'credit').reduce((s, m) => s + m.montant, 0);
+        return this.mouvements.filter(m => m.type === 'entrant').reduce((s, m) => s + m.montant, 0);
     }
 
     get totalDebit(): number {
-        return this.mouvements.filter(m => m.type === 'debit').reduce((s, m) => s + m.montant, 0);
+        return this.mouvements.filter(m => m.type === 'sortant').reduce((s, m) => s + m.montant, 0);
     }
 
     get solde(): number {
@@ -127,7 +119,7 @@ export class MouvementsComponent {
         this.newMouvement = {
             date: new Date().toISOString().slice(0, 10),
             libelle: '',
-            type: 'credit',
+            type: 'entrant',
             compte: '',
             montant: null,
             categorie: '',
@@ -143,17 +135,17 @@ export class MouvementsComponent {
 
     getCatCredit(cat: string): number {
         return this.mouvements
-            .filter(m => m.categorie === cat && m.type === 'credit')
+            .filter(m => m.categorie === cat && m.type === 'entrant')
             .reduce((s, m) => s + m.montant, 0);
     }
 
     getCatDebit(cat: string): number {
         return this.mouvements
-            .filter(m => m.categorie === cat && m.type === 'debit')
+            .filter(m => m.categorie === cat && m.type === 'sortant')
             .reduce((s, m) => s + m.montant, 0);
     }
 
     formatAmount(n: number): string {
-        return n.toLocaleString('fr-DZ') + ' DZD';
+        return n.toLocaleString('fr-DZ') + ' EQUA';
     }
 }

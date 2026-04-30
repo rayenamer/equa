@@ -4,8 +4,8 @@ import { SplashCursorComponent } from './components/splash-cursor/splash-cursor.
 import { HomeHeaderComponent } from './components/organisms/home-header/home-header.component';
 
 import { SiteFooterComponent } from './components/organisms/site-footer/site-footer.component';
-
 import { FooterLinkGroup } from './components/organisms/site-footer/site-footer.component';
+import { BusinessModeService } from './services/business-mode.service';
 @Component({
   selector: 'app-root',
   standalone: true,
@@ -16,6 +16,8 @@ import { FooterLinkGroup } from './components/organisms/site-footer/site-footer.
 export class AppComponent {
   title = 'EQUA - Finance Without Barriers';
   mobileMenuOpen = false;
+
+  constructor(public businessModeService: BusinessModeService) { }
   toggleMobileMenu(): void {
     this.mobileMenuOpen = !this.mobileMenuOpen;
   }

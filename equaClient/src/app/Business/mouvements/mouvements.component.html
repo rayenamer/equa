@@ -10,12 +10,12 @@
             <p class="page-sub">Comptabilité analytique & gestion des opérations</p>
         </div>
         <div class="header-right">
-            <div class="kpi-chip credit">
-                <span class="kpi-label">Total Crédit</span>
+            <div class="kpi-chip entrant">
+                <span class="kpi-label">Total Entrant</span>
                 <span class="kpi-val">{{ formatAmount(totalCredit) }}</span>
             </div>
-            <div class="kpi-chip debit">
-                <span class="kpi-label">Total Débit</span>
+            <div class="kpi-chip sortant">
+                <span class="kpi-label">Total Sortant</span>
                 <span class="kpi-val">{{ formatAmount(totalDebit) }}</span>
             </div>
             <div class="kpi-chip solde" [class.neg]="solde < 0">
@@ -28,10 +28,10 @@
     <!-- Tabs -->
     <div class="tabs">
         <button class="tab" [class.active]="activeTab === 'comptabilite'" (click)="setTab('comptabilite')">
-            📋 Comptabilité Analytique
+            Comptabilité Analytique
         </button>
         <button class="tab" [class.active]="activeTab === 'nouveau'" (click)="setTab('nouveau')">
-            ➕ Nouveau Mouvement
+            Nouveau Mouvement
         </button>
     </div>
 
@@ -49,10 +49,10 @@
             <div class="type-filters">
                 <button class="filter-btn" [class.active]="filterType === 'all'"
                     (click)="filterType = 'all'">Tous</button>
-                <button class="filter-btn credit" [class.active]="filterType === 'credit'"
-                    (click)="filterType = 'credit'">Crédit</button>
-                <button class="filter-btn debit" [class.active]="filterType === 'debit'"
-                    (click)="filterType = 'debit'">Débit</button>
+                <button class="filter-btn entrant" [class.active]="filterType === 'entrant'"
+                    (click)="filterType = 'entrant'">Entrant</button>
+                <button class="filter-btn sortant" [class.active]="filterType === 'sortant'"
+                    (click)="filterType = 'sortant'">Sortant</button>
             </div>
         </div>
 
@@ -70,8 +70,8 @@
 
             <div class="journal-body">
                 @for (m of filteredMouvements; track m.id) {
-                <div class="journal-row" [class.credit-row]="m.type === 'credit'"
-                    [class.debit-row]="m.type === 'debit'">
+                <div class="journal-row" [class.entrant-row]="m.type === 'entrant'"
+                    [class.sortant-row]="m.type === 'sortant'">
                     <span class="col-date">{{ m.date }}</span>
                     <span class="col-libelle">{{ m.libelle }}</span>
                     <span class="col-compte small">{{ m.compte }}</span>
@@ -79,18 +79,18 @@
                         <span class="cat-chip">{{ m.categorie }}</span>
                     </span>
                     <span class="col-type">
-                        <span class="type-badge" [class.credit]="m.type === 'credit'"
-                            [class.debit]="m.type === 'debit'">
-                            {{ m.type === 'credit' ? '▲ Crédit' : '▼ Débit' }}
+                        <span class="type-badge" [class.entrant]="m.type === 'entrant'"
+                            [class.sortant]="m.type === 'sortant'">
+                            {{ m.type === 'entrant' ? 'Entrant' : 'Sortant' }}
                         </span>
                     </span>
-                    <span class="col-montant" [class.credit-amt]="m.type === 'credit'"
-                        [class.debit-amt]="m.type === 'debit'">
-                        {{ m.type === 'credit' ? '+' : '-' }}{{ formatAmount(m.montant) }}
+                    <span class="col-montant" [class.entrant-amt]="m.type === 'entrant'"
+                        [class.sortant-amt]="m.type === 'sortant'">
+                        {{ m.type === 'entrant' ? '+' : '-' }}{{ formatAmount(m.montant) }}
                     </span>
                     <span class="col-statut">
                         <span class="statut-badge" [class]="'s-' + m.statut">
-                            {{ m.statut === 'valide' ? '✓ Validé' : m.statut === 'en_attente' ? '⏳ En attente' : '✕
+                            {{ m.statut === 'valide' ? 'Validé' : m.statut === 'en_attente' ? 'En attente' : '✕
                             Annulé' }}
                         </span>
                     </span>
@@ -112,11 +112,11 @@
             @for (cat of categories; track cat) {
             <div class="analytic-card">
                 <div class="ana-label">{{ cat }}</div>
-                <div class="ana-credit">
-                    Crédit : <strong>{{ formatAmount(getCatCredit(cat)) }}</strong>
+                <div class="ana-entrant">
+                    Entrant : <strong>{{ formatAmount(getCatCredit(cat)) }}</strong>
                 </div>
-                <div class="ana-debit">
-                    Débit : <strong>{{ formatAmount(getCatDebit(cat)) }}</strong>
+                <div class="ana-sortant">
+                    Sortant : <strong>{{ formatAmount(getCatDebit(cat)) }}</strong>
                 </div>
             </div>
             }
@@ -130,7 +130,7 @@
 
         @if (showSuccess) {
         <div class="success-banner">
-            ✅ Mouvement enregistré avec succès !
+            Mouvement enregistré avec succès !
         </div>
         }
 
@@ -151,13 +151,13 @@
                     <div class="form-group">
                         <label>Type de mouvement *</label>
                         <div class="type-toggle">
-                            <button type="button" class="type-btn" [class.active]="newMouvement.type === 'credit'"
-                                (click)="newMouvement.type = 'credit'">
-                                ▲ Crédit
+                            <button type="button" class="type-btn" [class.active]="newMouvement.type === 'entrant'"
+                                (click)="newMouvement.type = 'entrant'">
+                                Entrant
                             </button>
-                            <button type="button" class="type-btn debit" [class.active]="newMouvement.type === 'debit'"
-                                (click)="newMouvement.type = 'debit'">
-                                ▼ Débit
+                            <button type="button" class="type-btn sortant" [class.active]="newMouvement.type === 'sortant'"
+                                (click)="newMouvement.type = 'sortant'">
+                                Sortant
                             </button>
                         </div>
                     </div>
@@ -198,7 +198,7 @@
                     </div>
 
                     <div class="form-group">
-                        <label>Montant (DZD) *</label>
+                        <label>Montant (EQUA) *</label>
                         <input type="number" [(ngModel)]="newMouvement.montant" name="montant" class="form-control"
                             placeholder="0.00" min="1" required />
                         @if (formSubmitted && !newMouvement.montant) {
@@ -209,9 +209,9 @@
                     <div class="form-group">
                         <label>Statut</label>
                         <select [(ngModel)]="newMouvement.statut" name="statut" class="form-control">
-                            <option value="en_attente">⏳ En attente</option>
-                            <option value="valide">✓ Validé</option>
-                            <option value="annule">✕ Annulé</option>
+                            <option value="en_attente">En attente</option>
+                            <option value="valide">Validé</option>
+                            <option value="annule">Annulé</option>
                         </select>
                     </div>
 
