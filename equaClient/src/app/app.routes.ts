@@ -3,6 +3,9 @@ import { HomeComponent } from './pages/home/home.component';
 import { HomepageComponent as BlockchainHomepage } from './BlockChain/homepage/homepage.component';
 import { HomepageComponent as FinancialMarketHomepage } from './FiancialMarket/homepage/homepage.component';
 import { HomepageComponent as ForumHomepage } from './Forum/homepage/homepage.component';
+import { BusinessHomepageComponent } from './Business/homepage/homepage.component';
+import { MouvementsComponent } from './Business/mouvements/mouvements.component';
+import { FinanceComponent } from './Business/finance/finance.component';
 import { HomepageComponent as LoanHomepage } from './Loan/homepage/homepage.component';
 import { HomepageComponent as UserHomepage } from './User/homepage/homepage.component';
 import { HomepageComponent as WalletHomepage } from './Wallet/homepage/homepage.component';
@@ -37,7 +40,7 @@ export const routes: Routes = [
         component: HomeComponent
     },
     {
-        path : 'landingPage',
+        path: 'landingPage',
         component: LandingPage
     },
     {
@@ -103,6 +106,15 @@ export const routes: Routes = [
     {
         path: 'wallet',
         component: WalletHomepage
+    },
+    {
+        path: 'business',
+        component: BusinessHomepageComponent,
+        children: [
+            { path: '', redirectTo: 'mouvements', pathMatch: 'full' },
+            { path: 'mouvements', component: MouvementsComponent },
+            { path: 'finance', component: FinanceComponent }
+        ]
     },
     {
         path: '**',

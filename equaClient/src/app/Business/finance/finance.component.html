@@ -1,0 +1,226 @@
+<div class="finance-page">
+
+    <!-- Header -->
+    <div class="page-header">
+        <div>
+            <h1 class="page-title"><span class="title-icon">💹</span> Analyse Financière</h1>
+            <p class="page-sub">Ratios financiers & états financiers de l'entreprise</p>
+        </div>
+        <div class="header-note">
+            <!-- TODO: add period selector (month/quarter/year) when connected to API -->
+            <span class="data-badge">📅 Données : Exercice 2025–2026</span>
+        </div>
+    </div>
+
+    <!-- Tabs -->
+    <div class="tabs">
+        <button class="tab" [class.active]="activeTab === 'ratios'" (click)="setTab('ratios')">
+            📐 Ratios Financiers
+        </button>
+        <button class="tab" [class.active]="activeTab === 'etats'" (click)="setTab('etats')">
+            📄 États Financiers
+        </button>
+    </div>
+
+    <!-- ────────────────── TAB 1 : RATIOS ────────────────── -->
+    @if (activeTab === 'ratios') {
+    <div class="tab-content animate-in">
+
+        <!-- Liquidity -->
+        <div class="section-block">
+            <div class="section-label">💧 Ratios de Liquidité</div>
+            <div class="ratios-grid">
+                @for (r of ratiosLiquidite; track r.nom) {
+                <div class="ratio-card" [class]="'s-' + r.statut">
+                    <div class="ratio-top">
+                        <span class="ratio-icon">{{ r.icon }}</span>
+                        <span class="ratio-statut" [class]="'st-' + r.statut">
+                            {{ r.statut === 'bon' ? '✓ Bon' : r.statut === 'moyen' ? '⚠ Moyen' : '✕ Risque' }}
+                        </span>
+                    </div>
+                    <div class="ratio-value">{{ r.valeur }}</div>
+                    <div class="ratio-name">{{ r.nom }}</div>
+                    <div class="ratio-formule">{{ r.formule }}</div>
+                    @if (r.seuil) {
+                    <div class="ratio-seuil">Seuil : <strong>{{ r.seuil }}</strong></div>
+                    }
+                    <div class="ratio-desc">{{ r.description }}</div>
+                </div>
+                }
+            </div>
+        </div>
+
+        <!-- Solvability -->
+        <div class="section-block">
+            <div class="section-label">⚖️ Ratios de Solvabilité</div>
+            <div class="ratios-grid">
+                @for (r of ratiosSolvabilite; track r.nom) {
+                <div class="ratio-card" [class]="'s-' + r.statut">
+                    <div class="ratio-top">
+                        <span class="ratio-icon">{{ r.icon }}</span>
+                        <span class="ratio-statut" [class]="'st-' + r.statut">
+                            {{ r.statut === 'bon' ? '✓ Bon' : r.statut === 'moyen' ? '⚠ Moyen' : '✕ Risque' }}
+                        </span>
+                    </div>
+                    <div class="ratio-value">{{ r.valeur }}</div>
+                    <div class="ratio-name">{{ r.nom }}</div>
+                    <div class="ratio-formule">{{ r.formule }}</div>
+                    @if (r.seuil) {
+                    <div class="ratio-seuil">Seuil : <strong>{{ r.seuil }}</strong></div>
+                    }
+                    <div class="ratio-desc">{{ r.description }}</div>
+                </div>
+                }
+            </div>
+        </div>
+
+        <!-- Profitability -->
+        <div class="section-block">
+            <div class="section-label">📈 Ratios de Rentabilité</div>
+            <div class="ratios-grid four">
+                @for (r of ratiosProfitabilite; track r.nom) {
+                <div class="ratio-card" [class]="'s-' + r.statut">
+                    <div class="ratio-top">
+                        <span class="ratio-icon">{{ r.icon }}</span>
+                        <span class="ratio-statut" [class]="'st-' + r.statut">
+                            {{ r.statut === 'bon' ? '✓ Bon' : '⚠ Moyen' }}
+                        </span>
+                    </div>
+                    <div class="ratio-value pct">{{ r.valeur }}</div>
+                    <div class="ratio-name">{{ r.nom }}</div>
+                    <div class="ratio-formule">{{ r.formule }}</div>
+                    <div class="ratio-desc">{{ r.description }}</div>
+                </div>
+                }
+            </div>
+        </div>
+
+    </div>
+    }
+
+    <!-- ────────────────── TAB 2 : ÉTATS FINANCIERS ────────────────── -->
+    @if (activeTab === 'etats') {
+    <div class="tab-content animate-in">
+
+        <!-- TODO: Load real data from business backend financial statements API -->
+        <div class="states-grid">
+
+            <!-- Bilan -->
+            <div class="etat-card">
+                <div class="etat-header">
+                    <span class="etat-icon">🏛️</span>
+                    <div>
+                        <h3>Bilan Comptable</h3>
+                        <p>Actif · Passif · Capitaux propres</p>
+                    </div>
+                    <span class="todo-badge">Template</span>
+                </div>
+                <div class="bilan-body">
+                    <div class="bilan-col">
+                        <div class="bilan-section-title">ACTIF</div>
+                        <div class="bilan-row"><span>Actifs non courants</span><strong>4 820 000 DZD</strong></div>
+                        <div class="bilan-row sub"><span>Immobilisations corporelles</span><span>3 200 000</span></div>
+                        <div class="bilan-row sub"><span>Immobilisations incorporelles</span><span>820 000</span></div>
+                        <div class="bilan-row sub"><span>Participations financières</span><span>800 000</span></div>
+                        <div class="bilan-row"><span>Actifs courants</span><strong>2 150 000 DZD</strong></div>
+                        <div class="bilan-row sub"><span>Stocks</span><span>480 000</span></div>
+                        <div class="bilan-row sub"><span>Créances clients</span><span>920 000</span></div>
+                        <div class="bilan-row sub"><span>Disponibilités</span><span>750 000</span></div>
+                        <div class="bilan-total">Total Actif <strong>6 970 000 DZD</strong></div>
+                    </div>
+                    <div class="bilan-col">
+                        <div class="bilan-section-title">PASSIF</div>
+                        <div class="bilan-row"><span>Capitaux propres</span><strong>4 250 000 DZD</strong></div>
+                        <div class="bilan-row sub"><span>Capital social</span><span>3 000 000</span></div>
+                        <div class="bilan-row sub"><span>Réserves</span><span>850 000</span></div>
+                        <div class="bilan-row sub"><span>Résultat net</span><span>400 000</span></div>
+                        <div class="bilan-row"><span>Dettes long terme</span><strong>1 380 000 DZD</strong></div>
+                        <div class="bilan-row sub"><span>Emprunts bancaires</span><span>1 100 000</span></div>
+                        <div class="bilan-row sub"><span>Provisions</span><span>280 000</span></div>
+                        <div class="bilan-row"><span>Dettes courantes</span><strong>1 340 000 DZD</strong></div>
+                        <div class="bilan-row sub"><span>Fournisseurs</span><span>720 000</span></div>
+                        <div class="bilan-row sub"><span>Dettes fiscales</span><span>620 000</span></div>
+                        <div class="bilan-total">Total Passif <strong>6 970 000 DZD</strong></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Compte de résultat -->
+            <div class="etat-card">
+                <div class="etat-header">
+                    <span class="etat-icon">📑</span>
+                    <div>
+                        <h3>Compte de Résultat</h3>
+                        <p>Produits · Charges · Résultat</p>
+                    </div>
+                    <span class="todo-badge">Template</span>
+                </div>
+                <div class="cr-body">
+                    <div class="cr-section">
+                        <div class="cr-section-title credit">PRODUITS D'EXPLOITATION</div>
+                        <div class="cr-row"><span>Chiffre d'affaires</span><span class="c">3 225 000</span></div>
+                        <div class="cr-row"><span>Production stockée</span><span class="c">125 000</span></div>
+                        <div class="cr-row"><span>Subventions d'exploitation</span><span class="c">50 000</span></div>
+                        <div class="cr-subtotal"><span>Sous-total produits</span><strong class="c">3 400 000</strong>
+                        </div>
+                    </div>
+                    <div class="cr-section">
+                        <div class="cr-section-title debit">CHARGES D'EXPLOITATION</div>
+                        <div class="cr-row"><span>Achats & variations stocks</span><span class="d">980 000</span></div>
+                        <div class="cr-row"><span>Charges de personnel</span><span class="d">1 350 000</span></div>
+                        <div class="cr-row"><span>Dotations amortissements</span><span class="d">280 000</span></div>
+                        <div class="cr-row"><span>Autres charges</span><span class="d">390 000</span></div>
+                        <div class="cr-subtotal"><span>Sous-total charges</span><strong class="d">3 000 000</strong>
+                        </div>
+                    </div>
+                    <div class="cr-result">
+                        <span>Résultat d'exploitation</span>
+                        <strong>400 000 DZD</strong>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Tableau de flux de trésorerie -->
+            <div class="etat-card wide">
+                <div class="etat-header">
+                    <span class="etat-icon">🌊</span>
+                    <div>
+                        <h3>Tableau des Flux de Trésorerie</h3>
+                        <p>Activités opérationnelles · Investissement · Financement</p>
+                    </div>
+                    <span class="todo-badge">Template</span>
+                </div>
+                <div class="flux-body">
+                    <div class="flux-section">
+                        <div class="flux-section-title">🔄 Activités Opérationnelles</div>
+                        <div class="flux-row"><span>Résultat net</span><span class="pos">+400 000</span></div>
+                        <div class="flux-row"><span>Amortissements (retraitement)</span><span class="pos">+280
+                                000</span></div>
+                        <div class="flux-row"><span>Variation du BFR</span><span class="neg">–120 000</span></div>
+                        <div class="flux-total pos">Flux opérationnel net <strong>+560 000</strong></div>
+                    </div>
+                    <div class="flux-section">
+                        <div class="flux-section-title">🏗️ Activités d'Investissement</div>
+                        <div class="flux-row"><span>Acquisitions d'immobilisations</span><span class="neg">–450
+                                000</span></div>
+                        <div class="flux-row"><span>Cessions d'actifs</span><span class="pos">+80 000</span></div>
+                        <div class="flux-total neg">Flux investissement net <strong>–370 000</strong></div>
+                    </div>
+                    <div class="flux-section">
+                        <div class="flux-section-title">💳 Activités de Financement</div>
+                        <div class="flux-row"><span>Emprunts contractés</span><span class="pos">+200 000</span></div>
+                        <div class="flux-row"><span>Remboursements dette</span><span class="neg">–180 000</span></div>
+                        <div class="flux-row"><span>Dividendes versés</span><span class="neg">–100 000</span></div>
+                        <div class="flux-total neg">Flux financement net <strong>–80 000</strong></div>
+                    </div>
+                    <div class="flux-grand-total">
+                        Variation nette de trésorerie &nbsp;<strong>+110 000 DZD</strong>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+    }
+
+</div>

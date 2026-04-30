@@ -1,0 +1,239 @@
+<div class="mouvements-page">
+
+    <!-- Page header -->
+    <div class="page-header">
+        <div class="header-left">
+            <h1 class="page-title">
+                <span class="title-icon">📊</span>
+                Mouvements Comptables
+            </h1>
+            <p class="page-sub">Comptabilité analytique & gestion des opérations</p>
+        </div>
+        <div class="header-right">
+            <div class="kpi-chip credit">
+                <span class="kpi-label">Total Crédit</span>
+                <span class="kpi-val">{{ formatAmount(totalCredit) }}</span>
+            </div>
+            <div class="kpi-chip debit">
+                <span class="kpi-label">Total Débit</span>
+                <span class="kpi-val">{{ formatAmount(totalDebit) }}</span>
+            </div>
+            <div class="kpi-chip solde" [class.neg]="solde < 0">
+                <span class="kpi-label">Solde</span>
+                <span class="kpi-val">{{ formatAmount(solde) }}</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Tabs -->
+    <div class="tabs">
+        <button class="tab" [class.active]="activeTab === 'comptabilite'" (click)="setTab('comptabilite')">
+            📋 Comptabilité Analytique
+        </button>
+        <button class="tab" [class.active]="activeTab === 'nouveau'" (click)="setTab('nouveau')">
+            ➕ Nouveau Mouvement
+        </button>
+    </div>
+
+    <!-- ── TAB 1: Analytical Accounting ── -->
+    @if (activeTab === 'comptabilite') {
+    <div class="tab-content animate-in">
+
+        <!-- Filters -->
+        <div class="filters-bar">
+            <div class="search-box">
+                <span class="search-icon">🔍</span>
+                <input type="text" [(ngModel)]="searchTerm" placeholder="Rechercher un mouvement..."
+                    class="search-input" />
+            </div>
+            <div class="type-filters">
+                <button class="filter-btn" [class.active]="filterType === 'all'"
+                    (click)="filterType = 'all'">Tous</button>
+                <button class="filter-btn credit" [class.active]="filterType === 'credit'"
+                    (click)="filterType = 'credit'">Crédit</button>
+                <button class="filter-btn debit" [class.active]="filterType === 'debit'"
+                    (click)="filterType = 'debit'">Débit</button>
+            </div>
+        </div>
+
+        <!-- Journal comptable -->
+        <div class="journal-container">
+            <div class="journal-header">
+                <span class="col-date">Date</span>
+                <span class="col-libelle">Libellé</span>
+                <span class="col-compte">Compte</span>
+                <span class="col-categorie">Catégorie</span>
+                <span class="col-type">Type</span>
+                <span class="col-montant">Montant</span>
+                <span class="col-statut">Statut</span>
+            </div>
+
+            <div class="journal-body">
+                @for (m of filteredMouvements; track m.id) {
+                <div class="journal-row" [class.credit-row]="m.type === 'credit'"
+                    [class.debit-row]="m.type === 'debit'">
+                    <span class="col-date">{{ m.date }}</span>
+                    <span class="col-libelle">{{ m.libelle }}</span>
+                    <span class="col-compte small">{{ m.compte }}</span>
+                    <span class="col-categorie">
+                        <span class="cat-chip">{{ m.categorie }}</span>
+                    </span>
+                    <span class="col-type">
+                        <span class="type-badge" [class.credit]="m.type === 'credit'"
+                            [class.debit]="m.type === 'debit'">
+                            {{ m.type === 'credit' ? '▲ Crédit' : '▼ Débit' }}
+                        </span>
+                    </span>
+                    <span class="col-montant" [class.credit-amt]="m.type === 'credit'"
+                        [class.debit-amt]="m.type === 'debit'">
+                        {{ m.type === 'credit' ? '+' : '-' }}{{ formatAmount(m.montant) }}
+                    </span>
+                    <span class="col-statut">
+                        <span class="statut-badge" [class]="'s-' + m.statut">
+                            {{ m.statut === 'valide' ? '✓ Validé' : m.statut === 'en_attente' ? '⏳ En attente' : '✕
+                            Annulé' }}
+                        </span>
+                    </span>
+                </div>
+                }
+
+                @if (filteredMouvements.length === 0) {
+                <div class="empty-state">
+                    <span>📭</span>
+                    <p>Aucun mouvement trouvé</p>
+                </div>
+                }
+            </div>
+        </div>
+
+        <!-- Analytical summary by category -->
+        <div class="section-title">Répartition par catégorie</div>
+        <div class="analytics-grid">
+            @for (cat of categories; track cat) {
+            <div class="analytic-card">
+                <div class="ana-label">{{ cat }}</div>
+                <div class="ana-credit">
+                    Crédit : <strong>{{ formatAmount(getCatCredit(cat)) }}</strong>
+                </div>
+                <div class="ana-debit">
+                    Débit : <strong>{{ formatAmount(getCatDebit(cat)) }}</strong>
+                </div>
+            </div>
+            }
+        </div>
+    </div>
+    }
+
+    <!-- ── TAB 2: Nouveau Mouvement Form ── -->
+    @if (activeTab === 'nouveau') {
+    <div class="tab-content animate-in">
+
+        @if (showSuccess) {
+        <div class="success-banner">
+            ✅ Mouvement enregistré avec succès !
+        </div>
+        }
+
+        <div class="form-card">
+            <div class="form-card-header">
+                <h2>Ajouter un nouveau mouvement</h2>
+                <p>Renseignez les informations du mouvement comptable à enregistrer.</p>
+            </div>
+
+            <form class="mouvement-form" (ngSubmit)="submitMouvement()" #form="ngForm">
+                <div class="form-grid">
+
+                    <div class="form-group">
+                        <label>Date *</label>
+                        <input type="date" [(ngModel)]="newMouvement.date" name="date" class="form-control" required />
+                    </div>
+
+                    <div class="form-group">
+                        <label>Type de mouvement *</label>
+                        <div class="type-toggle">
+                            <button type="button" class="type-btn" [class.active]="newMouvement.type === 'credit'"
+                                (click)="newMouvement.type = 'credit'">
+                                ▲ Crédit
+                            </button>
+                            <button type="button" class="type-btn debit" [class.active]="newMouvement.type === 'debit'"
+                                (click)="newMouvement.type = 'debit'">
+                                ▼ Débit
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="form-group full">
+                        <label>Libellé *</label>
+                        <input type="text" [(ngModel)]="newMouvement.libelle" name="libelle" class="form-control"
+                            placeholder="Ex: Vente produit, Achat fournitures..." required />
+                        @if (formSubmitted && !newMouvement.libelle) {
+                        <span class="field-error">Le libellé est requis</span>
+                        }
+                    </div>
+
+                    <div class="form-group">
+                        <label>Compte comptable *</label>
+                        <select [(ngModel)]="newMouvement.compte" name="compte" class="form-control" required>
+                            <option value="" disabled selected>Sélectionner un compte</option>
+                            @for (c of comptes; track c) {
+                            <option [value]="c">{{ c }}</option>
+                            }
+                        </select>
+                        @if (formSubmitted && !newMouvement.compte) {
+                        <span class="field-error">Le compte est requis</span>
+                        }
+                    </div>
+
+                    <div class="form-group">
+                        <label>Catégorie analytique *</label>
+                        <select [(ngModel)]="newMouvement.categorie" name="categorie" class="form-control" required>
+                            <option value="" disabled selected>Sélectionner une catégorie</option>
+                            @for (c of categories; track c) {
+                            <option [value]="c">{{ c }}</option>
+                            }
+                        </select>
+                        @if (formSubmitted && !newMouvement.categorie) {
+                        <span class="field-error">La catégorie est requise</span>
+                        }
+                    </div>
+
+                    <div class="form-group">
+                        <label>Montant (DZD) *</label>
+                        <input type="number" [(ngModel)]="newMouvement.montant" name="montant" class="form-control"
+                            placeholder="0.00" min="1" required />
+                        @if (formSubmitted && !newMouvement.montant) {
+                        <span class="field-error">Le montant est requis</span>
+                        }
+                    </div>
+
+                    <div class="form-group">
+                        <label>Statut</label>
+                        <select [(ngModel)]="newMouvement.statut" name="statut" class="form-control">
+                            <option value="en_attente">⏳ En attente</option>
+                            <option value="valide">✓ Validé</option>
+                            <option value="annule">✕ Annulé</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group full">
+                        <label>Description / Pièce justificative</label>
+                        <textarea [(ngModel)]="newMouvement.description" name="description"
+                            class="form-control textarea"
+                            placeholder="Notes, numéro de facture, références..."></textarea>
+                    </div>
+
+                </div>
+
+                <!-- Form actions -->
+                <div class="form-actions">
+                    <button type="button" class="btn-secondary" (click)="resetForm()">Réinitialiser</button>
+                    <button type="submit" class="btn-primary">
+                        <span>💾</span> Enregistrer le mouvement
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+    }
+
+</div>

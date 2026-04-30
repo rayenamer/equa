@@ -1,0 +1,498 @@
+.finance-page {
+    color: #fff;
+    max-width: 1400px;
+
+    @keyframes fadeSlide {
+        from {
+            opacity: 0;
+            transform: translateY(12px);
+        }
+
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    .animate-in {
+        animation: fadeSlide 0.35s ease forwards;
+    }
+}
+
+/* ── Header ── */
+.page-header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 1rem;
+    margin-bottom: 2rem;
+}
+
+.page-title {
+    font-size: 1.8rem;
+    font-weight: 800;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-bottom: 0.3rem;
+}
+
+.title-icon {
+    font-size: 1.6rem;
+}
+
+.page-sub {
+    color: rgba(255, 255, 255, 0.45);
+    font-size: 0.9rem;
+}
+
+.data-badge {
+    display: inline-block;
+    background: rgba(255, 215, 0, 0.08);
+    border: 1px solid rgba(255, 215, 0, 0.2);
+    color: rgba(255, 215, 0, 0.7);
+    border-radius: 20px;
+    padding: 0.5rem 1rem;
+    font-size: 0.8rem;
+    font-weight: 600;
+}
+
+/* ── Tabs ── */
+.tabs {
+    display: flex;
+    gap: 0.5rem;
+    margin-bottom: 2rem;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    padding-bottom: 0;
+}
+
+.tab {
+    padding: 0.7rem 1.5rem;
+    border: none;
+    background: transparent;
+    color: rgba(255, 255, 255, 0.5);
+    cursor: pointer;
+    font-size: 0.9rem;
+    font-weight: 600;
+    border-bottom: 3px solid transparent;
+    transition: all 0.25s;
+    transform: translateY(1px);
+
+    &:hover {
+        color: rgba(255, 255, 255, 0.8);
+    }
+
+    &.active {
+        color: #FFD700;
+        border-color: #FFD700;
+        background: rgba(255, 215, 0, 0.05);
+        border-radius: 6px 6px 0 0;
+    }
+}
+
+.tab-content {
+    padding-bottom: 3rem;
+}
+
+/* ── Section block ── */
+.section-block {
+    margin-bottom: 2.5rem;
+}
+
+.section-label {
+    font-size: 0.85rem;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    color: rgba(255, 255, 255, 0.4);
+    font-weight: 700;
+    margin-bottom: 1rem;
+    padding-left: 2px;
+}
+
+/* ── Ratio cards ── */
+.ratios-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 1rem;
+
+    &.four {
+        grid-template-columns: repeat(auto-fill, minmax(230px, 1fr));
+    }
+}
+
+.ratio-card {
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.07);
+    border-radius: 16px;
+    padding: 1.5rem;
+    transition: all 0.25s;
+
+    &:hover {
+        background: rgba(255, 255, 255, 0.05);
+        transform: translateY(-3px);
+        box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
+    }
+
+    &.s-bon {
+        border-color: rgba(0, 220, 130, 0.15);
+    }
+
+    &.s-moyen {
+        border-color: rgba(255, 200, 0, 0.2);
+    }
+
+    &.s-risque {
+        border-color: rgba(255, 80, 80, 0.2);
+    }
+}
+
+.ratio-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 0.75rem;
+}
+
+.ratio-icon {
+    font-size: 1.5rem;
+}
+
+.ratio-statut {
+    font-size: 0.72rem;
+    font-weight: 700;
+    border-radius: 20px;
+    padding: 3px 10px;
+
+    &.st-bon {
+        background: rgba(0, 220, 130, 0.12);
+        color: #00dc82;
+    }
+
+    &.st-moyen {
+        background: rgba(255, 200, 0, 0.12);
+        color: #ffc800;
+    }
+
+    &.st-risque {
+        background: rgba(255, 80, 80, 0.12);
+        color: #ff5050;
+    }
+}
+
+.ratio-value {
+    font-size: 2.2rem;
+    font-weight: 800;
+    color: #FFD700;
+    line-height: 1;
+    margin-bottom: 0.4rem;
+
+    &.pct {
+        font-size: 1.8rem;
+    }
+}
+
+.ratio-name {
+    font-size: 0.9rem;
+    font-weight: 700;
+    margin-bottom: 0.25rem;
+}
+
+.ratio-formule {
+    font-size: 0.75rem;
+    color: rgba(255, 255, 255, 0.4);
+    font-style: italic;
+    margin-bottom: 0.5rem;
+    font-family: 'Courier New', monospace;
+}
+
+.ratio-seuil {
+    font-size: 0.75rem;
+    color: rgba(255, 215, 0, 0.6);
+    margin-bottom: 0.4rem;
+}
+
+.ratio-desc {
+    font-size: 0.78rem;
+    color: rgba(255, 255, 255, 0.4);
+    line-height: 1.5;
+}
+
+/* ── États financiers grid ── */
+.states-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.5rem;
+}
+
+.etat-card {
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.07);
+    border-radius: 18px;
+    overflow: hidden;
+
+    &.wide {
+        grid-column: 1 / -1;
+    }
+}
+
+.etat-header {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 1.25rem 1.5rem;
+    background: rgba(255, 215, 0, 0.03);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+
+    .etat-icon {
+        font-size: 1.5rem;
+    }
+
+    h3 {
+        font-size: 1rem;
+        font-weight: 700;
+        margin-bottom: 2px;
+    }
+
+    p {
+        font-size: 0.78rem;
+        color: rgba(255, 255, 255, 0.4);
+    }
+
+    flex: 1;
+}
+
+.todo-badge {
+    margin-left: auto;
+    font-size: 0.68rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    background: rgba(255, 215, 0, 0.08);
+    color: rgba(255, 215, 0, 0.6);
+    border: 1px solid rgba(255, 215, 0, 0.15);
+    border-radius: 20px;
+    padding: 3px 10px;
+    white-space: nowrap;
+}
+
+/* ── Bilan ── */
+.bilan-body {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0;
+    font-size: 0.84rem;
+}
+
+.bilan-col {
+    padding: 1.25rem 1.5rem;
+
+    &:first-child {
+        border-right: 1px solid rgba(255, 255, 255, 0.06);
+    }
+}
+
+.bilan-section-title {
+    font-size: 0.7rem;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    color: rgba(255, 215, 0, 0.6);
+    margin-bottom: 0.75rem;
+    margin-top: 0.5rem;
+}
+
+.bilan-row {
+    display: flex;
+    justify-content: space-between;
+    padding: 0.3rem 0;
+    color: rgba(255, 255, 255, 0.7);
+
+    &.sub {
+        padding-left: 1rem;
+        color: rgba(255, 255, 255, 0.4);
+        font-size: 0.8rem;
+    }
+}
+
+.bilan-total {
+    display: flex;
+    justify-content: space-between;
+    padding: 0.6rem 0 0;
+    margin-top: 0.5rem;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    font-size: 0.85rem;
+    font-weight: 700;
+}
+
+/* ── Compte de résultat ── */
+.cr-body {
+    padding: 1.25rem 1.5rem;
+    font-size: 0.84rem;
+}
+
+.cr-section {
+    margin-bottom: 1rem;
+}
+
+.cr-section-title {
+    font-size: 0.7rem;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    margin-bottom: 0.5rem;
+
+    &.credit {
+        color: rgba(0, 220, 130, 0.7);
+    }
+
+    &.debit {
+        color: rgba(255, 80, 80, 0.7);
+    }
+}
+
+.cr-row {
+    display: flex;
+    justify-content: space-between;
+    padding: 0.25rem 0;
+    color: rgba(255, 255, 255, 0.6);
+}
+
+.cr-subtotal {
+    display: flex;
+    justify-content: space-between;
+    padding: 0.5rem 0;
+    border-top: 1px solid rgba(255, 255, 255, 0.07);
+    margin-top: 0.25rem;
+}
+
+.cr-result {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.75rem 1rem;
+    background: rgba(255, 215, 0, 0.07);
+    border: 1px solid rgba(255, 215, 0, 0.2);
+    border-radius: 10px;
+    font-weight: 700;
+
+    strong {
+        color: #FFD700;
+        font-size: 1.1rem;
+    }
+}
+
+.c {
+    color: #00dc82;
+    font-weight: 600;
+}
+
+.d {
+    color: #ff5050;
+    font-weight: 600;
+}
+
+/* ── Flux ── */
+.flux-body {
+    padding: 1.5rem;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.5rem;
+}
+
+.flux-section {}
+
+.flux-section-title {
+    font-size: 0.78rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: rgba(255, 255, 255, 0.5);
+    margin-bottom: 0.75rem;
+}
+
+.flux-row {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.83rem;
+    padding: 0.25rem 0;
+    color: rgba(255, 255, 255, 0.6);
+}
+
+.flux-total {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.85rem;
+    padding: 0.5rem 0;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    margin-top: 0.5rem;
+
+    &.pos strong {
+        color: #00dc82;
+    }
+
+    &.neg strong {
+        color: #ff5050;
+    }
+}
+
+.flux-grand-total {
+    grid-column: 1 / -1;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: rgba(255, 215, 0, 0.06);
+    border: 1px solid rgba(255, 215, 0, 0.2);
+    border-radius: 10px;
+    padding: 0.75rem 1.25rem;
+    font-weight: 700;
+    font-size: 0.95rem;
+
+    strong {
+        color: #FFD700;
+        font-size: 1.1rem;
+    }
+}
+
+.pos {
+    color: #00dc82;
+    font-weight: 600;
+}
+
+.neg {
+    color: #ff5050;
+    font-weight: 600;
+}
+
+@media (max-width: 1100px) {
+    .states-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .etat-card.wide {
+        grid-column: auto;
+    }
+
+    .flux-body {
+        grid-template-columns: 1fr;
+    }
+
+    .flux-grand-total {
+        grid-column: auto;
+    }
+}
+
+@media (max-width: 768px) {
+    .bilan-body {
+        grid-template-columns: 1fr;
+    }
+
+    .bilan-col:first-child {
+        border-right: none;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+    }
+
+    .ratios-grid {
+        grid-template-columns: 1fr;
+    }
+}

@@ -1,0 +1,128 @@
+.business-layout {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  background: #050505;
+  color: #fff;
+}
+
+/* ── Topbar ── */
+.business-topbar {
+  background: rgba(10, 10, 20, 0.97);
+  border-bottom: 1px solid rgba(255, 215, 0, 0.12);
+  padding: 0.75rem 2rem;
+  z-index: 20;
+  position: sticky;
+  top: 0;
+}
+
+.topbar-inner {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+  max-width: 1600px;
+  margin: 0 auto;
+}
+
+.topbar-spacer {
+  flex: 1;
+}
+
+.logo {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  text-decoration: none;
+  color: var(--primary-gold, #FFD700);
+  font-size: 1.4rem;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  transition: opacity 0.2s;
+
+  &:hover { opacity: 0.8; }
+}
+
+.logo-icon {
+  font-size: 1.6rem;
+}
+
+.mode-badge {
+  display: inline-block;
+  background: linear-gradient(135deg, #fa8231, #f7b731);
+  color: #000;
+  font-size: 0.6rem;
+  font-weight: 900;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  padding: 2px 8px;
+  border-radius: 20px;
+  vertical-align: middle;
+  margin-left: 4px;
+}
+
+/* ── Mode toggle button ── */
+.mode-toggle-btn {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 1.25rem;
+  border-radius: 50px;
+  border: none;
+  cursor: pointer;
+  font-size: 0.85rem;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  transition: all 0.3s ease;
+
+  &.indiv {
+    background: rgba(255, 255, 255, 0.06);
+    color: rgba(255, 255, 255, 0.8);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+
+    &:hover {
+      background: rgba(255, 255, 255, 0.12);
+      color: #fff;
+      border-color: rgba(255, 255, 255, 0.3);
+      transform: translateY(-1px);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+    }
+  }
+}
+
+.toggle-icon {
+  font-size: 1rem;
+}
+
+/* ── Main body ── */
+.content-wrapper {
+  display: flex;
+  flex: 1;
+  min-height: 0;
+}
+
+.page-content {
+  flex: 1;
+  min-width: 0;
+  padding: 2rem;
+  height: calc(100vh - 57px);
+  overflow-y: auto;
+
+  &::-webkit-scrollbar { width: 6px; }
+  &::-webkit-scrollbar-track { background: transparent; }
+  &::-webkit-scrollbar-thumb {
+    background: rgba(255, 215, 0, 0.2);
+    border-radius: 10px;
+  }
+  &::-webkit-scrollbar-thumb:hover { background: rgba(255, 215, 0, 0.4); }
+}
+
+@media (max-width: 1024px) {
+  .content-wrapper {
+    flex-direction: column;
+  }
+  .page-content {
+    height: auto;
+    max-height: none;
+    overflow: visible;
+  }
+}
