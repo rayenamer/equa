@@ -20,16 +20,17 @@ public class DinarWalletController {
 
     private final DinarWalletService dinarWalletService;
     private final EquaValuationEngine valuationEngine;
+
     @PostMapping("/create")
     public ResponseEntity<DinarWallet> createWallet() {
         return ResponseEntity.ok(dinarWalletService.createWallet());
     }
 
-    @PostMapping("/{walletId}/deposit/{amount}")
-    public ResponseEntity<DinarWallet> deposit(@PathVariable String walletId,
-                                               @PathVariable int amount) {
-        DinarWallet wallet = dinarWalletService.deposit(walletId, amount);
-        valuationEngine.computeAndBroadcast();   // ← new Dinars entered the system
+    @PostMapping("/{walletId}/deposit")
+    public ResponseEntity<DinarWallet> deposit(@PathVariable String walletId, @RequestParam String cardCode)
+            throws BadRequestException {
+        DinarWallet wallet = dinarWalletService.deposit(walletId, cardCode);
+        valuationEngine.computeAndBroadcast(); // ← new Dinars entered the system
         return ResponseEntity.ok(wallet);
     }
 
@@ -48,9 +49,9 @@ public class DinarWalletController {
         return ResponseEntity.ok(dinarWalletService.getNodeDinars(nodeId));
     }
 
-    @PostMapping("/{walletId}/withdraw/{amount}")
+    @PostMapping("/{walletId}/withdraw")
     public ResponseEntity<DinarWallet> withdraw(@PathVariable String walletId,
-            @PathVariable int amount) throws BadRequestException {
+            @RequestParam int amount) throws BadRequestException {
         return ResponseEntity.ok(dinarWalletService.withdraw(walletId, amount));
     }
 

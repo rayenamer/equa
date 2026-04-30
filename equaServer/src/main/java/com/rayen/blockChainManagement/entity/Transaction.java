@@ -48,8 +48,4 @@ public class Transaction {
     @JoinColumn(name = "validator_node_id")
     private Node validatorNode;
 
-    //OneToMany with Token
-    //TODO
-
-
 }

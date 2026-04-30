@@ -23,9 +23,6 @@ public class Wallet {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long walletId;
 
-    @Builder.Default
-    private Float balance = 0f;
-
     private String publicKey;
     private String status;
 
@@ -74,4 +71,5 @@ public class Wallet {
     @OneToOne
     @JoinColumn(name = "user_id", nullable = false, unique = true)
     private User user;
+
 }

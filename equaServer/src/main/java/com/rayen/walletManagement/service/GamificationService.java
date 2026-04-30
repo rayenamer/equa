@@ -19,7 +19,7 @@ import java.util.stream.Collectors;
 public class GamificationService {
 
     public void evaluateAchievements(Wallet wallet, WalletOperationType operationType) {
-        if (wallet.getBalance() > 0 && !wallet.getAchievements().contains(AchievementType.FIRST_WALLET_FUNDING.name())) {
+        if (wallet.getEquaAmount() > 0 && !wallet.getAchievements().contains(AchievementType.FIRST_WALLET_FUNDING.name())) {
             wallet.getAchievements().add(AchievementType.FIRST_WALLET_FUNDING.name());
         }
 
@@ -41,7 +41,7 @@ public class GamificationService {
     }
 
     public void evaluateChallenges(Wallet wallet) {
-        if (wallet.getBalance() >= 500) {
+        if (wallet.getEquaAmount() >= 500) {
             wallet.getCompletedChallenges().add(ChallengeType.DAILY_MINIMUM_BALANCE.name());
         }
 
@@ -61,7 +61,7 @@ public class GamificationService {
     public void applyReward(Wallet wallet, RewardType rewardType, BigDecimal amount) {
         switch (rewardType) {
             case BONUS_POINTS -> wallet.setLoyaltyPoints(wallet.getLoyaltyPoints().add(amount));
-            case CASHBACK -> wallet.setBalance(wallet.getBalance() + amount.floatValue());
+            case CASHBACK -> wallet.setEquaAmount(wallet.getEquaAmount() + amount.floatValue());
             case TIER_BOOST -> wallet.setLoyaltyPoints(wallet.getLoyaltyPoints().add(BigDecimal.valueOf(500)));
             default -> throw new IllegalArgumentException("Unknown reward type");
         }
@@ -69,7 +69,7 @@ public class GamificationService {
     }
 
     public BigDecimal computeAggregateNetWorth(Wallet wallet) {
-        BigDecimal mainBalance = BigDecimal.valueOf(wallet.getBalance());
+        BigDecimal mainBalance = BigDecimal.valueOf(wallet.getEquaAmount());
         if (wallet.getDeviseWallet() == null) {
             return mainBalance;
         }

@@ -15,6 +15,8 @@ import java.util.List;
 import java.util.Random;
 import java.util.UUID;
 
+import static org.apache.tomcat.util.json.JSONParserConstants.ZERO;
+
 @Slf4j
 @Service
 @RequiredArgsConstructor
@@ -24,6 +26,7 @@ public class DinarWalletService {
     private final DinarRepository dinarRepository;
     private final NodeRepository nodeRepository;
     private final AuthContextService authContextService;
+    private final ChargingCardService chargingCardService;
 
     @Transactional
     public DinarWallet createWallet() {
@@ -34,7 +37,7 @@ public class DinarWalletService {
         DinarWallet wallet = DinarWallet.builder()
                 .walletId("DW-" + UUID.randomUUID())
                 .userId(userId)
-                .balance(BigDecimal.ZERO)
+                .balance(ZERO)
                 .status(DinarWalletStatus.ACTIVE)
                 .createdAt(LocalDateTime.now())
                 .updatedAt(LocalDateTime.now())
@@ -49,7 +52,13 @@ public class DinarWalletService {
     }
 
     @Transactional
-    public DinarWallet deposit(String walletId, int amount) {
+    public DinarWallet deposit(String walletId, String cardCode) throws BadRequestException {
+        Boolean isUsed = chargingCardService.isCardUser(cardCode);
+        if(isUsed==Boolean.TRUE){
+            throw new BadRequestException("CARD_ALREADY_USED");
+        }
+        Integer dinarAmount = chargingCardService.chargeCard(cardCode);
+
         DinarWallet wallet = dinarWalletRepository.findById(walletId)
                 .orElseThrow(() -> new IllegalArgumentException("Wallet not found"));
 
@@ -62,11 +71,11 @@ public class DinarWalletService {
         Random random = new Random();
 
         log.info("================================================================");
-        log.info("💰 Depositing {} dinars into wallet {}", amount, walletId);
+        log.info("💰 Depositing {} dinars into wallet {}", dinarAmount, walletId);
         log.info("📡 Distributing across {} nodes...", nodes.size());
         log.info("----------------------------------------------------------------");
 
-        for (int i = 0; i < amount; i++) {
+        for (int i = 0; i < dinarAmount; i++) {
             Node storageNode = nodes.get(random.nextInt(nodes.size()));
 
             Dinar dinar = Dinar.builder()
@@ -87,7 +96,8 @@ public class DinarWalletService {
                     storageNode.getLocation());
         }
 
-        wallet.setBalance(wallet.getBalance().add(BigDecimal.valueOf(amount)));
+        // Update wallet balance once
+        wallet.setBalance(wallet.getBalance() + dinarAmount);  // adjust type to match your field
         wallet.setUpdatedAt(LocalDateTime.now());
         DinarWallet saved = dinarWalletRepository.save(wallet);
 
@@ -106,7 +116,7 @@ public class DinarWalletService {
         if (wallet.getStatus() != DinarWalletStatus.ACTIVE)
             throw new IllegalStateException("Wallet is not active");
 
-        if (wallet.getBalance().compareTo(BigDecimal.valueOf(amount)) < 0)
+        if (wallet.getBalance().compareTo((amount)) < 0)
             throw new BadRequestException(String.format(
                     "Insufficient balance. Required: %d TND | Available: %.3f TND",
                     amount, wallet.getBalance()
@@ -130,7 +140,7 @@ public class DinarWalletService {
             dinarRepository.delete(dinar); // ← dinar leaves the system entirely
         }
 
-        wallet.setBalance(wallet.getBalance().subtract(BigDecimal.valueOf(amount)));
+        wallet.setBalance(wallet.getBalance() - ((amount)));
         wallet.setUpdatedAt(LocalDateTime.now());
         DinarWallet saved = dinarWalletRepository.save(wallet);
 

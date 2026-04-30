@@ -52,7 +52,7 @@ public class LoyaltyService {
 
         BigDecimal creditValue = pointsToRedeem.divide(BigDecimal.valueOf(100), 2, BigDecimal.ROUND_HALF_UP);
         wallet.setLoyaltyPoints(wallet.getLoyaltyPoints().subtract(pointsToRedeem));
-        wallet.setBalance(wallet.getBalance() + creditValue.floatValue());
+        wallet.setEquaAmount(wallet.getEquaAmount() + creditValue.floatValue());
         refreshTier(wallet);
         log.info("Redeemed {} points into {} EUR for wallet {}", pointsToRedeem, creditValue, wallet.getWalletId());
     }

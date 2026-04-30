@@ -32,7 +32,6 @@ public class WalletMapper {
                 .id(wallet.getWalletId())
                 .publicKey(wallet.getPublicKey())
                 .status(wallet.getStatus())
-                .balance(BigDecimal.valueOf(wallet.getBalance()))
                 .equaAmount(BigDecimal.valueOf(wallet.getEquaAmount()))
                 .ownerEmail(user == null ? null : user.getEmail())
                 .loyaltyTier(wallet.getLoyaltyTier())

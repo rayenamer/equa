@@ -24,7 +24,7 @@ public class DinarWallet {
     private String userId;
 
     @Column(name = "balance", nullable = false, precision = 15, scale = 3)
-    private BigDecimal balance;
+    private Integer balance;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "status", nullable = false)
