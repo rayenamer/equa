@@ -10,14 +10,14 @@ import { Dinar, DinarWallet } from '../models/dinar-wallet.model';
 export class DinarWalletService {
   private baseUrl = `${environment.apiUrl}/dinar-wallets`;
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient) { }
 
   createWallet(): Observable<DinarWallet> {
     return this.http.post<DinarWallet>(`${this.baseUrl}/create`, {});
   }
 
-  deposit(walletId: string, amount: number): Observable<DinarWallet> {
-    return this.http.post<DinarWallet>(`${this.baseUrl}/${encodeURIComponent(walletId)}/deposit/${amount}`, {});
+  deposit(walletId: string, cardCode: string): Observable<DinarWallet> {
+    return this.http.post<DinarWallet>(`${this.baseUrl}/${encodeURIComponent(walletId)}/deposit?cardCode=${encodeURIComponent(cardCode)}`, {});
   }
 
   getWallet(walletId: string): Observable<DinarWallet> {
@@ -32,8 +32,8 @@ export class DinarWalletService {
     return this.http.get<Dinar[]>(`${this.baseUrl}/node/${nodeId}/dinars`);
   }
 
-  withdraw(walletId: string, amount: number): Observable<DinarWallet> {
-    return this.http.post<DinarWallet>(`${this.baseUrl}/${encodeURIComponent(walletId)}/withdraw/${amount}`, {});
+  withdraw(walletId: string, amount: number | string): Observable<DinarWallet> {
+    return this.http.post<DinarWallet>(`${this.baseUrl}/${encodeURIComponent(walletId)}/withdraw?amount=${amount}`, {});
   }
 
   getMyWallet(): Observable<DinarWallet> {

@@ -79,6 +79,20 @@
                 opacity: 0.5;
                 cursor: not-allowed;
             }
+
+            &.scan-btn {
+                background: transparent;
+                color: var(--primary-gold);
+                border: 1px solid var(--primary-gold);
+                display: flex;
+                align-items: center;
+                gap: 0.25rem;
+
+                &:hover:not(:disabled) {
+                    background: rgba(255, 215, 0, 0.05);
+                    box-shadow: 0 0 10px rgba(255, 215, 0, 0.1);
+                }
+            }
         }
     }
 

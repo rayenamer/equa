@@ -42,7 +42,6 @@ public class WalletService {
             throw new RuntimeException("Wallet already exists for userId: " + user.getId());
 
         Wallet wallet = Wallet.builder()
-                .balance(0f)
                 .equaAmount(0f)
                 .status("ACTIVE")
                 .publicKey("pk-" + user.getId() + "-" + System.currentTimeMillis())
@@ -89,33 +88,34 @@ public class WalletService {
     // ─── CONVERT DINARS → EQUA ───────────────────────────────
 
     @Transactional
-    public Wallet convertDinarsToEqua(BigDecimal amountInDinars) {
+    public Wallet convertDinarsToEqua(Integer amountInDinars) {
         Long userId = authContextService.getLoggedInUserId();
 
         DinarWallet dinarWallet = dinarWalletRepository.findByUserId(userId.toString())
                 .orElseThrow(() -> new RuntimeException("DinarWallet not found for userId: " + userId));
 
-        if (dinarWallet.getBalance().compareTo(amountInDinars) < 0)
+        if ((dinarWallet.getBalance() - (amountInDinars)) < 0 )
             throw new RuntimeException("Insufficient Dinar balance");
 
         BigDecimal rate = equaValuationEngine.getCurrentRate();
-        BigDecimal equaReceived = amountInDinars.divide(rate, 8, RoundingMode.HALF_UP);
 
-        dinarWallet.setBalance(dinarWallet.getBalance().subtract(amountInDinars));
+        BigDecimal equaReceived = BigDecimal.valueOf(amountInDinars)
+                .divide(rate, 8, RoundingMode.HALF_UP);
+
+        dinarWallet.setBalance(dinarWallet.getBalance() - (amountInDinars));
         dinarWalletRepository.save(dinarWallet);
 
         Wallet wallet = walletRepository.findByUser_Id(userId)
                 .orElseThrow(() -> new RuntimeException("Wallet not found for userId: " + userId));
 
         wallet.setEquaAmount(wallet.getEquaAmount() + equaReceived.floatValue());
-        wallet.setBalance(wallet.getBalance() + equaReceived.floatValue());
         log.info("[WalletService] userId:{} converted {} DT → {} EQUA @ rate={}", userId, amountInDinars, equaReceived, rate);
 
 
         //for rate calculation
         Conversion record = Conversion.builder()
                 .walletId(wallet.getWalletId().toString())
-                .dinarAmount(amountInDinars)
+                .dinarAmount(BigDecimal.valueOf(amountInDinars))
                 .equaAmount(equaReceived)
                 .rateAtConversion(rate)
                 .build();

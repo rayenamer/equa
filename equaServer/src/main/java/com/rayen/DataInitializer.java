@@ -1,8 +1,9 @@
 package com.rayen;
 
-
+import com.rayen.blockChainManagement.entity.CharginCard;
 import com.rayen.blockChainManagement.entity.Node;
 import com.rayen.blockChainManagement.repository.BlockRepository;
+import com.rayen.blockChainManagement.repository.CharginCardRepository;
 import com.rayen.blockChainManagement.repository.NodeRepository;
 import com.rayen.blockChainManagement.service.BlockService;
 import com.rayen.blockChainManagement.model.BlockRequest;
@@ -26,10 +27,13 @@ public class DataInitializer implements ApplicationRunner {
 
     @Override
     public void run(ApplicationArguments args) {
-        log.info("================================================================ DATA INIT START ================================================================");
+        log.info(
+                "================================================================ DATA INIT START ================================================================");
         initNodes();
         initGenesisBlock();
-        log.info("================================================================ DATA INIT END ==================================================================");
+        initChargingCards();
+        log.info(
+                "================================================================ DATA INIT END ==================================================================");
     }
 
     private void initNodes() {
@@ -43,10 +47,9 @@ public class DataInitializer implements ApplicationRunner {
         List<Node> nodes = List.of(
                 buildNode("MINER", "192.168.1.1", "node-pubkey-001", "Paris"),
                 buildNode("MINER", "192.168.1.2", "node-pubkey-002", "London"),
-                buildNode("MINER",     "192.168.1.3", "node-pubkey-003", "Berlin"),
-                buildNode("MINER",     "192.168.1.4", "node-pubkey-004", "Tunis"),
-                buildNode("MINER",      "192.168.1.5", "node-pubkey-005", "Tokyo")
-        );
+                buildNode("MINER", "192.168.1.3", "node-pubkey-003", "Berlin"),
+                buildNode("MINER", "192.168.1.4", "node-pubkey-004", "Tunis"),
+                buildNode("MINER", "192.168.1.5", "node-pubkey-005", "Tokyo"));
 
         nodeRepository.saveAll(nodes);
         log.info("✅ 5 nodes created successfully");
@@ -76,5 +79,26 @@ public class DataInitializer implements ApplicationRunner {
         node.setUpdatedAt(now);
         node.setLastSeen(now);
         return node;
+    }
+
+    private final CharginCardRepository charginCardRepository;
+
+    private void initChargingCards() {
+        if (charginCardRepository.count() > 0) {
+            log.info("✅ Charging cards already exist — skipping card creation");
+            return;
+        }
+
+        log.info("💳 Creating default charging cards...");
+
+        List<CharginCard> cards = List.of(
+                CharginCard.builder().cardCode("#4H5SSH").dinarAmount(100).consumed(false).build(),
+                CharginCard.builder().cardCode("KJF4#21").dinarAmount(200).consumed(false).build(),
+                CharginCard.builder().cardCode("GBF6##@").dinarAmount(500).consumed(false).build(),
+                CharginCard.builder().cardCode("NB#RR78").dinarAmount(1000).consumed(false).build(),
+                CharginCard.builder().cardCode("NJ#NS}}").dinarAmount(50).consumed(false).build());
+
+        charginCardRepository.saveAll(cards);
+        log.info("✅ {} charging cards created successfully", cards.size());
     }
 }

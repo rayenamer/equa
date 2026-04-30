@@ -79,7 +79,7 @@ public class AnalyticsService {
 
         return WalletKpi.builder()
                 .walletId(wallet.getWalletId())
-                .mainBalance(BigDecimal.valueOf(wallet.getBalance()))
+                .mainBalance(BigDecimal.valueOf(wallet.getEquaAmount()))
                 .aggregateNetWorth(aggregateBalance)
                 .loyaltyPoints(wallet.getLoyaltyPoints())
                 .loyaltyTier(wallet.getLoyaltyTier())
@@ -92,7 +92,7 @@ public class AnalyticsService {
     }
 
     private BigDecimal computeAggregateBalance(Wallet wallet) {
-        BigDecimal mainBalance = BigDecimal.valueOf(wallet.getBalance());
+        BigDecimal mainBalance = BigDecimal.valueOf(wallet.getEquaAmount());
         if (wallet.getDeviseWallet() == null) {
             return mainBalance;
         }

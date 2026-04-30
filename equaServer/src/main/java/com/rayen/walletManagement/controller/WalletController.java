@@ -57,7 +57,7 @@ public class WalletController {
     }
 
     @PostMapping("/convert")
-    public ResponseEntity<WalletDTO> convertDinarsToEqua(@RequestParam BigDecimal amount) {
+    public ResponseEntity<WalletDTO> convertDinarsToEqua(@RequestParam Integer amount) {
         WalletDTO dto = walletMapper.toDTO(walletService.convertDinarsToEqua(amount));
         equaValuationEngine.computeAndBroadcast();
         return ResponseEntity.ok(dto);

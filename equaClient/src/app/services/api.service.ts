@@ -31,12 +31,12 @@ export class ApiService {
     return this.http.get<DinarWallet>(`${this.apiUrl}/dinar-wallets/myWallet`);
   }
 
-  depositDinar(walletId: string, amount: number): Observable<DinarWallet> {
-    return this.http.post<DinarWallet>(`${this.apiUrl}/dinar-wallets/${walletId}/deposit/${amount}`, {});
+  depositDinar(walletId: string, cardCode: string): Observable<DinarWallet> {
+    return this.http.post<DinarWallet>(`${this.apiUrl}/dinar-wallets/${walletId}/deposit?cardCode=${encodeURIComponent(cardCode)}`, {});
   }
 
-  withdrawDinar(walletId: string, amount: number): Observable<DinarWallet> {
-    return this.http.post<DinarWallet>(`${this.apiUrl}/dinar-wallets/${walletId}/withdraw/${amount}`, {});
+  withdrawDinar(walletId: string, amount: number | string): Observable<DinarWallet> {
+    return this.http.post<DinarWallet>(`${this.apiUrl}/dinar-wallets/${walletId}/withdraw?amount=${amount}`, {});
   }
 
   // Wallet (Equa) endpoints

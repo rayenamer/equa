@@ -33,7 +33,7 @@ public class DeviseWalletService {
             wallet.setDeviseWallet(deviseWallet);
         }
         wallet.setStatus("ACTIVE");
-        wallet.setBalance(wallet.getBalance() == null ? 0f : wallet.getBalance());
+        wallet.setEquaAmount(wallet.getEquaAmount() == null ? 0f : wallet.getEquaAmount());
         return walletRepository.save(wallet);
     }
 

@@ -67,15 +67,20 @@ export class WalletComponent implements OnInit {
     });
   }
 
-  handleWalletAction(event: { type: 'deposit' | 'withdraw', amount: number }) {
+  handleWalletAction(event: { type: 'deposit' | 'withdraw'; cardCode: string }): void {
     if (!this.dinarWallet) return;
-
-    const action = event.type === 'deposit' ? this.apiService.depositDinar(this.dinarWallet.walletId, event.amount) : this.apiService.withdrawDinar(this.dinarWallet.walletId, event.amount);
-
-    action.subscribe(wallet => {
-      this.dinarWallet = wallet;
-    }, error => {
-      alert('Erreur: ' + error.message);
+  
+    const action = event.type === 'deposit'
+      ? this.apiService.depositDinar(this.dinarWallet.walletId, event.cardCode)
+      : this.apiService.withdrawDinar(this.dinarWallet.walletId, event.cardCode);
+  
+    action.subscribe({
+      next: (wallet) => {
+        this.dinarWallet = wallet;
+      },
+      error: (error) => {
+        alert('Erreur: ' + error.message);
+      },
     });
   }
 

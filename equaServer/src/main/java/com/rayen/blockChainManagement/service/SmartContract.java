@@ -156,7 +156,7 @@ public class SmartContract {
         Wallet wallet = walletRepository.findById(Long.parseLong(walletId))
                 .orElseThrow(() -> new BadRequestException("Wallet not found"));
 
-        if (amount.floatValue() > wallet.getBalance()) {
+        if (amount.floatValue() > wallet.getEquaAmount()) {
             throw new BadRequestException("INSUFFICIENT CREDIT");
         }
     }
@@ -169,10 +169,10 @@ public class SmartContract {
         Wallet receiverWallet = walletRepository.findById(Long.parseLong(toWalletId))
                 .orElseThrow(() -> new BadRequestException("Receiver wallet not found"));
 
-        senderWallet.setBalance(senderWallet.getBalance() - amount.floatValue());
+        senderWallet.setEquaAmount(senderWallet.getEquaAmount() - amount.floatValue());
         senderWallet.setEquaAmount(senderWallet.getEquaAmount() - amount.floatValue());
 
-        receiverWallet.setBalance(receiverWallet.getBalance() + amount.floatValue());
+        receiverWallet.setEquaAmount(receiverWallet.getEquaAmount() + amount.floatValue());
         receiverWallet.setEquaAmount(receiverWallet.getEquaAmount() + amount.floatValue());
 
         walletRepository.save(senderWallet);

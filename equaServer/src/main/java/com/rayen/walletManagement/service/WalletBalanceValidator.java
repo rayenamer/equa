@@ -27,7 +27,7 @@ public class WalletBalanceValidator {
     }
 
     public void ensureSufficientMainBalance(Wallet wallet, BigDecimal amount) {
-        if (wallet.getBalance() == null || BigDecimal.valueOf(wallet.getBalance()).compareTo(amount) < 0) {
+        if (wallet.getEquaAmount() == null || BigDecimal.valueOf(wallet.getEquaAmount()).compareTo(amount) < 0) {
             throw new IllegalStateException("Insufficient main wallet balance");
         }
     }

@@ -5,8 +5,25 @@
         <h3>Dépôt de Fonds</h3>
         <p>Alimentez votre portefeuille Dinar pour pouvoir ensuite les convertir en tokens EQUA.</p>
         <div class="input-group">
-            <input type="number" [(ngModel)]="depositAmount" placeholder="Montant en DT..." min="1">
-            <button (click)="onDeposit()" [disabled]="!depositAmount || depositAmount <= 0">Déposer</button>
+            <input type="text" [(ngModel)]="cardCode" placeholder="Code de carte de recharge...">
+            <button class="scan-btn" (click)="isScanning ? stopScan() : startScan()">
+                <svg *ngIf="!isScanning" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                    stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                    style="margin-right: 4px; vertical-align: middle;">
+                    <path d="M4 7V4h3"></path>
+                    <path d="M4 17v3h3"></path>
+                    <path d="M20 7V4h-3"></path>
+                    <path d="M20 17v3h-3"></path>
+                    <rect x="9" y="9" width="6" height="6"></rect>
+                </svg>
+                {{ isScanning ? 'Fermer' : 'Scanner' }}
+            </button>
+            <button (click)="onDeposit()" [disabled]="!cardCode.trim()">Déposer</button>
+        </div>
+
+        <div *ngIf="isScanning"
+            style="margin-top: 15px; border-radius: 12px; overflow: hidden; border: 1px solid rgba(255, 215, 0, 0.2);">
+            <div id="reader" style="width: 100%;"></div>
         </div>
     </div>
 </div>
