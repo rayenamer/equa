@@ -41,11 +41,16 @@ public class TradeFinancialService {
 
         // DONE: deduct `spendEqua` EQUA from wallet → walletService.debit(userId, spendEqua)
         Wallet wallet = walletService.getMyWallet();
-        try{
-            wallet.setEquaAmount(wallet.getEquaAmount() - spendEqua.floatValue());
-        }catch (Error e){
-            throw new BadRequestException("CANT_INVEST_UR_BROKE");
+
+        BigDecimal walletAmount = BigDecimal.valueOf(wallet.getEquaAmount());
+
+        if (walletAmount.compareTo(req.amountEqua) < 0) {
+            throw new BadRequestException("CANT_INVEST_BROKIE");
         }
+
+        wallet.setEquaAmount(
+                walletAmount.subtract(req.amountEqua).floatValue()
+        );
 
         BigDecimal impact   = subtotal.divide(marketCap(asset), 6, RoundingMode.HALF_UP).multiply(PRICE_SENSITIVITY);
         BigDecimal newPrice = price.multiply(BigDecimal.ONE.add(impact)).setScale(6, RoundingMode.HALF_UP);

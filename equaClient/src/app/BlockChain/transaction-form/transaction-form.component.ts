@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ApiService } from '../../services/api.service';
 import { WalletDTO } from '../models/dinar-wallet.model';
+import { ActivatedRoute } from '@angular/router';
 
 
 @Component({
@@ -19,7 +20,11 @@ export class TransactionFormComponent implements OnInit {
     errorMessage = '';
     myWallet: WalletDTO | null = null;
 
-    constructor(private fb: FormBuilder, private apiService: ApiService) {
+    constructor(
+        private fb: FormBuilder,
+        private apiService: ApiService,
+        private route: ActivatedRoute
+    ) {
         this.transactionForm = this.fb.group({
             transactionId: [null],
             fromWallet: ['', [Validators.required]],
@@ -31,6 +36,14 @@ export class TransactionFormComponent implements OnInit {
 
     ngOnInit() {
         this.loadMyWallet();
+        this.route.queryParams.subscribe(params => {
+            if (params['toWallet']) {
+                this.transactionForm.patchValue({ toWallet: params['toWallet'] });
+            }
+            if (params['amount']) {
+                this.transactionForm.patchValue({ amount: params['amount'] });
+            }
+        });
     }
 
     loadMyWallet() {

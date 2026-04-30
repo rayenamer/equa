@@ -13,7 +13,7 @@ import java.time.LocalDateTime;
 public class TradeRequestFinancial {
     // TradeRequestFinancial.java
     @NotNull
-    private BigDecimal amountEqua;   // EQUA to spend (buy) or EQUA value to sell
+    public BigDecimal amountEqua;   // EQUA to spend (buy) or EQUA value to sell
     private Long assetId;
 }
 
