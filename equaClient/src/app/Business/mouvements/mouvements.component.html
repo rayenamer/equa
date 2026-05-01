@@ -1,0 +1,358 @@
+<div class="mouvements-page">
+
+    <!-- Page header -->
+    <div class="page-header">
+        <div class="header-left">
+            <h1 class="page-title">
+                Mouvements Comptables
+            </h1>
+            <p class="page-sub">Comptabilité analytique & gestion des opérations</p>
+        </div>
+        <div class="header-right">
+            <div class="kpi-chip entrant">
+                <span class="kpi-label">Total Entrant</span>
+                <span class="kpi-val">{{ formatAmount(totalCredit) }}</span>
+            </div>
+            <div class="kpi-chip sortant">
+                <span class="kpi-label">Total Sortant</span>
+                <span class="kpi-val">{{ formatAmount(totalDebit) }}</span>
+            </div>
+            <div class="kpi-chip solde" [class.neg]="solde < 0">
+                <span class="kpi-label">Solde</span>
+                <span class="kpi-val">{{ formatAmount(solde) }}</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Tabs -->
+    <div class="tabs">
+        <button class="tab" [class.active]="activeTab === 'comptabilite'" (click)="setTab('comptabilite')">
+            Comptabilité Analytique
+        </button>
+        <button class="tab" [class.active]="activeTab === 'nouveau'" (click)="setTab('nouveau')">
+            Nouveau Mouvement
+        </button>
+    </div>
+
+    <!-- ── TAB 1: Analytical Accounting ── -->
+    @if (activeTab === 'comptabilite') {
+    <div class="tab-content animate-in">
+
+        <!-- Filters -->
+        <div class="filters-bar">
+            <div class="search-box">
+                <span class="search-icon">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="none" stroke="currentColor"
+                        stroke-width="2" viewBox="0 0 24 24">
+                        <circle cx="11" cy="11" r="8"></circle>
+                        <path d="M21 21l-4.35-4.35"></path>
+                    </svg>
+                </span>
+                <input type="text" [(ngModel)]="searchTerm" placeholder="Rechercher un mouvement..."
+                    class="search-input" />
+            </div>
+            <div class="type-filters">
+                <button class="filter-btn" [class.active]="filterType === 'all'"
+                    (click)="filterType = 'all'">Tous</button>
+                <button class="filter-btn entrant" [class.active]="filterType === 'entrant'"
+                    (click)="filterType = 'entrant'">Entrant</button>
+                <button class="filter-btn sortant" [class.active]="filterType === 'sortant'"
+                    (click)="filterType = 'sortant'">Sortant</button>
+            </div>
+        </div>
+
+        <!-- Mouvements en attente -->
+        @if (pendingMouvements.length > 0 && (filterType === 'all' || pendingMouvements[0].type === filterType)) {
+        <div class="pending-section animate-in">
+            <div class="pending-header">
+                <h3>
+                    <span class="warning-icon">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="none" stroke="currentColor"
+                            stroke-width="2" viewBox="0 0 24 24">
+                            <circle cx="12" cy="12" r="10"></circle>
+                            <polyline points="12 6 12 12 16 14"></polyline>
+                        </svg>
+                    </span>
+                    Mouvements en attente (À classifier)
+                </h3>
+                <span class="pending-count">{{ pendingMouvements.length }} mouvement(s) requiert votre attention</span>
+            </div>
+            <div class="pending-list">
+                @for (p of pendingMouvements; track p.id) {
+                <div class="pending-card">
+                    <div class="p-date">{{ p.date }}</div>
+                    <div class="p-details">
+                        <div class="p-libelle">{{ p.libelle }}</div>
+                        <div class="p-type" [class.p-entrant]="p.type === 'entrant'"
+                            [class.p-sortant]="p.type === 'sortant'">
+                            {{ p.type === 'entrant' ? 'Entrant' : 'Sortant' }} • {{ formatAmount(p.montant) }}
+                        </div>
+                    </div>
+                    <div class="p-action">
+                        <button class="btn-classify" (click)="openClassifyModal(p.id)">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="none"
+                                stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+                                <polyline points="20 6 9 17 4 12"></polyline>
+                            </svg>
+                            Classifier
+                        </button>
+                    </div>
+                </div>
+                }
+            </div>
+        </div>
+        }
+
+        <!-- Journal comptable -->
+        <div class="journal-container">
+            <div class="journal-header">
+                <span class="col-date">Date</span>
+                <span class="col-libelle">Libellé</span>
+                <span class="col-compte">Compte</span>
+                <span class="col-categorie">Catégorie</span>
+                <span class="col-type">Type</span>
+                <span class="col-montant">Montant</span>
+                <span class="col-statut">Statut</span>
+            </div>
+
+            <div class="journal-body">
+                @for (m of filteredMouvements; track m.id) {
+                <div class="journal-row" [class.entrant-row]="m.type === 'entrant'"
+                    [class.sortant-row]="m.type === 'sortant'">
+                    <span class="col-date">{{ m.date }}</span>
+                    <span class="col-libelle">{{ m.libelle }}</span>
+                    <span class="col-compte small">{{ m.compte }}</span>
+                    <span class="col-categorie">
+                        <span class="cat-chip">{{ m.categorie }}</span>
+                    </span>
+                    <span class="col-type">
+                        <span class="type-badge" [class.entrant]="m.type === 'entrant'"
+                            [class.sortant]="m.type === 'sortant'">
+                            {{ m.type === 'entrant' ? 'Entrant' : 'Sortant' }}
+                        </span>
+                    </span>
+                    <span class="col-montant" [class.entrant-amt]="m.type === 'entrant'"
+                        [class.sortant-amt]="m.type === 'sortant'">
+                        {{ m.type === 'entrant' ? '+' : '-' }}{{ formatAmount(m.montant) }}
+                    </span>
+                    <span class="col-statut">
+                        <span class="statut-badge" [class]="'s-' + m.statut">
+                            {{ m.statut === 'valide' ? 'Validé' : m.statut === 'en_attente' ? 'En attente' : '✕
+                            Annulé' }}
+                        </span>
+                    </span>
+                </div>
+                }
+
+                @if (filteredMouvements.length === 0) {
+                <div class="empty-state">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" fill="none" stroke="currentColor"
+                        stroke-width="1.5" viewBox="0 0 24 24">
+                        <path
+                            d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z">
+                        </path>
+                        <polyline points="3.27 6.96 12 12.01 20.73 6.96"></polyline>
+                        <line x1="12" y1="22.08" x2="12" y2="12"></line>
+                    </svg>
+                    <p>Aucun mouvement trouvé</p>
+                </div>
+                }
+            </div>
+        </div>
+
+        <!-- Analytical summary by category -->
+        <div class="section-title">Répartition par catégorie</div>
+        <div class="analytics-grid">
+            @for (cat of categories; track cat) {
+            <div class="analytic-card">
+                <div class="ana-label">{{ cat }}</div>
+                <div class="ana-entrant">
+                    Entrant : <strong>{{ formatAmount(getCatCredit(cat)) }}</strong>
+                </div>
+                <div class="ana-sortant">
+                    Sortant : <strong>{{ formatAmount(getCatDebit(cat)) }}</strong>
+                </div>
+            </div>
+            }
+        </div>
+    </div>
+    }
+
+    <!-- ── TAB 2: Nouveau Mouvement Form ── -->
+    @if (activeTab === 'nouveau') {
+    <div class="tab-content animate-in">
+
+        @if (showSuccess) {
+        <div class="success-banner">
+            Mouvement enregistré avec succès !
+        </div>
+        }
+
+        <div class="form-card">
+            <div class="form-card-header">
+                <h2>Ajouter un nouveau mouvement</h2>
+                <p>Renseignez les informations du mouvement comptable à enregistrer.</p>
+            </div>
+
+            <form class="mouvement-form" (ngSubmit)="submitMouvement()" #form="ngForm">
+                <div class="form-grid">
+
+                    <div class="form-group">
+                        <label>Date *</label>
+                        <input type="date" [(ngModel)]="newMouvement.date" name="date" class="form-control" required />
+                    </div>
+
+                    <div class="form-group">
+                        <label>Type de mouvement *</label>
+                        <div class="type-toggle">
+                            <button type="button" class="type-btn" [class.active]="newMouvement.type === 'entrant'"
+                                (click)="newMouvement.type = 'entrant'">
+                                Entrant
+                            </button>
+                            <button type="button" class="type-btn sortant"
+                                [class.active]="newMouvement.type === 'sortant'"
+                                (click)="newMouvement.type = 'sortant'">
+                                Sortant
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="form-group full">
+                        <label>Libellé *</label>
+                        <input type="text" [(ngModel)]="newMouvement.libelle" name="libelle" class="form-control"
+                            placeholder="Ex: Vente produit, Achat fournitures..." required />
+                        @if (formSubmitted && !newMouvement.libelle) {
+                        <span class="field-error">Le libellé est requis</span>
+                        }
+                    </div>
+
+                    <div class="form-group">
+                        <label>Compte comptable *</label>
+                        <select [(ngModel)]="newMouvement.compte" name="compte" class="form-control" required>
+                            <option value="" disabled selected>Sélectionner un compte</option>
+                            @for (c of comptes; track c) {
+                            <option [value]="c">{{ c }}</option>
+                            }
+                        </select>
+                        @if (formSubmitted && !newMouvement.compte) {
+                        <span class="field-error">Le compte est requis</span>
+                        }
+                    </div>
+
+                    <div class="form-group">
+                        <label>Catégorie analytique *</label>
+                        <select [(ngModel)]="newMouvement.categorie" name="categorie" class="form-control" required>
+                            <option value="" disabled selected>Sélectionner une catégorie</option>
+                            @for (c of categories; track c) {
+                            <option [value]="c">{{ c }}</option>
+                            }
+                        </select>
+                        @if (formSubmitted && !newMouvement.categorie) {
+                        <span class="field-error">La catégorie est requise</span>
+                        }
+                    </div>
+
+                    <div class="form-group">
+                        <label>Montant (EQUA) *</label>
+                        <input type="number" [(ngModel)]="newMouvement.montant" name="montant" class="form-control"
+                            placeholder="0.00" min="1" required />
+                        @if (formSubmitted && !newMouvement.montant) {
+                        <span class="field-error">Le montant est requis</span>
+                        }
+                    </div>
+
+                    <div class="form-group">
+                        <label>Statut</label>
+                        <select [(ngModel)]="newMouvement.statut" name="statut" class="form-control">
+                            <option value="en_attente">En attente</option>
+                            <option value="valide">Validé</option>
+                            <option value="annule">Annulé</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group full">
+                        <label>Description / Pièce justificative</label>
+                        <textarea [(ngModel)]="newMouvement.description" name="description"
+                            class="form-control textarea"
+                            placeholder="Notes, numéro de facture, références..."></textarea>
+                    </div>
+
+                </div>
+
+                <!-- Form actions -->
+                <div class="form-actions">
+                    <button type="button" class="btn-secondary" (click)="resetForm()">Réinitialiser</button>
+                    <button type="submit" class="btn-primary">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="none" stroke="currentColor"
+                            stroke-width="2" viewBox="0 0 24 24">
+                            <path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"></path>
+                            <polyline points="17 21 17 13 7 13 7 21"></polyline>
+                            <polyline points="7 3 7 8 15 8"></polyline>
+                        </svg>
+                        Enregistrer le mouvement
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+    }
+
+    <!-- ── Modal Classification ── -->
+    @if (selectedMovementToClassify) {
+    <div class="modal-overlay" (click)="cancelClassification()">
+        <div class="modal-content animate-in" (click)="$event.stopPropagation()">
+            <div class="modal-header">
+                <h2>Classifier le mouvement</h2>
+                <button type="button" class="btn-close" (click)="cancelClassification()">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="none" stroke="currentColor"
+                        stroke-width="2" viewBox="0 0 24 24">
+                        <line x1="18" y1="6" x2="6" y2="18"></line>
+                        <line x1="6" y1="6" x2="18" y2="18"></line>
+                    </svg>
+                </button>
+            </div>
+
+            <div class="modal-body">
+                <div class="movement-preview">
+                    <div class="prev-libelle">{{ selectedMovementToClassify.libelle }}</div>
+                    <div class="prev-montant" [class.p-entrant]="selectedMovementToClassify.type === 'entrant'"
+                        [class.p-sortant]="selectedMovementToClassify.type === 'sortant'">
+                        {{ selectedMovementToClassify.type === 'entrant' ? 'Entrant' : 'Sortant' }} • {{
+                        formatAmount(selectedMovementToClassify.montant) }}
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>Compte comptable *</label>
+                    <select [(ngModel)]="classificationForm.compte" class="form-control" required>
+                        <option value="" disabled selected>Sélectionner un compte</option>
+                        @for (c of comptes; track c) {
+                        <option [value]="c">{{ c }}</option>
+                        }
+                    </select>
+                </div>
+
+                <div class="form-group" style="margin-top: 1rem;">
+                    <label>Catégorie analytique *</label>
+                    <select [(ngModel)]="classificationForm.categorie" class="form-control" required>
+                        <option value="" disabled selected>Sélectionner une catégorie</option>
+                        @for (c of categories; track c) {
+                        <option [value]="c">{{ c }}</option>
+                        }
+                    </select>
+                </div>
+            </div>
+
+            <div class="modal-footer">
+                <button type="button" class="btn-secondary" (click)="cancelClassification()">Annuler</button>
+                <button type="button" class="btn-primary"
+                    [disabled]="!classificationForm.compte || !classificationForm.categorie"
+                    (click)="confirmClassification()">
+                    Confirmer la classification
+                </button>
+            </div>
+        </div>
+    </div>
+    }
+
+</div>

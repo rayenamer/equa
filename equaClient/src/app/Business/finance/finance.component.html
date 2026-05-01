@@ -1,0 +1,145 @@
+<div class="finance-page">
+
+    <!-- Header -->
+    <div class="page-header">
+        <div>
+            <h1 class="page-title"><span class="title-icon">💹</span> Analyse Financière</h1>
+            <p class="page-sub">Ratios financiers & états financiers de l'entreprise</p>
+        </div>
+        <div class="header-note">
+            <!-- TODO: add period selector (month/quarter/year) when connected to API -->
+            <span class="data-badge">Données : Exercice 2025–2026</span>
+        </div>
+    </div>
+
+    <!-- Tabs -->
+    <div class="tabs">
+        <button class="tab" [class.active]="activeTab === 'ratios'" (click)="setTab('ratios')">
+            Ratios Financiers
+        </button>
+        <button class="tab" [class.active]="activeTab === 'etats'" (click)="setTab('etats')">
+            États Financiers
+        </button>
+    </div>
+
+    <!-- ────────────────── TAB 1 : RATIOS ────────────────── -->
+    @if (activeTab === 'ratios') {
+    <div class="tab-content animate-in">
+
+        <!-- Liquidity -->
+        <div class="section-block">
+            <div class="section-label">Ratios de Liquidité</div>
+            <div class="ratios-grid">
+                @for (r of ratiosLiquidite; track r.nom) {
+                <div class="ratio-card" [class]="'s-' + r.statut">
+                    <div class="ratio-top">
+                        <span class="ratio-icon">{{ r.icon }}</span>
+                        <span class="ratio-statut" [class]="'st-' + r.statut">
+                            {{ r.statut === 'bon' ? 'Bon' : r.statut === 'moyen' ? 'Moyen' : 'Risque' }}
+                        </span>
+                    </div>
+                    <div class="ratio-value">{{ r.valeur }}</div>
+                    <div class="ratio-name">{{ r.nom }}</div>
+                    <div class="ratio-formule">{{ r.formule }}</div>
+                    @if (r.seuil) {
+                    <div class="ratio-seuil">Seuil : <strong>{{ r.seuil }}</strong></div>
+                    }
+                    <div class="ratio-desc">{{ r.description }}</div>
+                </div>
+                }
+            </div>
+        </div>
+
+        <!-- Solvability -->
+        <div class="section-block">
+            <div class="section-label">Ratios de Solvabilité</div>
+            <div class="ratios-grid">
+                @for (r of ratiosSolvabilite; track r.nom) {
+                <div class="ratio-card" [class]="'s-' + r.statut">
+                    <div class="ratio-top">
+                        <span class="ratio-icon">{{ r.icon }}</span>
+                        <span class="ratio-statut" [class]="'st-' + r.statut">
+                            {{ r.statut === 'bon' ? 'Bon' : r.statut === 'moyen' ? 'Moyen' : 'Risque' }}
+                        </span>
+                    </div>
+                    <div class="ratio-value">{{ r.valeur }}</div>
+                    <div class="ratio-name">{{ r.nom }}</div>
+                    <div class="ratio-formule">{{ r.formule }}</div>
+                    @if (r.seuil) {
+                    <div class="ratio-seuil">Seuil : <strong>{{ r.seuil }}</strong></div>
+                    }
+                    <div class="ratio-desc">{{ r.description }}</div>
+                </div>
+                }
+            </div>
+        </div>
+
+        <!-- Profitability -->
+        <div class="section-block">
+            <div class="section-label">Ratios de Rentabilité</div>
+            <div class="ratios-grid four">
+                @for (r of ratiosProfitabilite; track r.nom) {
+                <div class="ratio-card" [class]="'s-' + r.statut">
+                    <div class="ratio-top">
+                        <span class="ratio-icon">{{ r.icon }}</span>
+                        <span class="ratio-statut" [class]="'st-' + r.statut">
+                            {{ r.statut === 'bon' ? 'Bon' : 'Moyen' }}
+                        </span>
+                    </div>
+                    <div class="ratio-value pct">{{ r.valeur }}</div>
+                    <div class="ratio-name">{{ r.nom }}</div>
+                    <div class="ratio-formule">{{ r.formule }}</div>
+                    <div class="ratio-desc">{{ r.description }}</div>
+                </div>
+                }
+            </div>
+        </div>
+
+    </div>
+    }
+
+    <!-- ────────────────── TAB 2 : ÉTATS FINANCIERS ────────────────── -->
+    @if (activeTab === 'etats') {
+    <div class="tab-content animate-in">
+
+        <!-- TODO: Load real data from business backend financial statements API -->
+        <!-- Compte de résultat -->
+        <div class="states-grid">
+            <div class="etat-card">
+                <div class="etat-header">
+                    <span class="etat-icon"></span>
+                    <div>
+                        <h3>Compte de Résultat</h3>
+                        <p>Produits · Charges · Résultat</p>
+                    </div>
+                    <span class="todo-badge">Template</span>
+                </div>
+                <div class="cr-body">
+                    <div class="cr-section">
+                        <div class="cr-section-title entrant">PRODUITS D'EXPLOITATION (Classe 7)</div>
+                        <div class="cr-row"><span>Chiffre d'affaires</span><span class="c">3 225 000</span></div>
+                        <div class="cr-row"><span>Production stockée</span><span class="c">125 000</span></div>
+                        <div class="cr-row"><span>Subventions d'exploitation</span><span class="c">50 000</span></div>
+                        <div class="cr-subtotal"><span>Sous-total produits</span><strong class="c">3 400 000</strong>
+                        </div>
+                    </div>
+                    <div class="cr-section">
+                        <div class="cr-section-title sortant">CHARGES D'EXPLOITATION (Classe 6)</div>
+                        <div class="cr-row"><span>Achats & variations stocks</span><span class="d">980 000</span></div>
+                        <div class="cr-row"><span>Charges de personnel</span><span class="d">1 350 000</span></div>
+                        <div class="cr-row"><span>Dotations amortissements</span><span class="d">280 000</span></div>
+                        <div class="cr-row"><span>Autres charges</span><span class="d">390 000</span></div>
+                        <div class="cr-subtotal"><span>Sous-total charges</span><strong class="d">3 000 000</strong>
+                        </div>
+                    </div>
+                    <div class="cr-result">
+                        <span>Résultat d'exploitation</span>
+                        <strong>400 000 EQUA</strong>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    }
+
+</div>

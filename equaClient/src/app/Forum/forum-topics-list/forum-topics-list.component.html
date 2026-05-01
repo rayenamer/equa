@@ -3,39 +3,38 @@
   <span class="count">{{ topics.length }}</span>
 </div>
 
-<div class="create-topic">
-  <app-ui-input
-    type="text"
-    name="newTopicTitle"
-    placeholder="Topic title"
-    [value]="newTopicTitle"
-    (valueChange)="newTopicTitleChange.emit($event)">
-  </app-ui-input>
-  <app-ui-input
-    type="text"
-    name="newTopicDescription"
-    placeholder="Topic description"
-    [value]="newTopicDescription"
-    (valueChange)="newTopicDescriptionChange.emit($event)">
-  </app-ui-input>
-  <app-ui-button label="Create" variant="primary" size="md" (clicked)="createTopic.emit()"></app-ui-button>
+<div class="header-actions">
+  <app-ui-button label="+ Add Topic" variant="primary" size="md" (clicked)="showAddTopic = true"></app-ui-button>
+</div>
+
+<!-- Add Topic Popup Overlay -->
+<div class="composer-overlay" *ngIf="showAddTopic">
+  <div class="composer-popup">
+    <div class="popup-head">
+      <h4>Create New Topic</h4>
+      <button class="close-btn" (click)="showAddTopic = false">&times;</button>
+    </div>
+    <div class="composer-body">
+      <app-ui-input type="text" name="newTopicTitle" placeholder="Topic title" [value]="newTopicTitle"
+        (valueChange)="newTopicTitleChange.emit($event)">
+      </app-ui-input>
+      <app-ui-input type="text" name="newTopicDescription" placeholder="Topic description" [value]="newTopicDescription"
+        (valueChange)="newTopicDescriptionChange.emit($event)">
+      </app-ui-input>
+      <app-ui-button label="Create Topic" variant="primary" size="md"
+        (clicked)="createTopic.emit(); showAddTopic = false"></app-ui-button>
+    </div>
+  </div>
 </div>
 
 <div class="filters">
-  <app-ui-input
-    type="text"
-    name="search"
-    placeholder="Search topics..."
-    [value]="search"
+  <app-ui-input type="text" name="search" placeholder="Search topics..." [value]="search"
     (valueChange)="searchChange.emit($event)">
   </app-ui-input>
 </div>
 
 <div class="topic-list">
-  <article
-    *ngFor="let topic of topics"
-    class="topic-item"
-    [class.selected]="selectedTopicId === topic.topicId"
+  <article *ngFor="let topic of topics" class="topic-item" [class.selected]="selectedTopicId === topic.topicId"
     (click)="topicSelected.emit(topic)">
     <div class="row-top">
       <h3>{{ topic.title }}</h3>

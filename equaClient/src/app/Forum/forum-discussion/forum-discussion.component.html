@@ -5,7 +5,10 @@
 
 <ng-container *ngIf="selectedTopic as topic">
   <div class="topic-summary">
-    <h3>{{ topic.title }}</h3>
+    <div class="topic-header-row">
+      <h3>{{ topic.title }}</h3>
+      <app-ui-button label="Add Message" variant="primary" size="md" (clicked)="showComposer = true"></app-ui-button>
+    </div>
     <p>{{ topic.description }}</p>
     <div class="topic-actions">
       <app-ui-button label="Report topic" variant="secondary" size="md" (clicked)="reportTopic.emit()"></app-ui-button>
@@ -23,7 +26,8 @@
           <span>{{ message.createdAt | date:'short' }}</span>
         </div>
         <p *ngIf="message.messageText">{{ message.messageText }}</p>
-        <img *ngIf="message.gifUrl" [src]="message.gifUrl" alt="gif message" class="message-gif" (error)="onGifError($event)" />
+        <img *ngIf="message.gifUrl" [src]="message.gifUrl" alt="gif message" class="message-gif"
+          (error)="onGifError($event)" />
         <div class="message-actions">
           <button class="report-link" (click)="reportMessage.emit(message)">Report</button>
           <button class="inline-action" (click)="editMessage.emit(message)">Edit</button>
@@ -34,35 +38,48 @@
   </div>
 
   <div class="report-box">
-    <app-ui-input
-      type="text"
-      name="reportReason"
-      placeholder="Report reason (topic/message)"
-      [value]="reportReason"
+    <app-ui-input type="text" name="reportReason" placeholder="Report reason (topic/message)" [value]="reportReason"
       (valueChange)="reportReasonChange.emit($event)">
     </app-ui-input>
   </div>
 
-  <div class="composer">
-    <app-ui-input
-      type="text"
-      name="gifUrl"
-      placeholder="GIF URL (optional)"
-      [value]="gifUrl"
-      (valueChange)="gifUrlChange.emit($event)">
-    </app-ui-input>
-    <app-ui-input
-      type="text"
-      name="newMessage"
-      placeholder="Write a message..."
-      [value]="newMessage"
-      (valueChange)="newMessageChange.emit($event)">
-    </app-ui-input>
-    <app-ui-button
-      label="Send"
-      variant="primary"
-      size="md"
-      (clicked)="sendMessage.emit()">
-    </app-ui-button>
+  <!-- Add Message Popup Overlay -->
+  <div class="composer-overlay" *ngIf="showComposer">
+    <div class="composer-popup">
+      <div class="popup-head">
+        <h4>Create Post</h4>
+        <button class="close-btn" (click)="showComposer = false">&times;</button>
+      </div>
+      <div class="composer-body">
+        <!-- GIF Picker -->
+        <div class="gif-picker-area">
+          <div class="gif-toggle-bar">
+            <button type="button" class="gif-toggle-btn" (click)="showGifPicker = !showGifPicker">
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="none" stroke="currentColor"
+                stroke-width="2" viewBox="0 0 24 24">
+                <rect x="3" y="3" width="18" height="18" rx="2" />
+                <circle cx="8.5" cy="8.5" r="1.5" />
+                <polyline points="21 15 16 10 5 21" />
+              </svg>
+              GIF
+            </button>
+            <span class="gif-selected-label" *ngIf="gifUrl">
+              <img [src]="gifUrl" class="gif-thumb-preview" alt="Selected GIF" />
+              <button type="button" class="gif-clear-btn" (click)="clearGif()">&times;</button>
+            </span>
+          </div>
+
+          <div class="gif-gallery" *ngIf="showGifPicker && !gifUrl">
+            <img *ngFor="let g of availableGifs" [src]="g" class="gif-thumb" [class.selected]="gifUrl === g"
+              (click)="selectGif(g)" alt="gif option" />
+          </div>
+        </div>
+        <app-ui-input type="text" name="newMessage" placeholder="What's on your mind?..." [value]="newMessage"
+          (valueChange)="newMessageChange.emit($event)">
+        </app-ui-input>
+        <app-ui-button label="Post" variant="primary" size="md" (clicked)="sendMessage.emit(); showComposer = false">
+        </app-ui-button>
+      </div>
+    </div>
   </div>
 </ng-container>
