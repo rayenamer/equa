@@ -17,6 +17,7 @@ export class ForumTopicsListComponent {
   @Input() search = '';
   @Input() newTopicTitle = '';
   @Input() newTopicDescription = '';
+  showAddTopic = false;
 
   @Output() searchChange = new EventEmitter<string>();
   @Output() newTopicTitleChange = new EventEmitter<string>();

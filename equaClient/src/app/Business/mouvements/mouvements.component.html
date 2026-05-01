@@ -4,7 +4,6 @@
     <div class="page-header">
         <div class="header-left">
             <h1 class="page-title">
-                <span class="title-icon">📊</span>
                 Mouvements Comptables
             </h1>
             <p class="page-sub">Comptabilité analytique & gestion des opérations</p>
@@ -42,7 +41,13 @@
         <!-- Filters -->
         <div class="filters-bar">
             <div class="search-box">
-                <span class="search-icon">🔍</span>
+                <span class="search-icon">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="none" stroke="currentColor"
+                        stroke-width="2" viewBox="0 0 24 24">
+                        <circle cx="11" cy="11" r="8"></circle>
+                        <path d="M21 21l-4.35-4.35"></path>
+                    </svg>
+                </span>
                 <input type="text" [(ngModel)]="searchTerm" placeholder="Rechercher un mouvement..."
                     class="search-input" />
             </div>
@@ -55,6 +60,48 @@
                     (click)="filterType = 'sortant'">Sortant</button>
             </div>
         </div>
+
+        <!-- Mouvements en attente -->
+        @if (pendingMouvements.length > 0 && (filterType === 'all' || pendingMouvements[0].type === filterType)) {
+        <div class="pending-section animate-in">
+            <div class="pending-header">
+                <h3>
+                    <span class="warning-icon">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="none" stroke="currentColor"
+                            stroke-width="2" viewBox="0 0 24 24">
+                            <circle cx="12" cy="12" r="10"></circle>
+                            <polyline points="12 6 12 12 16 14"></polyline>
+                        </svg>
+                    </span>
+                    Mouvements en attente (À classifier)
+                </h3>
+                <span class="pending-count">{{ pendingMouvements.length }} mouvement(s) requiert votre attention</span>
+            </div>
+            <div class="pending-list">
+                @for (p of pendingMouvements; track p.id) {
+                <div class="pending-card">
+                    <div class="p-date">{{ p.date }}</div>
+                    <div class="p-details">
+                        <div class="p-libelle">{{ p.libelle }}</div>
+                        <div class="p-type" [class.p-entrant]="p.type === 'entrant'"
+                            [class.p-sortant]="p.type === 'sortant'">
+                            {{ p.type === 'entrant' ? 'Entrant' : 'Sortant' }} • {{ formatAmount(p.montant) }}
+                        </div>
+                    </div>
+                    <div class="p-action">
+                        <button class="btn-classify" (click)="openClassifyModal(p.id)">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="none"
+                                stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+                                <polyline points="20 6 9 17 4 12"></polyline>
+                            </svg>
+                            Classifier
+                        </button>
+                    </div>
+                </div>
+                }
+            </div>
+        </div>
+        }
 
         <!-- Journal comptable -->
         <div class="journal-container">
@@ -99,7 +146,14 @@
 
                 @if (filteredMouvements.length === 0) {
                 <div class="empty-state">
-                    <span>📭</span>
+                    <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" fill="none" stroke="currentColor"
+                        stroke-width="1.5" viewBox="0 0 24 24">
+                        <path
+                            d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z">
+                        </path>
+                        <polyline points="3.27 6.96 12 12.01 20.73 6.96"></polyline>
+                        <line x1="12" y1="22.08" x2="12" y2="12"></line>
+                    </svg>
                     <p>Aucun mouvement trouvé</p>
                 </div>
                 }
@@ -155,7 +209,8 @@
                                 (click)="newMouvement.type = 'entrant'">
                                 Entrant
                             </button>
-                            <button type="button" class="type-btn sortant" [class.active]="newMouvement.type === 'sortant'"
+                            <button type="button" class="type-btn sortant"
+                                [class.active]="newMouvement.type === 'sortant'"
                                 (click)="newMouvement.type = 'sortant'">
                                 Sortant
                             </button>
@@ -228,10 +283,74 @@
                 <div class="form-actions">
                     <button type="button" class="btn-secondary" (click)="resetForm()">Réinitialiser</button>
                     <button type="submit" class="btn-primary">
-                        <span>💾</span> Enregistrer le mouvement
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="none" stroke="currentColor"
+                            stroke-width="2" viewBox="0 0 24 24">
+                            <path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"></path>
+                            <polyline points="17 21 17 13 7 13 7 21"></polyline>
+                            <polyline points="7 3 7 8 15 8"></polyline>
+                        </svg>
+                        Enregistrer le mouvement
                     </button>
                 </div>
             </form>
+        </div>
+    </div>
+    }
+
+    <!-- ── Modal Classification ── -->
+    @if (selectedMovementToClassify) {
+    <div class="modal-overlay" (click)="cancelClassification()">
+        <div class="modal-content animate-in" (click)="$event.stopPropagation()">
+            <div class="modal-header">
+                <h2>Classifier le mouvement</h2>
+                <button type="button" class="btn-close" (click)="cancelClassification()">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="none" stroke="currentColor"
+                        stroke-width="2" viewBox="0 0 24 24">
+                        <line x1="18" y1="6" x2="6" y2="18"></line>
+                        <line x1="6" y1="6" x2="18" y2="18"></line>
+                    </svg>
+                </button>
+            </div>
+
+            <div class="modal-body">
+                <div class="movement-preview">
+                    <div class="prev-libelle">{{ selectedMovementToClassify.libelle }}</div>
+                    <div class="prev-montant" [class.p-entrant]="selectedMovementToClassify.type === 'entrant'"
+                        [class.p-sortant]="selectedMovementToClassify.type === 'sortant'">
+                        {{ selectedMovementToClassify.type === 'entrant' ? 'Entrant' : 'Sortant' }} • {{
+                        formatAmount(selectedMovementToClassify.montant) }}
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>Compte comptable *</label>
+                    <select [(ngModel)]="classificationForm.compte" class="form-control" required>
+                        <option value="" disabled selected>Sélectionner un compte</option>
+                        @for (c of comptes; track c) {
+                        <option [value]="c">{{ c }}</option>
+                        }
+                    </select>
+                </div>
+
+                <div class="form-group" style="margin-top: 1rem;">
+                    <label>Catégorie analytique *</label>
+                    <select [(ngModel)]="classificationForm.categorie" class="form-control" required>
+                        <option value="" disabled selected>Sélectionner une catégorie</option>
+                        @for (c of categories; track c) {
+                        <option [value]="c">{{ c }}</option>
+                        }
+                    </select>
+                </div>
+            </div>
+
+            <div class="modal-footer">
+                <button type="button" class="btn-secondary" (click)="cancelClassification()">Annuler</button>
+                <button type="button" class="btn-primary"
+                    [disabled]="!classificationForm.compte || !classificationForm.categorie"
+                    (click)="confirmClassification()">
+                    Confirmer la classification
+                </button>
+            </div>
         </div>
     </div>
     }

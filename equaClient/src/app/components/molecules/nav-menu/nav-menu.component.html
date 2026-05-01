@@ -1,15 +1,39 @@
 <nav class="nav-links" [class.open]="open">
   @for (item of menuItems; track item.label) {
-    @if (item.styleType === 'button') {
-      <button type="button" class="nav-button" (click)="item.action?.()">{{ item.label }}</button>
-    } @else if (item.styleType === 'icon') {
-        <a [routerLink]="item.route" class="nav-icon" [attr.aria-label]="item.label">{{ item.icon }}</a>
-    } @else {
-      @if (item.route) {
-        <a [routerLink]="item.route">{{ item.label }}</a>
-      } @else {
-        <a href="#" (click)="onItemClick($event, item.sectionId)">{{ item.label }}</a>
+  @if (item.styleType === 'button') {
+  <button type="button" class="nav-button" (click)="item.action?.()">{{ item.label }}</button>
+  } @else if (item.styleType === 'icon') {
+  <a [routerLink]="item.route" class="nav-icon" [attr.aria-label]="item.label">{{ item.icon }}</a>
+  } @else {
+  @if (item.route) {
+  <a [routerLink]="item.route">{{ item.label }}</a>
+  } @else {
+  <a href="#" (click)="onItemClick($event, item.sectionId)">{{ item.label }}</a>
+  }
+  }
+  }
+
+  @if (authenticated) {
+  <div class="user-menu-container">
+    <button type="button" class="nav-icon dots-btn" (click)="toggleUserMenu()" aria-label="User Options">
+      <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" viewBox="0 0 16 16">
+        <path
+          d="M3 9.5a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3zm5 0a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3zm5 0a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3z" />
+      </svg>
+    </button>
+
+    @if (isUserMenuOpen) {
+    <div class="user-menu-dropdown" (click)="$event.stopPropagation()">
+      <div class="user-menu-header">
+        <span>{{ isBusinessMode ? 'Business Mode' : 'Individual Mode' }}</span>
+      </div>
+      @for (opt of userMenuOptions; track opt.label) {
+      <button class="user-menu-item" (click)="opt.action()">
+        {{ opt.label }}
+      </button>
       }
+    </div>
     }
+  </div>
   }
 </nav>

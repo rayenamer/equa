@@ -16,6 +16,7 @@ export class ForumDiscussionComponent {
   @Input() newMessage = '';
   @Input() gifUrl = '';
   @Input() reportReason = '';
+  showComposer = false;
 
   @Output() newMessageChange = new EventEmitter<string>();
   @Output() gifUrlChange = new EventEmitter<string>();

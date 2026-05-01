@@ -2,89 +2,120 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  margin-bottom: 0.9rem;
+  margin-bottom: 1.5rem;
 
   h2 {
     margin: 0;
-    font-size: 1rem;
+    font-size: 1.2rem;
     font-weight: 700;
+    color: #fff;
+    letter-spacing: 0.01em;
   }
 
   .count {
-    color: #9ca3af;
-    font-size: 0.85rem;
+    background: rgba(255, 255, 255, 0.1);
+    color: #d1d5db;
+    padding: 0.15rem 0.5rem;
+    border-radius: 999px;
+    font-size: 0.75rem;
+    font-weight: 600;
   }
 }
 
 .report-list {
-  display: grid;
-  gap: 0.7rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.8rem;
 }
 
 .report-item {
-  border: 1px solid #253041;
-  background: #0f172a;
-  border-radius: 10px;
-  padding: 0.75rem;
+  background: rgba(255, 255, 255, 0.03);
+  border-radius: 12px;
+  padding: 1.2rem;
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.report-item:hover {
+  background: rgba(255, 255, 255, 0.06);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
 }
 
 .report-top {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  gap: 0.5rem;
+  gap: 1rem;
 }
 
 p {
-  margin: 0.45rem 0 0;
+  margin: 0.8rem 0 0;
   color: #d1d5db;
-  font-size: 0.86rem;
+  font-size: 0.9rem;
+  line-height: 1.5;
 }
 
 .meta {
-  color: #9ca3af;
-  font-size: 0.76rem;
+  color: #6b7280;
+  font-size: 0.8rem;
+  font-weight: 500;
+  margin-top: 0.6rem;
 }
 
 .status,
 .badge {
-  font-size: 0.68rem;
-  font-weight: 700;
-  padding: 0.2rem 0.5rem;
+  font-size: 0.65rem;
+  font-weight: 800;
+  padding: 0.25rem 0.6rem;
   border-radius: 999px;
-  background: #1e3a8a;
-  color: #dbeafe;
+  background: rgba(255, 255, 255, 0.1);
+  color: #e5e7eb;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
 }
 
 .status.done {
-  background: #14532d;
-  color: #bbf7d0;
+  background: rgba(16, 185, 129, 0.2);
+  color: #6ee7b7;
+  border: 1px solid rgba(16, 185, 129, 0.3);
 }
 
 .reason {
   font-weight: 600;
+  color: #fff;
 }
 
 .actions {
-  margin-top: 0.55rem;
+  margin-top: 1rem;
   display: flex;
-  gap: 0.45rem;
+  gap: 0.6rem;
 }
 
 .btn {
   border: 0;
   border-radius: 8px;
-  padding: 0.38rem 0.65rem;
-  font-size: 0.76rem;
+  padding: 0.45rem 0.8rem;
+  font-size: 0.75rem;
+  font-weight: 700;
   cursor: pointer;
+  transition: all 0.2s;
 }
 
 .btn.primary {
-  background: #dc2626;
+  background: rgba(239, 68, 68, 0.9);
   color: #fff;
+
+  &:hover {
+    background: #dc2626;
+  }
 }
 
 .btn.secondary {
-  background: #374151;
-  color: #f3f4f6;
+  background: rgba(255, 255, 255, 0.1);
+  color: #fff;
+
+  &:hover {
+    background: rgba(255, 255, 255, 0.2);
+  }
 }

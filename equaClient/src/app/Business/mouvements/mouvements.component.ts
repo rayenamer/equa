@@ -27,6 +27,10 @@ export class MouvementsComponent {
 
     // ─── Sample data for analytical accounting display ───────────────────────
     mouvements: Mouvement[] = [
+        // Pending movements
+        { id: 101, date: '2026-05-01', libelle: 'Virement entrant inconnu', type: 'entrant', compte: 'À définir', montant: 45000, categorie: 'À définir', statut: 'en_attente' },
+        { id: 102, date: '2026-04-30', libelle: 'Prélèvement fournisseur', type: 'sortant', compte: 'À définir', montant: 12000, categorie: 'À définir', statut: 'en_attente' },
+        // Validated movements
         { id: 1, date: '2026-04-28', libelle: 'Vente produit A', type: 'entrant', compte: '701 – Ventes marchandises', montant: 125000, categorie: 'Chiffre d\'affaires', statut: 'valide' },
         { id: 2, date: '2026-04-27', libelle: 'Achat matières premières', type: 'sortant', compte: '601 – Achats matières', montant: 48000, categorie: 'Charges opérationnelles', statut: 'valide' },
         { id: 3, date: '2026-04-26', libelle: 'Salaires Avril', type: 'sortant', compte: '641 – Charges de personnel', montant: 72000, categorie: 'Charges de personnel', statut: 'valide' },
@@ -70,8 +74,14 @@ export class MouvementsComponent {
     formSubmitted = false;
     showSuccess = false;
 
+    get pendingMouvements(): Mouvement[] {
+        return this.mouvements.filter(m => m.statut === 'en_attente');
+    }
+
     get filteredMouvements(): Mouvement[] {
         return this.mouvements.filter(m => {
+            if (m.statut === 'en_attente') return false; // Show only non-pending here
+
             const matchType = this.filterType === 'all' || m.type === this.filterType;
             const matchSearch = !this.searchTerm ||
                 m.libelle.toLowerCase().includes(this.searchTerm.toLowerCase()) ||
@@ -82,11 +92,11 @@ export class MouvementsComponent {
     }
 
     get totalCredit(): number {
-        return this.mouvements.filter(m => m.type === 'entrant').reduce((s, m) => s + m.montant, 0);
+        return this.mouvements.filter(m => m.type === 'entrant' && m.statut !== 'en_attente').reduce((s, m) => s + m.montant, 0);
     }
 
     get totalDebit(): number {
-        return this.mouvements.filter(m => m.type === 'sortant').reduce((s, m) => s + m.montant, 0);
+        return this.mouvements.filter(m => m.type === 'sortant' && m.statut !== 'en_attente').reduce((s, m) => s + m.montant, 0);
     }
 
     get solde(): number {
@@ -135,14 +145,48 @@ export class MouvementsComponent {
 
     getCatCredit(cat: string): number {
         return this.mouvements
-            .filter(m => m.categorie === cat && m.type === 'entrant')
+            .filter(m => m.categorie === cat && m.type === 'entrant' && m.statut !== 'en_attente')
             .reduce((s, m) => s + m.montant, 0);
     }
 
     getCatDebit(cat: string): number {
         return this.mouvements
-            .filter(m => m.categorie === cat && m.type === 'sortant')
+            .filter(m => m.categorie === cat && m.type === 'sortant' && m.statut !== 'en_attente')
             .reduce((s, m) => s + m.montant, 0);
+    }
+
+    // Modal state for classification
+    selectedMovementToClassify: Mouvement | null = null;
+    classificationForm = {
+        compte: '',
+        categorie: ''
+    };
+
+    openClassifyModal(id: number): void {
+        const m = this.mouvements.find(x => x.id === id);
+        if (m) {
+            this.selectedMovementToClassify = m;
+            this.classificationForm = {
+                compte: '',
+                categorie: ''
+            };
+        }
+    }
+
+    cancelClassification(): void {
+        this.selectedMovementToClassify = null;
+    }
+
+    confirmClassification(): void {
+        if (!this.selectedMovementToClassify || !this.classificationForm.compte || !this.classificationForm.categorie) return;
+
+        this.selectedMovementToClassify.compte = this.classificationForm.compte;
+        this.selectedMovementToClassify.categorie = this.classificationForm.categorie;
+        this.selectedMovementToClassify.statut = 'valide';
+
+        // Form refresh triggered
+        this.mouvements = [...this.mouvements];
+        this.selectedMovementToClassify = null;
     }
 
     formatAmount(n: number): string {

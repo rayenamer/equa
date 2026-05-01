@@ -50,17 +50,28 @@ export class NavMenuComponent implements OnDestroy {
   ];
 
   private get authenticatedActionItems(): NavMenuItem[] {
+    return []; // We handle these separately in the dropdown now
+  }
+
+  isUserMenuOpen = false;
+
+  toggleUserMenu(): void {
+    this.isUserMenuOpen = !this.isUserMenuOpen;
+    this.cdr.markForCheck();
+  }
+
+  get userMenuOptions() {
     if (this.isBusinessMode) {
       return [
-        { label: 'Mode Individuel', action: () => { this.businessModeService.setMode('individual'); this.router.navigate(['/user/dashboard']); }, styleType: 'button' },
-        { label: 'Profile', route: '/user', styleType: 'link' },
-        { label: 'Déconnexion', action: () => this.logout(), styleType: 'button', route: 'home' }
+        { label: 'Mode Individuel', action: () => { this.businessModeService.setMode('individual'); this.router.navigate(['/user/dashboard']); this.isUserMenuOpen = false; } },
+        { label: 'Profile', action: () => { this.router.navigate(['/user']); this.isUserMenuOpen = false; } },
+        { label: 'Déconnexion', action: () => { this.logout(); this.isUserMenuOpen = false; } }
       ];
     } else {
       return [
-        { label: 'Mode Business', action: () => { this.businessModeService.setMode('business'); this.router.navigate(['/business/mouvements']); }, styleType: 'button' },
-        { label: 'Profile', route: '/user', styleType: 'link' },
-        { label: 'Déconnexion', action: () => this.logout(), styleType: 'button', route: 'home' }
+        { label: 'Mode Business', action: () => { this.businessModeService.setMode('business'); this.router.navigate(['/business/mouvements']); this.isUserMenuOpen = false; } },
+        { label: 'Profile', action: () => { this.router.navigate(['/user']); this.isUserMenuOpen = false; } },
+        { label: 'Déconnexion', action: () => { this.logout(); this.isUserMenuOpen = false; } }
       ];
     }
   }
@@ -69,10 +80,7 @@ export class NavMenuComponent implements OnDestroy {
     { label: 'Connexion', route: '/user/login', styleType: 'link' },
   ];
 
-  private readonly authenticatedBusinessItems: NavMenuItem[] = [
-    { label: 'Mouvements', route: '/business' },
-    { label: 'Finance', route: '/business/finance' }
-  ];
+  private readonly authenticatedBusinessItems: NavMenuItem[] = [];
 
 
   constructor(private authService: AuthService, private router: Router, private cdr: ChangeDetectorRef, private businessModeService: BusinessModeService) {
