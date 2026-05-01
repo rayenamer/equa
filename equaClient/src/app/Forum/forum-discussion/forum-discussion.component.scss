@@ -1,0 +1,139 @@
+.panel-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 0.9rem;
+
+  h2 {
+    margin: 0;
+    font-size: 1rem;
+    font-weight: 700;
+  }
+
+  .count {
+    color: #9ca3af;
+    font-size: 0.85rem;
+  }
+}
+
+.topic-summary {
+  border: 1px solid #253041;
+  background: #0f172a;
+  border-radius: 10px;
+  padding: 0.75rem;
+  margin-bottom: 0.8rem;
+}
+
+.topic-actions {
+  margin-top: 0.6rem;
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+  flex-wrap: wrap;
+}
+
+h3 {
+  margin: 0;
+  font-size: 0.95rem;
+}
+
+p {
+  margin: 0.45rem 0 0;
+  color: #d1d5db;
+  font-size: 0.86rem;
+}
+
+.messages {
+  display: grid;
+  gap: 0.7rem;
+}
+
+.message {
+  display: flex;
+  gap: 0.6rem;
+}
+
+.avatar {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  background: #1e3a8a;
+  color: #fff;
+  font-size: 0.8rem;
+  font-weight: 700;
+}
+
+.bubble {
+  flex: 1;
+  border: 1px solid #253041;
+  background: #0f172a;
+  border-radius: 10px;
+  padding: 0.55rem 0.7rem;
+}
+
+.bubble-meta {
+  display: flex;
+  justify-content: space-between;
+  color: #9ca3af;
+  font-size: 0.73rem;
+}
+
+.report-link {
+  margin-top: 0.4rem;
+  background: transparent;
+  border: 0;
+  color: #93c5fd;
+  cursor: pointer;
+  font-size: 0.78rem;
+  padding: 0;
+}
+
+.message-actions {
+  margin-top: 0.45rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.inline-action {
+  background: transparent;
+  border: 1px solid #334155;
+  color: #cbd5e1;
+  border-radius: 8px;
+  padding: 0.22rem 0.45rem;
+  font-size: 0.75rem;
+  cursor: pointer;
+}
+
+.inline-action.danger {
+  border-color: #7f1d1d;
+  color: #fca5a5;
+}
+
+.report-box {
+  margin-top: 0.75rem;
+}
+
+.message-gif {
+  margin-top: 0.5rem;
+  max-width: 260px;
+  width: 100%;
+  border-radius: 10px;
+  border: 1px solid #253041;
+}
+
+.composer {
+  margin-top: 0.8rem;
+  display: grid;
+  grid-template-columns: 1fr 1fr auto;
+  gap: 0.6rem;
+}
+
+@media (max-width: 900px) {
+  .composer {
+    grid-template-columns: 1fr;
+  }
+}

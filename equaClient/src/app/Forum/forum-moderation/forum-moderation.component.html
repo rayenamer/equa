@@ -1,0 +1,22 @@
+<div class="panel-head">
+  <h2>Moderation</h2>
+  <span class="count">{{ reports.length }}</span>
+</div>
+
+<div class="report-list">
+  <article class="report-item" *ngFor="let report of reports">
+    <div class="report-top">
+      <span class="badge">{{ report.targetType }}</span>
+      <span class="status" [class.done]="report.status !== 'PENDING'">{{ report.status }}</span>
+    </div>
+    <p class="reason">{{ report.reason }}</p>
+    <p class="meta">
+      Ref: {{ report.targetType === 'TOPIC' ? ('#' + report.topicId) : ('msg#' + report.messageId) }}
+      | Reported by {{ report.reporterUsername }}
+    </p>
+    <div class="actions" *ngIf="report.status === 'PENDING'">
+      <button class="btn secondary" (click)="moderate.emit({ report, action: 'IGNORE' })">Ignore</button>
+      <button class="btn primary" (click)="moderate.emit({ report, action: 'HIDE' })">Hide</button>
+    </div>
+  </article>
+</div>

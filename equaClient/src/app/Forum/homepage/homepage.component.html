@@ -1,1 +1,49 @@
-<p>homepage works!</p>
+<div class="forum-container">
+  <header class="page-header">
+    <h1>Community</h1>
+    <p class="subtitle">Community discussions, messages, and report moderation.</p>
+  </header>
+  <p class="state-message" *ngIf="loading">Loading community...</p>
+  <p class="state-message error" *ngIf="errorMessage">{{ errorMessage }}</p>
+  <p class="state-message error" *ngIf="moderationError">{{ moderationError }}</p>
+
+  <div class="forum-grid">
+    <app-forum-topics-list
+      class="panel topics-panel"
+      [topics]="filteredTopics"
+      [selectedTopicId]="selectedTopic?.topicId ?? null"
+      [search]="search"
+      [newTopicTitle]="newTopicTitle"
+      [newTopicDescription]="newTopicDescription"
+      (searchChange)="search = $event"
+      (newTopicTitleChange)="newTopicTitle = $event"
+      (newTopicDescriptionChange)="newTopicDescription = $event"
+      (createTopic)="createTopic()"
+      (topicSelected)="selectTopic($event)">
+    </app-forum-topics-list>
+
+    <app-forum-discussion
+      class="panel discussion-panel"
+      [selectedTopic]="selectedTopic"
+      [newMessage]="newMessage"
+      [gifUrl]="gifUrl"
+      [reportReason]="reportReason"
+      (newMessageChange)="newMessage = $event"
+      (gifUrlChange)="gifUrl = $event"
+      (reportReasonChange)="reportReason = $event"
+      (sendMessage)="addMessage()"
+      (reportTopic)="reportCurrentTopic()"
+      (reportMessage)="reportMessage($event.messageId)"
+      (editTopic)="editCurrentTopic()"
+      (deleteTopic)="deleteCurrentTopic()"
+      (editMessage)="editMessage($event)"
+      (deleteMessage)="deleteMessage($event)">
+    </app-forum-discussion>
+
+    <app-forum-moderation
+      class="panel moderation-panel"
+      [reports]="reports"
+      (moderate)="moderateReport($event.report, $event.action)">
+    </app-forum-moderation>
+  </div>
+</div>

@@ -1,0 +1,68 @@
+<div class="panel-head" *ngIf="selectedTopic">
+  <h2>Discussion</h2>
+  <span class="count">#{{ selectedTopic.topicId }}</span>
+</div>
+
+<ng-container *ngIf="selectedTopic as topic">
+  <div class="topic-summary">
+    <h3>{{ topic.title }}</h3>
+    <p>{{ topic.description }}</p>
+    <div class="topic-actions">
+      <app-ui-button label="Report topic" variant="secondary" size="md" (clicked)="reportTopic.emit()"></app-ui-button>
+      <button class="inline-action" (click)="editTopic.emit()">Edit topic</button>
+      <button class="inline-action danger" (click)="deleteTopic.emit()">Delete topic</button>
+    </div>
+  </div>
+
+  <div class="messages">
+    <div class="message" *ngFor="let message of topic.messages">
+      <div class="avatar">{{ message.authorUsername[0] | uppercase }}</div>
+      <div class="bubble">
+        <div class="bubble-meta">
+          <strong>{{ message.authorUsername }}</strong>
+          <span>{{ message.createdAt | date:'short' }}</span>
+        </div>
+        <p *ngIf="message.messageText">{{ message.messageText }}</p>
+        <img *ngIf="message.gifUrl" [src]="message.gifUrl" alt="gif message" class="message-gif" (error)="onGifError($event)" />
+        <div class="message-actions">
+          <button class="report-link" (click)="reportMessage.emit(message)">Report</button>
+          <button class="inline-action" (click)="editMessage.emit(message)">Edit</button>
+          <button class="inline-action danger" (click)="deleteMessage.emit(message)">Delete</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="report-box">
+    <app-ui-input
+      type="text"
+      name="reportReason"
+      placeholder="Report reason (topic/message)"
+      [value]="reportReason"
+      (valueChange)="reportReasonChange.emit($event)">
+    </app-ui-input>
+  </div>
+
+  <div class="composer">
+    <app-ui-input
+      type="text"
+      name="gifUrl"
+      placeholder="GIF URL (optional)"
+      [value]="gifUrl"
+      (valueChange)="gifUrlChange.emit($event)">
+    </app-ui-input>
+    <app-ui-input
+      type="text"
+      name="newMessage"
+      placeholder="Write a message..."
+      [value]="newMessage"
+      (valueChange)="newMessageChange.emit($event)">
+    </app-ui-input>
+    <app-ui-button
+      label="Send"
+      variant="primary"
+      size="md"
+      (clicked)="sendMessage.emit()">
+    </app-ui-button>
+  </div>
+</ng-container>
