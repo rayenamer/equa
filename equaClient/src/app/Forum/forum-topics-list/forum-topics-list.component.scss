@@ -1,0 +1,109 @@
+.panel-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 0.9rem;
+
+  h2 {
+    margin: 0;
+    font-size: 1rem;
+    font-weight: 700;
+  }
+
+  .count {
+    color: #9ca3af;
+    font-size: 0.85rem;
+  }
+}
+
+.create-topic {
+  display: grid;
+  gap: 0.55rem;
+  margin-bottom: 0.85rem;
+}
+
+.filters {
+  display: grid;
+  gap: 0.7rem;
+  margin-bottom: 0.8rem;
+}
+
+.chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+}
+
+.chip {
+  border: 1px solid #374151;
+  background: #0f172a;
+  color: #cbd5e1;
+  padding: 0.35rem 0.6rem;
+  border-radius: 999px;
+  font-size: 0.75rem;
+  cursor: pointer;
+}
+
+.chip.active {
+  background: #2563eb;
+  border-color: #2563eb;
+  color: #fff;
+}
+
+.topic-list {
+  display: grid;
+  gap: 0.7rem;
+}
+
+.topic-item {
+  border: 1px solid #253041;
+  background: #0f172a;
+  border-radius: 10px;
+  padding: 0.75rem;
+  cursor: pointer;
+}
+
+.topic-item.selected {
+  border-color: #3b82f6;
+}
+
+.row-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+h3 {
+  margin: 0;
+  font-size: 0.95rem;
+}
+
+p {
+  margin: 0.45rem 0 0;
+  color: #d1d5db;
+  font-size: 0.86rem;
+}
+
+.meta {
+  margin-top: 0.5rem;
+  display: flex;
+  gap: 0.6rem;
+  flex-wrap: wrap;
+  color: #9ca3af;
+  font-size: 0.76rem;
+}
+
+.status {
+  font-size: 0.68rem;
+  font-weight: 700;
+  padding: 0.2rem 0.5rem;
+  border-radius: 999px;
+  background: #1e3a8a;
+  color: #dbeafe;
+}
+
+.status.hidden {
+  background: #7f1d1d;
+  color: #fecaca;
+}
