@@ -25,76 +25,78 @@
     <!-- ────────────────── TAB 1 : RATIOS ────────────────── -->
     @if (activeTab === 'ratios') {
     <div class="tab-content animate-in">
+        <div class="ratios-layout">
 
-        <!-- Liquidity -->
-        <div class="section-block">
-            <div class="section-label">Ratios de Liquidité</div>
-            <div class="ratios-grid">
-                @for (r of ratiosLiquidite; track r.nom) {
-                <div class="ratio-card" [class]="'s-' + r.statut">
-                    <div class="ratio-top">
-                        <span class="ratio-icon">{{ r.icon }}</span>
-                        <span class="ratio-statut" [class]="'st-' + r.statut">
-                            {{ r.statut === 'bon' ? 'Bon' : r.statut === 'moyen' ? 'Moyen' : 'Risque' }}
-                        </span>
+            <!-- Liquidity -->
+            <div class="section-block">
+                <div class="section-label">Ratios de Liquidité</div>
+                <div class="ratios-grid">
+                    @for (r of ratiosLiquidite; track r.nom) {
+                    <div class="ratio-card" [class]="'s-' + r.statut">
+                        <div class="ratio-top">
+                            <span class="ratio-icon">{{ r.icon }}</span>
+                            <span class="ratio-statut" [class]="'st-' + r.statut">
+                                {{ r.statut === 'bon' ? 'Bon' : r.statut === 'moyen' ? 'Moyen' : 'Risque' }}
+                            </span>
+                        </div>
+                        <div class="ratio-value">{{ r.valeur }}</div>
+                        <div class="ratio-name">{{ r.nom }}</div>
+                        <div class="ratio-formule">{{ r.formule }}</div>
+                        @if (r.seuil) {
+                        <div class="ratio-seuil">Seuil : <strong>{{ r.seuil }}</strong></div>
+                        }
+                        <div class="ratio-desc">{{ r.description }}</div>
                     </div>
-                    <div class="ratio-value">{{ r.valeur }}</div>
-                    <div class="ratio-name">{{ r.nom }}</div>
-                    <div class="ratio-formule">{{ r.formule }}</div>
-                    @if (r.seuil) {
-                    <div class="ratio-seuil">Seuil : <strong>{{ r.seuil }}</strong></div>
                     }
-                    <div class="ratio-desc">{{ r.description }}</div>
                 </div>
-                }
             </div>
-        </div>
 
-        <!-- Solvability -->
-        <div class="section-block">
-            <div class="section-label">Ratios de Solvabilité</div>
-            <div class="ratios-grid">
-                @for (r of ratiosSolvabilite; track r.nom) {
-                <div class="ratio-card" [class]="'s-' + r.statut">
-                    <div class="ratio-top">
-                        <span class="ratio-icon">{{ r.icon }}</span>
-                        <span class="ratio-statut" [class]="'st-' + r.statut">
-                            {{ r.statut === 'bon' ? 'Bon' : r.statut === 'moyen' ? 'Moyen' : 'Risque' }}
-                        </span>
+            <!-- Solvability -->
+            <div class="section-block">
+                <div class="section-label">Ratios de Solvabilité</div>
+                <div class="ratios-grid">
+                    @for (r of ratiosSolvabilite; track r.nom) {
+                    <div class="ratio-card" [class]="'s-' + r.statut">
+                        <div class="ratio-top">
+                            <span class="ratio-icon">{{ r.icon }}</span>
+                            <span class="ratio-statut" [class]="'st-' + r.statut">
+                                {{ r.statut === 'bon' ? 'Bon' : r.statut === 'moyen' ? 'Moyen' : 'Risque' }}
+                            </span>
+                        </div>
+                        <div class="ratio-value">{{ r.valeur }}</div>
+                        <div class="ratio-name">{{ r.nom }}</div>
+                        <div class="ratio-formule">{{ r.formule }}</div>
+                        @if (r.seuil) {
+                        <div class="ratio-seuil">Seuil : <strong>{{ r.seuil }}</strong></div>
+                        }
+                        <div class="ratio-desc">{{ r.description }}</div>
                     </div>
-                    <div class="ratio-value">{{ r.valeur }}</div>
-                    <div class="ratio-name">{{ r.nom }}</div>
-                    <div class="ratio-formule">{{ r.formule }}</div>
-                    @if (r.seuil) {
-                    <div class="ratio-seuil">Seuil : <strong>{{ r.seuil }}</strong></div>
                     }
-                    <div class="ratio-desc">{{ r.description }}</div>
                 </div>
-                }
             </div>
-        </div>
 
-        <!-- Profitability -->
-        <div class="section-block">
-            <div class="section-label">Ratios de Rentabilité</div>
-            <div class="ratios-grid four">
-                @for (r of ratiosProfitabilite; track r.nom) {
-                <div class="ratio-card" [class]="'s-' + r.statut">
-                    <div class="ratio-top">
-                        <span class="ratio-icon">{{ r.icon }}</span>
-                        <span class="ratio-statut" [class]="'st-' + r.statut">
-                            {{ r.statut === 'bon' ? 'Bon' : 'Moyen' }}
-                        </span>
+            <!-- Profitability -->
+            <div class="section-block">
+                <div class="section-label">Ratios de Rentabilité</div>
+                <div class="ratios-grid four">
+                    @for (r of ratiosProfitabilite; track r.nom) {
+                    <div class="ratio-card" [class]="'s-' + r.statut">
+                        <div class="ratio-top">
+                            <span class="ratio-icon">{{ r.icon }}</span>
+                            <span class="ratio-statut" [class]="'st-' + r.statut">
+                                {{ r.statut === 'bon' ? 'Bon' : 'Moyen' }}
+                            </span>
+                        </div>
+                        <div class="ratio-value pct">{{ r.valeur }}</div>
+                        <div class="ratio-name">{{ r.nom }}</div>
+                        <div class="ratio-formule">{{ r.formule }}</div>
+                        <div class="ratio-desc">{{ r.description }}</div>
                     </div>
-                    <div class="ratio-value pct">{{ r.valeur }}</div>
-                    <div class="ratio-name">{{ r.nom }}</div>
-                    <div class="ratio-formule">{{ r.formule }}</div>
-                    <div class="ratio-desc">{{ r.description }}</div>
+                    }
                 </div>
-                }
             </div>
-        </div>
 
+        </div>
     </div>
     }
 
