@@ -17,6 +17,28 @@ export class ForumDiscussionComponent {
   @Input() gifUrl = '';
   @Input() reportReason = '';
   showComposer = false;
+  showGifPicker = false;
+
+  readonly availableGifs = [
+    'https://media.tenor.com/JGp00a_5sjsAAAAM/the-office-michael-scott.gif',
+    'https://media.tenor.com/kQA86PqyXZQAAAAj/small-dancing-white-cat-dance-funny.gif',
+    'https://media.tenor.com/Bav2QWeveKgAAAAj/best-banana-cat.gif',
+    'https://media.tenor.com/g485TTq4thoAAAAj/cat-cat-dance.gif',
+    'https://media3.giphy.com/media/v1.Y2lkPTc5MGI3NjExeTYweW4waWN0YWs2Y3d3YjFqYmlvc3phM2NjNjgzdGZiNWN6cHFjNSZlcD12MV9naWZzX3NlYXJjaCZjdD1n/wJ2PzfofCXw1q/200.webp',
+    'https://media0.giphy.com/media/v1.Y2lkPTc5MGI3NjExMWZ2bWVtbWE0YmsyMzNrODN5a2RvaHlmaHh2Y2c5YWc4OTQ1ZDFraSZlcD12MV9naWZzX3NlYXJjaCZjdD1n/BYoRqTmcgzHcL9TCy1/giphy.webp',
+    'https://media4.giphy.com/media/v1.Y2lkPTc5MGI3NjExanBrd3pndHVvODJ3YnRpY2JoMDlzeHNqdWEzYWc2cjJsYTh6d3kwZCZlcD12MV9naWZzX3NlYXJjaCZjdD1n/JpG2A9P3dPHXaTYrwu/200.webp',
+    'https://media1.giphy.com/media/v1.Y2lkPTc5MGI3NjExanBrd3pndHVvODJ3YnRpY2JoMDlzeHNqdWEzYWc2cjJsYTh6d3kwZCZlcD12MV9naWZzX3NlYXJjaCZjdD1n/xTiTnqUxyWbsAXq7Ju/giphy.webp',
+    'https://media2.giphy.com/media/v1.Y2lkPTc5MGI3NjExbTEyeG8ycXlmOGR6MWtnOWNieTdnbHcwdGxid2F2ZXBuMm5xMTM0OCZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/12Eo7WogCAoj84/giphy.gif'
+  ];
+
+  selectGif(url: string): void {
+    this.gifUrlChange.emit(url);
+    this.showGifPicker = false;
+  }
+
+  clearGif(): void {
+    this.gifUrlChange.emit('');
+  }
 
   @Output() newMessageChange = new EventEmitter<string>();
   @Output() gifUrlChange = new EventEmitter<string>();

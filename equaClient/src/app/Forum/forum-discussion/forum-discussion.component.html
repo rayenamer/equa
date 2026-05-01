@@ -51,9 +51,29 @@
         <button class="close-btn" (click)="showComposer = false">&times;</button>
       </div>
       <div class="composer-body">
-        <app-ui-input type="text" name="gifUrl" placeholder="GIF URL (optional)" [value]="gifUrl"
-          (valueChange)="gifUrlChange.emit($event)">
-        </app-ui-input>
+        <!-- GIF Picker -->
+        <div class="gif-picker-area">
+          <div class="gif-toggle-bar">
+            <button type="button" class="gif-toggle-btn" (click)="showGifPicker = !showGifPicker">
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="none" stroke="currentColor"
+                stroke-width="2" viewBox="0 0 24 24">
+                <rect x="3" y="3" width="18" height="18" rx="2" />
+                <circle cx="8.5" cy="8.5" r="1.5" />
+                <polyline points="21 15 16 10 5 21" />
+              </svg>
+              GIF
+            </button>
+            <span class="gif-selected-label" *ngIf="gifUrl">
+              <img [src]="gifUrl" class="gif-thumb-preview" alt="Selected GIF" />
+              <button type="button" class="gif-clear-btn" (click)="clearGif()">&times;</button>
+            </span>
+          </div>
+
+          <div class="gif-gallery" *ngIf="showGifPicker && !gifUrl">
+            <img *ngFor="let g of availableGifs" [src]="g" class="gif-thumb" [class.selected]="gifUrl === g"
+              (click)="selectGif(g)" alt="gif option" />
+          </div>
+        </div>
         <app-ui-input type="text" name="newMessage" placeholder="What's on your mind?..." [value]="newMessage"
           (valueChange)="newMessageChange.emit($event)">
         </app-ui-input>
