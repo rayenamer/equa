@@ -1,0 +1,35 @@
+<div class="how-page">
+
+    <div class="page-header">
+        <h1 class="page-title">Comment fonctionne EQUA Business ?</h1>
+        <p class="page-sub">Un système de gestion comptable et financière intégré à votre activité sur EQUA</p>
+    </div>
+
+    <div class="steps-grid">
+        @for (step of steps; track step.number) {
+        <div class="step-card">
+            <div class="step-number">{{ step.number }}</div>
+            <div class="step-icon">
+                <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" fill="none" stroke="currentColor"
+                    stroke-width="1.6" viewBox="0 0 24 24">
+                    <path [attr.d]="step.icon"></path>
+                </svg>
+            </div>
+            <h3 class="step-title">{{ step.title }}</h3>
+            <p class="step-body">{{ step.body }}</p>
+        </div>
+        }
+    </div>
+
+    <div class="cta-section">
+        <div class="cta-card">
+            <h2>Prêt à commencer ?</h2>
+            <p>Accédez à vos mouvements comptables ou consultez votre état financier directement depuis le menu.</p>
+            <div class="cta-actions">
+                <a routerLink="/business/mouvements" class="btn-primary">Voir les mouvements</a>
+                <a routerLink="/business/finance" class="btn-secondary">Analyse financière</a>
+            </div>
+        </div>
+    </div>
+
+</div>

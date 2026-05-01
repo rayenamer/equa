@@ -20,8 +20,12 @@ export class BusinessHomepageComponent {
     ) { }
 
     navItems: NavMenuItem[] = [
+        { label: 'Gérer', type: 'header' },
         { label: 'Mouvements', sectionId: '/business/mouvements' },
-        { label: 'Finance', sectionId: '/business/finance' }
+        { label: 'Finance', sectionId: '/business/finance' },
+        { label: 'Portefeuille', sectionId: '/business/portfolio' },
+        { label: 'Guide', type: 'header' },
+        { label: 'Comment ça marche', sectionId: '/business/how-it-works' },
     ];
 
     /** Switch back to individual mode and navigate to user area */
