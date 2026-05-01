@@ -1,0 +1,90 @@
+.panel-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 0.9rem;
+
+  h2 {
+    margin: 0;
+    font-size: 1rem;
+    font-weight: 700;
+  }
+
+  .count {
+    color: #9ca3af;
+    font-size: 0.85rem;
+  }
+}
+
+.report-list {
+  display: grid;
+  gap: 0.7rem;
+}
+
+.report-item {
+  border: 1px solid #253041;
+  background: #0f172a;
+  border-radius: 10px;
+  padding: 0.75rem;
+}
+
+.report-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+p {
+  margin: 0.45rem 0 0;
+  color: #d1d5db;
+  font-size: 0.86rem;
+}
+
+.meta {
+  color: #9ca3af;
+  font-size: 0.76rem;
+}
+
+.status,
+.badge {
+  font-size: 0.68rem;
+  font-weight: 700;
+  padding: 0.2rem 0.5rem;
+  border-radius: 999px;
+  background: #1e3a8a;
+  color: #dbeafe;
+}
+
+.status.done {
+  background: #14532d;
+  color: #bbf7d0;
+}
+
+.reason {
+  font-weight: 600;
+}
+
+.actions {
+  margin-top: 0.55rem;
+  display: flex;
+  gap: 0.45rem;
+}
+
+.btn {
+  border: 0;
+  border-radius: 8px;
+  padding: 0.38rem 0.65rem;
+  font-size: 0.76rem;
+  cursor: pointer;
+}
+
+.btn.primary {
+  background: #dc2626;
+  color: #fff;
+}
+
+.btn.secondary {
+  background: #374151;
+  color: #f3f4f6;
+}

@@ -42,6 +42,7 @@ export class NavMenuComponent implements OnDestroy {
   private readonly authenticatedItems: NavMenuItem[] = [
     { label: 'Send / Receive', route: '/blockchain' },
     { label: 'Invest', route: '/financial-market' },
+    { label: 'Community', route: '/forum' },
     { label: 'Wallet Overview', route: 'coming-soon' },
     { label: 'Borrow', route: '/coming-soon' }
   ];

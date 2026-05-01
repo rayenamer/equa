@@ -1,0 +1,51 @@
+<div class="panel-head">
+  <h2>Topics</h2>
+  <span class="count">{{ topics.length }}</span>
+</div>
+
+<div class="create-topic">
+  <app-ui-input
+    type="text"
+    name="newTopicTitle"
+    placeholder="Topic title"
+    [value]="newTopicTitle"
+    (valueChange)="newTopicTitleChange.emit($event)">
+  </app-ui-input>
+  <app-ui-input
+    type="text"
+    name="newTopicDescription"
+    placeholder="Topic description"
+    [value]="newTopicDescription"
+    (valueChange)="newTopicDescriptionChange.emit($event)">
+  </app-ui-input>
+  <app-ui-button label="Create" variant="primary" size="md" (clicked)="createTopic.emit()"></app-ui-button>
+</div>
+
+<div class="filters">
+  <app-ui-input
+    type="text"
+    name="search"
+    placeholder="Search topics..."
+    [value]="search"
+    (valueChange)="searchChange.emit($event)">
+  </app-ui-input>
+</div>
+
+<div class="topic-list">
+  <article
+    *ngFor="let topic of topics"
+    class="topic-item"
+    [class.selected]="selectedTopicId === topic.topicId"
+    (click)="topicSelected.emit(topic)">
+    <div class="row-top">
+      <h3>{{ topic.title }}</h3>
+      <span class="status" [class.hidden]="topic.hidden">{{ topic.hidden ? 'HIDDEN' : 'OPEN' }}</span>
+    </div>
+    <p>{{ topic.description }}</p>
+    <div class="meta">
+      <span>{{ topic.createdByUsername }}</span>
+      <span>{{ topic.messages?.length || 0 }} replies</span>
+      <span>{{ topic.createdAt | date:'short' }}</span>
+    </div>
+  </article>
+</div>
