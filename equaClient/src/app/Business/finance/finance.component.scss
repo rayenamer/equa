@@ -112,12 +112,32 @@
 
 /* ── Ratio cards ── */
 .ratios-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    display: flex;
+    flex-wrap: nowrap;
     gap: 1rem;
+    overflow-x: auto;
+    padding-bottom: 0.5rem;
 
-    &.four {
-        grid-template-columns: repeat(auto-fill, minmax(230px, 1fr));
+    // Scrollbar styling
+    &::-webkit-scrollbar {
+        height: 5px;
+    }
+
+    &::-webkit-scrollbar-track {
+        background: transparent;
+    }
+
+    &::-webkit-scrollbar-thumb {
+        background: rgba(255, 255, 255, 0.12);
+        border-radius: 10px;
+    }
+
+    .ratio-card {
+        flex: 0 0 220px;
+    }
+
+    &.four .ratio-card {
+        flex: 0 0 200px;
     }
 }
 
@@ -493,6 +513,10 @@
     }
 
     .ratios-grid {
-        grid-template-columns: 1fr;
+        flex-wrap: wrap;
+
+        .ratio-card {
+            flex: 0 0 100%;
+        }
     }
 }

@@ -6,6 +6,8 @@ import { HomepageComponent as ForumHomepage } from './Forum/homepage/homepage.co
 import { BusinessHomepageComponent } from './Business/homepage/homepage.component';
 import { MouvementsComponent } from './Business/mouvements/mouvements.component';
 import { FinanceComponent } from './Business/finance/finance.component';
+import { BusinessPortfolioComponent } from './Business/portfolio/portfolio.component';
+import { BusinessHowItWorksComponent } from './Business/how-it-works/how-it-works.component';
 import { HomepageComponent as LoanHomepage } from './Loan/homepage/homepage.component';
 import { HomepageComponent as UserHomepage } from './User/homepage/homepage.component';
 import { HomepageComponent as WalletHomepage } from './Wallet/homepage/homepage.component';
@@ -113,7 +115,9 @@ export const routes: Routes = [
         children: [
             { path: '', redirectTo: 'mouvements', pathMatch: 'full' },
             { path: 'mouvements', component: MouvementsComponent },
-            { path: 'finance', component: FinanceComponent }
+            { path: 'finance', component: FinanceComponent },
+            { path: 'portfolio', component: BusinessPortfolioComponent },
+            { path: 'how-it-works', component: BusinessHowItWorksComponent }
         ]
     },
     {
