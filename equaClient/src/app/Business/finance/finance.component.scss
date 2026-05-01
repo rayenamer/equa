@@ -95,6 +95,21 @@
     padding-bottom: 3rem;
 }
 
+/* ── Ratios Layout ── */
+.ratios-layout {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 2rem;
+    align-items: flex-start;
+
+    .section-block {
+        margin-bottom: 1.5rem;
+        flex: 1 1 300px;
+        min-width: 300px;
+        max-width: 100%;
+    }
+}
+
 /* ── Section block ── */
 .section-block {
     margin-bottom: 2.5rem;
@@ -419,8 +434,6 @@
     grid-template-columns: repeat(3, 1fr);
     gap: 1.5rem;
 }
-
-.flux-section {}
 
 .flux-section-title {
     font-size: 0.78rem;
