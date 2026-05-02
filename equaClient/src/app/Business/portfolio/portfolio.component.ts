@@ -17,22 +17,31 @@ export class BusinessPortfolioComponent implements OnInit {
     equaWallet: WalletDTO | null = null;
     walletExists = false;
     showSendModal = false;
+    currentBusinessId: number | null = null;
 
     sendForm = { recipientId: '', montant: null as number | null };
 
     constructor(private apiService: ApiService) { }
 
     ngOnInit(): void {
-        this.apiService.getMyWallet().pipe(
-            catchError(() => of(null))
-        ).subscribe(wallet => {
-            this.equaWallet = wallet;
-            this.walletExists = !!wallet;
+        this.apiService.getBusinesses().subscribe({
+            next: (businesses) => {
+                if (businesses && businesses.length > 0) {
+                    this.currentBusinessId = businesses[0].id;
+                    this.apiService.getBusinessWallet(this.currentBusinessId!).pipe(
+                        catchError(() => of(null))
+                    ).subscribe(wallet => {
+                        this.equaWallet = wallet;
+                        this.walletExists = !!wallet;
+                    });
+                }
+            }
         });
     }
 
     createEquaWallet(): void {
-        this.apiService.createWallet().subscribe(wallet => {
+        if (!this.currentBusinessId) return;
+        this.apiService.createBusinessWallet(this.currentBusinessId).subscribe(wallet => {
             this.equaWallet = wallet;
             this.walletExists = true;
         });
