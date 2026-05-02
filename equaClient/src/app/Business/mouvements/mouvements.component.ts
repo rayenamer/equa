@@ -1,6 +1,9 @@
-import { Component, signal } from '@angular/core';
+import { Component, signal, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { ApiService } from '../../services/api.service';
+import { TransactionService } from '../../BlockChain/services/transaction.service';
+import { Transaction } from '../../BlockChain/models/transaction.model';
 
 export interface Mouvement {
     id: number;
@@ -20,23 +23,20 @@ export interface Mouvement {
     templateUrl: './mouvements.component.html',
     styleUrl: './mouvements.component.scss'
 })
-export class MouvementsComponent {
-    activeTab: 'comptabilite' | 'nouveau' = 'comptabilite';
+export class MouvementsComponent implements OnInit {
+    activeTab: 'comptabilite' | 'nouveau' | 'transactions' = 'comptabilite';
     filterType: 'all' | 'sortant' | 'entrant' = 'all';
     searchTerm = '';
 
-    // ─── Sample data for analytical accounting display ───────────────────────
-    mouvements: Mouvement[] = [
-        // Pending movements
-        { id: 101, date: '2026-05-01', libelle: 'Virement entrant inconnu', type: 'entrant', compte: 'À définir', montant: 45000, categorie: 'À définir', statut: 'en_attente' },
-        { id: 102, date: '2026-04-30', libelle: 'Prélèvement fournisseur', type: 'sortant', compte: 'À définir', montant: 12000, categorie: 'À définir', statut: 'en_attente' },
-        // Validated movements
-        { id: 1, date: '2026-04-28', libelle: 'Vente produit A', type: 'entrant', compte: '701 – Ventes marchandises', montant: 125000, categorie: 'Chiffre d\'affaires', statut: 'valide' },
-        { id: 2, date: '2026-04-27', libelle: 'Achat matières premières', type: 'sortant', compte: '601 – Achats matières', montant: 48000, categorie: 'Charges opérationnelles', statut: 'valide' },
-        { id: 3, date: '2026-04-26', libelle: 'Salaires Avril', type: 'sortant', compte: '641 – Charges de personnel', montant: 72000, categorie: 'Charges de personnel', statut: 'valide' },
-        { id: 4, date: '2026-04-25', libelle: 'Loyer bureau', type: 'sortant', compte: '613 – Locations', montant: 18000, categorie: 'Charges générales', statut: 'valide' },
-        { id: 6, date: '2026-04-23', libelle: 'Service consulting', type: 'entrant', compte: '706 – Prestations services', montant: 37500, categorie: 'Chiffre d\'affaires', statut: 'valide' },
-    ];
+    // ─── Real data for analytical accounting ──────────────────────────────────
+    mouvements: Mouvement[] = [];
+    currentBusinessId: number | null = null;
+    isLoading = false;
+
+    // ─── Wallet transactions ───────────────────────────────────────────────────
+    walletTransactions: Transaction[] = [];
+    myWallet: any = null;
+    myWalletId: string = '';
 
     // ─── New movement form ────────────────────────────────────────────────────
     newMouvement = {
@@ -74,6 +74,64 @@ export class MouvementsComponent {
     formSubmitted = false;
     showSuccess = false;
 
+    constructor(private apiService: ApiService, private transactionService: TransactionService) { }
+
+    ngOnInit(): void {
+        this.loadBusinessContext();
+    }
+
+    loadBusinessContext(): void {
+        this.isLoading = true;
+        this.apiService.getBusinesses().subscribe({
+            next: (businesses) => {
+                if (businesses && businesses.length > 0) {
+                    this.currentBusinessId = businesses[0].id;
+                    this.loadMouvements();
+                    this.loadWalletTransactions();
+                }
+            },
+            error: (err) => {
+                console.error('Error loading business', err);
+                this.isLoading = false;
+            }
+        });
+    }
+
+    loadMouvements(): void {
+        if (!this.currentBusinessId) return;
+        this.apiService.getMouvements(this.currentBusinessId).subscribe({
+            next: (data) => {
+                this.mouvements = data;
+                this.isLoading = false;
+            },
+            error: (err) => {
+                console.error('Error loading mouvements', err);
+                this.isLoading = false;
+            }
+        });
+    }
+
+    loadWalletTransactions(): void {
+        this.apiService.getMyWallet().subscribe({
+            next: (wallet) => {
+                if (wallet) {
+                    this.myWallet = wallet;
+                    const identifier = wallet.publicKey || (wallet as any).walletId || (wallet.id ? wallet.id.toString() : '');
+                    this.myWalletId = identifier;
+
+                    this.transactionService.getAllTransactions().subscribe({
+                        next: (txs) => {
+                            const userTxs = txs.filter(tx => tx.fromWallet === identifier || tx.toWallet === identifier);
+                            this.walletTransactions = userTxs.length > 0 ? userTxs : txs;
+                        },
+                        error: (err) => console.error('Error loading transactions', err)
+                    });
+                }
+            },
+            error: (err) => console.error('Error loading wallet', err)
+        });
+    }
+
     get pendingMouvements(): Mouvement[] {
         return this.mouvements.filter(m => m.statut === 'en_attente');
     }
@@ -106,23 +164,28 @@ export class MouvementsComponent {
     submitMouvement(): void {
         this.formSubmitted = true;
         if (!this.newMouvement.libelle || !this.newMouvement.compte || !this.newMouvement.montant || !this.newMouvement.categorie) return;
+        if (!this.currentBusinessId) return;
 
-        // TODO: send to API when business backend is ready
-        const entry: Mouvement = {
-            id: this.mouvements.length + 1,
+        const payload = {
             date: this.newMouvement.date,
             libelle: this.newMouvement.libelle,
             type: this.newMouvement.type,
             compte: this.newMouvement.compte,
-            montant: this.newMouvement.montant!,
+            montant: this.newMouvement.montant,
             categorie: this.newMouvement.categorie,
             statut: this.newMouvement.statut
         };
-        this.mouvements.unshift(entry);
-        this.showSuccess = true;
-        this.formSubmitted = false;
-        this.resetForm();
-        setTimeout(() => { this.showSuccess = false; }, 4000);
+
+        this.apiService.addMouvement(this.currentBusinessId, payload).subscribe({
+            next: (savedMouvement) => {
+                this.mouvements.unshift(savedMouvement);
+                this.showSuccess = true;
+                this.formSubmitted = false;
+                this.resetForm();
+                setTimeout(() => { this.showSuccess = false; }, 4000);
+            },
+            error: (err) => console.error('Error adding mouvement', err)
+        });
     }
 
     resetForm(): void {
@@ -138,9 +201,44 @@ export class MouvementsComponent {
         };
     }
 
-    setTab(tab: 'comptabilite' | 'nouveau'): void {
+    setTab(tab: 'comptabilite' | 'nouveau' | 'transactions'): void {
         this.activeTab = tab;
         this.showSuccess = false;
+    }
+
+    isSortant(tx: Transaction): boolean {
+        if (!tx || !this.myWallet) return false;
+        const fromW = String(tx.fromWallet).toLowerCase().trim();
+        const pk = this.myWallet.publicKey ? String(this.myWallet.publicKey).toLowerCase().trim() : '';
+        const wid = (this.myWallet as any).walletId ? String((this.myWallet as any).walletId).toLowerCase().trim() : '';
+        const idStr = this.myWallet.id ? String(this.myWallet.id).toLowerCase().trim() : '';
+        return fromW === pk || fromW === wid || fromW === idStr;
+    }
+
+    importTransaction(tx: Transaction): void {
+        if (!this.currentBusinessId) return;
+
+        const type = this.isSortant(tx) ? 'sortant' : 'entrant';
+        const dateStr = new Date(tx.timestamp).toISOString().slice(0, 10);
+
+        const payload = {
+            date: dateStr,
+            libelle: `Transaction TX-${tx.transactionHash ? tx.transactionHash.substring(0, 8) : '000'}`,
+            type: type,
+            compte: 'Transaction Blockchain',
+            montant: tx.amount,
+            categorie: 'Exceptionnel',
+            statut: 'en_attente'
+        };
+
+        this.apiService.addMouvement(this.currentBusinessId, payload).subscribe({
+            next: (savedMouvement) => {
+                this.mouvements.unshift(savedMouvement);
+                this.showSuccess = true;
+                setTimeout(() => { this.showSuccess = false; }, 4000);
+            },
+            error: (err) => console.error('Error importing transaction as mouvement', err)
+        });
     }
 
     getCatCredit(cat: string): number {
@@ -180,13 +278,22 @@ export class MouvementsComponent {
     confirmClassification(): void {
         if (!this.selectedMovementToClassify || !this.classificationForm.compte || !this.classificationForm.categorie) return;
 
-        this.selectedMovementToClassify.compte = this.classificationForm.compte;
-        this.selectedMovementToClassify.categorie = this.classificationForm.categorie;
-        this.selectedMovementToClassify.statut = 'valide';
-
-        // Form refresh triggered
-        this.mouvements = [...this.mouvements];
-        this.selectedMovementToClassify = null;
+        this.apiService.classifyMouvement(
+            this.selectedMovementToClassify.id,
+            'valide',
+            this.classificationForm.compte,
+            this.classificationForm.categorie
+        ).subscribe({
+            next: (updatedMouvement) => {
+                const idx = this.mouvements.findIndex(m => m.id === updatedMouvement.id);
+                if (idx !== -1) {
+                    this.mouvements[idx] = updatedMouvement;
+                }
+                this.mouvements = [...this.mouvements];
+                this.selectedMovementToClassify = null;
+            },
+            error: (err) => console.error('Error classifying', err)
+        });
     }
 
     formatAmount(n: number): string {

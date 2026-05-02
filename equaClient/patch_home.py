@@ -1,4 +1,7 @@
-<div class="business-layout">
+with open('/home/rayounouna/equa/equaClient/src/app/Business/homepage/homepage.component.html', 'r') as f:
+    content = f.read()
+
+new_content = """<div class="business-layout">
 
   <div class="content-wrapper">
     <app-blockchain-sidebar [navItems]="navItems"></app-blockchain-sidebar>
@@ -44,3 +47,7 @@
     </main>
   </div>
 </div>
+"""
+
+with open('/home/rayounouna/equa/equaClient/src/app/Business/homepage/homepage.component.html', 'w') as f:
+    f.write(new_content)

@@ -119,24 +119,30 @@
                 <div class="cr-body">
                     <div class="cr-section">
                         <div class="cr-section-title entrant">PRODUITS D'EXPLOITATION (Classe 7)</div>
-                        <div class="cr-row"><span>Chiffre d'affaires</span><span class="c">3 225 000</span></div>
-                        <div class="cr-row"><span>Production stockée</span><span class="c">125 000</span></div>
-                        <div class="cr-row"><span>Subventions d'exploitation</span><span class="c">50 000</span></div>
-                        <div class="cr-subtotal"><span>Sous-total produits</span><strong class="c">3 400 000</strong>
+                        <div class="cr-row"><span>Chiffre d'affaires</span><span class="c">{{ caTotal | number }}</span>
+                        </div>
+                        <div class="cr-row"><span>Subventions d'exploitation</span><span class="c">{{ subventions |
+                                number }}</span></div>
+                        <div class="cr-subtotal"><span>Sous-total produits</span><strong class="c">{{ caTotal +
+                                subventions | number }}</strong>
                         </div>
                     </div>
                     <div class="cr-section">
                         <div class="cr-section-title sortant">CHARGES D'EXPLOITATION (Classe 6)</div>
-                        <div class="cr-row"><span>Achats & variations stocks</span><span class="d">980 000</span></div>
-                        <div class="cr-row"><span>Charges de personnel</span><span class="d">1 350 000</span></div>
-                        <div class="cr-row"><span>Dotations amortissements</span><span class="d">280 000</span></div>
-                        <div class="cr-row"><span>Autres charges</span><span class="d">390 000</span></div>
-                        <div class="cr-subtotal"><span>Sous-total charges</span><strong class="d">3 000 000</strong>
+                        <div class="cr-row"><span>Achats & variations stocks</span><span class="d">{{ achatsTotal |
+                                number }}</span></div>
+                        <div class="cr-row"><span>Charges de personnel</span><span class="d">{{ chargesPersonnel |
+                                number }}</span></div>
+                        <div class="cr-row"><span>Autres charges</span><span class="d">{{ autresCharges | number
+                                }}</span></div>
+                        <div class="cr-subtotal"><span>Sous-total charges</span><strong class="d">{{ achatsTotal +
+                                chargesPersonnel + autresCharges | number }}</strong>
                         </div>
                     </div>
                     <div class="cr-result">
                         <span>Résultat d'exploitation</span>
-                        <strong>400 000 EQUA</strong>
+                        <strong>{{ (caTotal + subventions) - (achatsTotal + chargesPersonnel + autresCharges) | number
+                            }} EQUA</strong>
                     </div>
                 </div>
             </div>

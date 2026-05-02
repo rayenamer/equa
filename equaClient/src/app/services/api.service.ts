@@ -14,6 +14,80 @@ export class ApiService {
 
   constructor(private http: HttpClient) { }
 
+  private getUserId(): number {
+    // Priority 1: currentUser which strictly defines `id: number`
+    const userStr = localStorage.getItem('currentUser');
+    if (userStr) {
+      try {
+        const user = JSON.parse(userStr);
+        if (user && user.id && !isNaN(Number(user.id))) return Number(user.id);
+      } catch (e) { }
+    }
+
+    // Priority 2: Fallback to JWT decoding (handle non-numeric subs)
+    const token = localStorage.getItem('authToken');
+    if (token) {
+      try {
+        const payload = JSON.parse(atob(token.split('.')[1]));
+        if (payload.id && !isNaN(Number(payload.id))) return Number(payload.id);
+        if (payload.userId && !isNaN(Number(payload.userId))) return Number(payload.userId);
+
+        const subInt = parseInt(payload.sub, 10);
+        if (payload.sub && !isNaN(subInt)) return subInt;
+      } catch (e) {
+        console.error('Error decoding JWT token for userId', e);
+      }
+    }
+
+    return 0; // Or throw error
+  }
+
+  private getSafeUserId(): number {
+    const finalId = this.getUserId();
+    if (isNaN(finalId) || !isFinite(finalId) || finalId === null || finalId === undefined) {
+      console.warn("Extracted userId was invalid/NaN, defaulting to 0");
+      return 0;
+    }
+    return finalId;
+  }
+
+  // --- Business Endpoints ---
+  getBusinesses(): Observable<any[]> {
+    const userId = this.getSafeUserId();
+    if (userId === 0) return new Observable(subj => { subj.next([]); subj.complete(); });
+    return this.http.get<any[]>(`${this.apiUrl}/v1/business/user/${userId}`);
+  }
+
+  createBusiness(business: any): Observable<any> {
+    const userId = this.getSafeUserId();
+    return this.http.post<any>(`${this.apiUrl}/v1/business/user/${userId}`, business);
+  }
+
+  getBusinessWallet(businessId: number): Observable<any> {
+    return this.http.get<any>(`${this.apiUrl}/v1/business/${businessId}/wallet`);
+  }
+
+  createBusinessWallet(businessId: number): Observable<any> {
+    return this.http.post<any>(`${this.apiUrl}/v1/business/${businessId}/wallet`, {});
+  }
+
+  getFinanceRatios(businessId: number): Observable<any> {
+    return this.http.get<any>(`${this.apiUrl}/v1/business/${businessId}/finance`);
+  }
+
+  // --- Mouvement Endpoints ---
+  getMouvements(businessId: number): Observable<any[]> {
+    return this.http.get<any[]>(`${this.apiUrl}/v1/mouvements/business/${businessId}`);
+  }
+
+  addMouvement(businessId: number, mouvement: any): Observable<any> {
+    return this.http.post<any>(`${this.apiUrl}/v1/mouvements/business/${businessId}`, mouvement);
+  }
+
+  classifyMouvement(mouvementId: number, statut: string, compte: string, categorie: string): Observable<any> {
+    return this.http.put<any>(`${this.apiUrl}/v1/mouvements/${mouvementId}/classify?statut=${encodeURIComponent(statut)}&compte=${encodeURIComponent(compte)}&categorie=${encodeURIComponent(categorie)}`, {});
+  }
+
   getProjects(): Observable<Project[]> {
     return this.http.get<Project[]>(`${this.apiUrl}/projects`);
   }
