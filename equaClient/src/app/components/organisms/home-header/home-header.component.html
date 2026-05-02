@@ -1,24 +1,26 @@
-<header class="page-header" [class.business-theme]="isBusinessMode">
+<header class="page-header">
   <div class="header-container">
-    <a [routerLink]="isBusinessMode ? '/business/mouvements' : '/'" class="logo">
-      @if (isBusinessMode) {
-      <span class="logo-icon">⬡</span>
-      <span class="logo-text">EQUA <span class="mode-badge">Business</span></span>
-      } @else {
-      {{ logoText }}
-      }
-    </a>
+    <a href="/" class="logo">{{ logoText }}</a>
 
-    <button type="button" class="header-burger" aria-label="Menu" [class.open]="mobileMenuOpen"
-      (click)="menuToggle.emit()">
+    <button
+      type="button"
+      class="header-burger"
+      aria-label="Menu"
+      [class.open]="mobileMenuOpen"
+      (click)="menuToggle.emit()"
+    >
       <span></span><span></span><span></span>
     </button>
 
-    <app-nav-menu class="header-nav" [items]="navItems" [open]="mobileMenuOpen"
-      (itemClick)="navItemClick.emit($event)" />
+    <app-nav-menu
+      class="header-nav"
+      [items]="navItems"
+      [open]="mobileMenuOpen"
+      (itemClick)="navItemClick.emit($event)"
+    />
 
     <div class="header-cta">
-
+     
     </div>
   </div>
 </header>

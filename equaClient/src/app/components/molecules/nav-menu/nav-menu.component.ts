@@ -3,7 +3,6 @@ import { CommonModule } from '@angular/common';
 import { Router, RouterLink } from '@angular/router';
 import { Subject, takeUntil } from 'rxjs';
 import { AuthService } from '../../../User/services/auth.service';
-import { BusinessModeService } from '../../../services/business-mode.service';
 
 export interface NavMenuItem {
   label: string;
@@ -33,7 +32,6 @@ export class NavMenuComponent implements OnDestroy {
   @Output() itemClick = new EventEmitter<string>();
 
   authenticated = false;
-  isBusinessMode = false;
   private readonly destroy$ = new Subject<void>();
 
   private readonly defaultItems: NavMenuItem[] = [
@@ -44,57 +42,25 @@ export class NavMenuComponent implements OnDestroy {
   private readonly authenticatedItems: NavMenuItem[] = [
     { label: 'Send / Receive', route: '/blockchain' },
     { label: 'Invest', route: '/financial-market' },
-    { label: 'Community', route: '/forum' },
     { label: 'Wallet Overview', route: 'coming-soon' },
     { label: 'Borrow', route: '/coming-soon' }
   ];
 
-  private get authenticatedActionItems(): NavMenuItem[] {
-    return []; // We handle these separately in the dropdown now
-  }
-
-  isUserMenuOpen = false;
-
-  toggleUserMenu(): void {
-    this.isUserMenuOpen = !this.isUserMenuOpen;
-    this.cdr.markForCheck();
-  }
-
-  get userMenuOptions() {
-    if (this.isBusinessMode) {
-      return [
-        { label: 'Mode Individuel', action: () => { this.businessModeService.setMode('individual'); this.router.navigate(['/user/dashboard']); this.isUserMenuOpen = false; } },
-        { label: 'Profile', action: () => { this.router.navigate(['/user']); this.isUserMenuOpen = false; } },
-        { label: 'Déconnexion', action: () => { this.logout(); this.isUserMenuOpen = false; } }
-      ];
-    } else {
-      return [
-        { label: 'Mode Business', action: () => { this.businessModeService.setMode('business'); this.router.navigate(['/business/mouvements']); this.isUserMenuOpen = false; } },
-        { label: 'Profile', action: () => { this.router.navigate(['/user']); this.isUserMenuOpen = false; } },
-        { label: 'Déconnexion', action: () => { this.logout(); this.isUserMenuOpen = false; } }
-      ];
-    }
-  }
+  private readonly authenticatedActionItems: NavMenuItem[] = [
+    { label: 'Profile', route: '/user', icon: '👤', styleType: 'icon' },
+    { label: 'Déconnexion', action: () => this.logout(), styleType: 'button', route: 'home' }
+  ];
 
   private readonly anonymousActionItems: NavMenuItem[] = [
     { label: 'Connexion', route: '/user/login', styleType: 'link' },
   ];
 
-  private readonly authenticatedBusinessItems: NavMenuItem[] = [];
 
-
-  constructor(private authService: AuthService, private router: Router, private cdr: ChangeDetectorRef, private businessModeService: BusinessModeService) {
+  constructor(private authService: AuthService, private router: Router, private cdr: ChangeDetectorRef) {
     this.authService.currentUser$
       .pipe(takeUntil(this.destroy$))
       .subscribe(user => {
         this.authenticated = !!user;
-        this.cdr.markForCheck();
-      });
-
-    this.businessModeService.mode$
-      .pipe(takeUntil(this.destroy$))
-      .subscribe(mode => {
-        this.isBusinessMode = mode === 'business';
         this.cdr.markForCheck();
       });
   }
@@ -113,9 +79,8 @@ export class NavMenuComponent implements OnDestroy {
     if (this.items && this.items.length > 0) {
       return this.items;
     }
-    const baseItems = this.isBusinessMode ? this.authenticatedBusinessItems : this.authenticatedItems;
     return this.authenticated
-      ? [...baseItems, ...this.authenticatedActionItems]
+      ? [...this.authenticatedItems, ...this.authenticatedActionItems]
       : [...this.defaultItems, ...this.anonymousActionItems];
   }
 

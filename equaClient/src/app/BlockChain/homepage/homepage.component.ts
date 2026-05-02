@@ -26,7 +26,7 @@ export class HomepageComponent {
     { label: 'Tableau de bord', sectionId: '/blockchain/dashboard' },
 
     { label: 'Envoi / Réception', type: 'header' },
-    { label: 'Portefeuilles', sectionId: '/blockchain/wallet' },
+    { label: 'Portefeuille (Dinar)', sectionId: '/blockchain/wallet' },
     { label: 'Transactions', sectionId: '/blockchain/transactions' },
     { label: 'Envoyer des fonds', sectionId: '/blockchain/transactions/create' },
 

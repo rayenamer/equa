@@ -1,20 +1,17 @@
-import { ChangeDetectionStrategy, Component, EventEmitter, Input, Output, ChangeDetectorRef, OnInit, OnDestroy } from '@angular/core';
+import { ChangeDetectionStrategy, Component, EventEmitter, Input, Output } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { RouterLink } from '@angular/router';
-import { Subject, takeUntil } from 'rxjs';
 import { NavMenuComponent, NavMenuItem } from '../../molecules/nav-menu/nav-menu.component';
 import { UiButtonComponent } from '../../atoms/ui-button/ui-button.component';
-import { BusinessModeService } from '../../../services/business-mode.service';
 
 @Component({
   selector: 'app-home-header',
   standalone: true,
-  imports: [CommonModule, RouterLink, NavMenuComponent, UiButtonComponent],
+  imports: [CommonModule, NavMenuComponent, UiButtonComponent],
   templateUrl: './home-header.component.html',
   styleUrl: './home-header.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class HomeHeaderComponent implements OnInit, OnDestroy {
+export class HomeHeaderComponent {
   /** Brand text shown in the logo area. */
   @Input() logoText = 'EQUA';
   /** Navigation links rendered in the menu. */
@@ -34,26 +31,4 @@ export class HomeHeaderComponent implements OnInit, OnDestroy {
   @Output() loginClick = new EventEmitter<Event>();
   /** Emits when signup CTA is clicked. */
   @Output() signupClick = new EventEmitter<Event>();
-
-  isBusinessMode = false;
-  private readonly destroy$ = new Subject<void>();
-
-  constructor(
-    private businessModeService: BusinessModeService,
-    private cdr: ChangeDetectorRef
-  ) { }
-
-  ngOnInit(): void {
-    this.businessModeService.mode$
-      .pipe(takeUntil(this.destroy$))
-      .subscribe(mode => {
-        this.isBusinessMode = mode === 'business';
-        this.cdr.markForCheck();
-      });
-  }
-
-  ngOnDestroy(): void {
-    this.destroy$.next();
-    this.destroy$.complete();
-  }
 }

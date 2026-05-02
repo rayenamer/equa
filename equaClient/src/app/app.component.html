@@ -1,12 +1,12 @@
 <!--<app-splash-cursor></app-splash-cursor>-->
 <!--<router-outlet></router-outlet>-->
-<app-home-header [logoText]="'EQUA'" [mobileMenuOpen]="mobileMenuOpen" [loginLabel]="'Connexion'"
-  (menuToggle)="toggleMobileMenu()" (navItemClick)="scrollTo($event)" />
+<app-home-header [logoText]="'EQUA'" [mobileMenuOpen]="mobileMenuOpen"
+  [loginLabel]="'Connexion'" (menuToggle)="toggleMobileMenu()" (navItemClick)="scrollTo($event)"
+/>
 <router-outlet></router-outlet>
-@if (!businessModeService.isBusinessMode()) {
 <app-site-footer [brand]="'EQUA'" [tagline]="'Finance Without Barriers'" [socialLinks]="footerSocialLinks"
   [linkGroups]="footerLinkGroups" [newsletterTitle]="'Restez informé'"
   [newsletterText]="'Recevez les actualités et les nouveautés EQUA.'" [newsletterEmail]="newsletterEmail"
   [currentYear]="currentYear" (newsletterEmailChange)="newsletterEmail = $event"
   (newsletterSubmit)="onNewsletterSubmit($event)" />
-}
+<!--<app-splash-cursor></app-splash-cursor>-->

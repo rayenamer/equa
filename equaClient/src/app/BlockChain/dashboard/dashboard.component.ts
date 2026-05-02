@@ -141,7 +141,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
         this.equaWallet.set(data.equa);
         this.recentTransactions.set(data.transactions?.slice(0, 5) || []);
       },
-      error: (err) => console.error('Error loading dashboard data:', err)
+      error: (err: any) => console.error('Error loading dashboard data:', err)
     });
   }
 
@@ -207,7 +207,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
         this.currentRate.set(rate);
         this.updateChartData(rate);
       },
-      error: (err) => console.error('Error loading current rate:', err)
+      error: (err: any) => console.error('Error loading current rate:', err)
     });
   }
 }
