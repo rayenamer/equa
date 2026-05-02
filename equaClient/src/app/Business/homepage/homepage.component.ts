@@ -64,9 +64,9 @@ export class BusinessHomepageComponent implements OnInit {
 
     navItems: NavMenuItem[] = [
         { label: 'Gérer', type: 'header' },
+        { label: 'Informations', sectionId: '/business/info' },
         { label: 'Mouvements', sectionId: '/business/mouvements' },
         { label: 'Finance', sectionId: '/business/finance' },
-        { label: 'Portefeuille', sectionId: '/business/portfolio' },
         { label: 'Guide', type: 'header' },
         { label: 'Comment ça marche', sectionId: '/business/how-it-works' },
     ];

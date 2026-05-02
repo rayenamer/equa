@@ -2,6 +2,8 @@ import { Component, signal, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ApiService } from '../../services/api.service';
+import { TransactionService } from '../../BlockChain/services/transaction.service';
+import { Transaction } from '../../BlockChain/models/transaction.model';
 
 export interface Mouvement {
     id: number;
@@ -22,7 +24,7 @@ export interface Mouvement {
     styleUrl: './mouvements.component.scss'
 })
 export class MouvementsComponent implements OnInit {
-    activeTab: 'comptabilite' | 'nouveau' = 'comptabilite';
+    activeTab: 'comptabilite' | 'nouveau' | 'transactions' = 'comptabilite';
     filterType: 'all' | 'sortant' | 'entrant' = 'all';
     searchTerm = '';
 
@@ -30,6 +32,11 @@ export class MouvementsComponent implements OnInit {
     mouvements: Mouvement[] = [];
     currentBusinessId: number | null = null;
     isLoading = false;
+
+    // ─── Wallet transactions ───────────────────────────────────────────────────
+    walletTransactions: Transaction[] = [];
+    myWallet: any = null;
+    myWalletId: string = '';
 
     // ─── New movement form ────────────────────────────────────────────────────
     newMouvement = {
@@ -67,7 +74,7 @@ export class MouvementsComponent implements OnInit {
     formSubmitted = false;
     showSuccess = false;
 
-    constructor(private apiService: ApiService) { }
+    constructor(private apiService: ApiService, private transactionService: TransactionService) { }
 
     ngOnInit(): void {
         this.loadBusinessContext();
@@ -80,6 +87,7 @@ export class MouvementsComponent implements OnInit {
                 if (businesses && businesses.length > 0) {
                     this.currentBusinessId = businesses[0].id;
                     this.loadMouvements();
+                    this.loadWalletTransactions();
                 }
             },
             error: (err) => {
@@ -100,6 +108,27 @@ export class MouvementsComponent implements OnInit {
                 console.error('Error loading mouvements', err);
                 this.isLoading = false;
             }
+        });
+    }
+
+    loadWalletTransactions(): void {
+        this.apiService.getMyWallet().subscribe({
+            next: (wallet) => {
+                if (wallet) {
+                    this.myWallet = wallet;
+                    const identifier = wallet.publicKey || (wallet as any).walletId || (wallet.id ? wallet.id.toString() : '');
+                    this.myWalletId = identifier;
+
+                    this.transactionService.getAllTransactions().subscribe({
+                        next: (txs) => {
+                            const userTxs = txs.filter(tx => tx.fromWallet === identifier || tx.toWallet === identifier);
+                            this.walletTransactions = userTxs.length > 0 ? userTxs : txs;
+                        },
+                        error: (err) => console.error('Error loading transactions', err)
+                    });
+                }
+            },
+            error: (err) => console.error('Error loading wallet', err)
         });
     }
 
@@ -172,9 +201,44 @@ export class MouvementsComponent implements OnInit {
         };
     }
 
-    setTab(tab: 'comptabilite' | 'nouveau'): void {
+    setTab(tab: 'comptabilite' | 'nouveau' | 'transactions'): void {
         this.activeTab = tab;
         this.showSuccess = false;
+    }
+
+    isSortant(tx: Transaction): boolean {
+        if (!tx || !this.myWallet) return false;
+        const fromW = String(tx.fromWallet).toLowerCase().trim();
+        const pk = this.myWallet.publicKey ? String(this.myWallet.publicKey).toLowerCase().trim() : '';
+        const wid = (this.myWallet as any).walletId ? String((this.myWallet as any).walletId).toLowerCase().trim() : '';
+        const idStr = this.myWallet.id ? String(this.myWallet.id).toLowerCase().trim() : '';
+        return fromW === pk || fromW === wid || fromW === idStr;
+    }
+
+    importTransaction(tx: Transaction): void {
+        if (!this.currentBusinessId) return;
+
+        const type = this.isSortant(tx) ? 'sortant' : 'entrant';
+        const dateStr = new Date(tx.timestamp).toISOString().slice(0, 10);
+
+        const payload = {
+            date: dateStr,
+            libelle: `Transaction TX-${tx.transactionHash ? tx.transactionHash.substring(0, 8) : '000'}`,
+            type: type,
+            compte: 'Transaction Blockchain',
+            montant: tx.amount,
+            categorie: 'Exceptionnel',
+            statut: 'en_attente'
+        };
+
+        this.apiService.addMouvement(this.currentBusinessId, payload).subscribe({
+            next: (savedMouvement) => {
+                this.mouvements.unshift(savedMouvement);
+                this.showSuccess = true;
+                setTimeout(() => { this.showSuccess = false; }, 4000);
+            },
+            error: (err) => console.error('Error importing transaction as mouvement', err)
+        });
     }
 
     getCatCredit(cat: string): number {

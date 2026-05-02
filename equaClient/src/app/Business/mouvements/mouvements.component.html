@@ -33,6 +33,9 @@
         <button class="tab" [class.active]="activeTab === 'nouveau'" (click)="setTab('nouveau')">
             Nouveau Mouvement
         </button>
+        <button class="tab" [class.active]="activeTab === 'transactions'" (click)="setTab('transactions')">
+            Importer Transactions
+        </button>
     </div>
 
     <!-- ── TAB 1: Analytical Accounting ── -->
@@ -294,6 +297,68 @@
                     </button>
                 </div>
             </form>
+        </div>
+    </div>
+    }
+
+    <!-- ── TAB 3: Importer Transactions ── -->
+    @if (activeTab === 'transactions') {
+    <div class="tab-content animate-in">
+
+        @if (showSuccess) {
+        <div class="success-banner">
+            Transaction importée en attente avec succès !
+        </div>
+        }
+
+        <div class="form-card-header" style="margin-bottom: 2rem;">
+            <h2>Transactions de votre Wallet</h2>
+            <p>Sélectionnez les transactions blockchain à importer en tant que mouvements comptables.</p>
+        </div>
+
+        <div class="journal-container">
+            <div class="journal-header">
+                <span class="col-date">Date</span>
+                <span class="col-libelle">Hash de Transaction</span>
+                <span class="col-type">Sens</span>
+                <span class="col-montant">Montant</span>
+                <span class="col-statut">Action</span>
+            </div>
+
+            <div class="journal-body">
+                @for (tx of walletTransactions; track tx.transactionId) {
+                <div class="journal-row" [class.entrant-row]="!isSortant(tx)" [class.sortant-row]="isSortant(tx)">
+                    <span class="col-date">{{ tx.timestamp | date:'shortDate' }}</span>
+                    <span class="col-libelle small" style="word-break: break-all;">{{ tx.transactionHash }}</span>
+                    <span class="col-type">
+                        <span class="type-badge" [class.entrant]="!isSortant(tx)" [class.sortant]="isSortant(tx)">
+                            {{ !isSortant(tx) ? 'Entrante' : 'Sortante' }}
+                        </span>
+                    </span>
+                    <span class="col-montant" [class.entrant-amt]="!isSortant(tx)" [class.sortant-amt]="isSortant(tx)">
+                        {{ !isSortant(tx) ? '+' : '-' }}{{ formatAmount(tx.amount) }}
+                    </span>
+                    <span class="col-statut">
+                        <button class="btn-primary" style="padding: 0.5rem 1rem; font-size: 0.85rem;"
+                            (click)="importTransaction(tx)">
+                            Ajouter
+                        </button>
+                    </span>
+                </div>
+                }
+
+                @if (walletTransactions.length === 0) {
+                <div class="empty-state">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" fill="none" stroke="currentColor"
+                        stroke-width="1.5" viewBox="0 0 24 24">
+                        <path
+                            d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z">
+                        </path>
+                    </svg>
+                    <p>Aucune transaction trouvée sur ce wallet</p>
+                </div>
+                }
+            </div>
         </div>
     </div>
     }
