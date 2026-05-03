@@ -1,1 +1,244 @@
-<p>homepage works!</p>
+<div class="wallet-dashboard">
+  <!-- Custom Toast Notification -->
+  <div class="custom-toast" [class.show]="toastMessage" [ngClass]="toastType">
+    <i class="pi" [ngClass]="{'pi-check-circle': toastType === 'success', 'pi-times-circle': toastType === 'error', 'pi-info-circle': toastType === 'info'}"></i>
+    <span>{{ toastMessage }}</span>
+  </div>
+
+  <!-- Modals Overlay -->
+  <div class="modal-overlay" *ngIf="activeModal !== null" (click)="closeModal($event)">
+    
+    <!-- Receive Modal -->
+    <div class="modal-card receive-modal" *ngIf="activeModal === 'receive'" (click)="$event.stopPropagation()">
+      <div class="modal-header">
+        <h3>Receive EQUA</h3>
+        <button class="btn-close" (click)="closeModal()"><i class="pi pi-times"></i></button>
+      </div>
+      <div class="modal-body text-center">
+        <p class="desc">Scan this code or copy your Public Key to receive digital assets directly.</p>
+        <div class="qr-placeholder">
+          <i class="pi pi-qrcode"></i>
+        </div>
+        <div class="address-box">
+          <span class="addr">{{ equaWallet?.publicKey || 'Activating Key...' }}</span>
+          <button class="btn-copy" (click)="copyAddress()" title="Copy to clipboard"><i class="pi pi-copy"></i></button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Send Modal -->
+    <div class="modal-card send-modal" *ngIf="activeModal === 'send'" (click)="$event.stopPropagation()">
+      <div class="modal-header">
+        <h3>Send EQUA</h3>
+        <button class="btn-close" (click)="closeModal()"><i class="pi pi-times"></i></button>
+      </div>
+      <div class="modal-body">
+        <div class="input-grp">
+          <label>Recipient Wallet ID</label>
+          <input type="number" [(ngModel)]="sendRecipientId" placeholder="e.g. 2">
+        </div>
+        <div class="input-grp mt-3">
+          <div style="display: flex; justify-content: space-between; align-items: baseline;">
+             <label>Amount (EQUA)</label>
+             <span class="max-balance">Max: {{ equaWallet?.equaAmount || 0 | number:'1.2-4' }}</span>
+          </div>
+          <div class="input-row">
+            <input type="number" [(ngModel)]="sendAmount" placeholder="0.00">
+            <button class="btn-max-small" (click)="sendAmount = equaWallet?.equaAmount || 0">MAX</button>
+          </div>
+        </div>
+        
+        <div class="fee-notice">Network Fee: <span>Free</span></div>
+        
+        <button class="btn-primary-gold w-100 mt-4" (click)="executeSend()" [disabled]="isSending">
+          <i *ngIf="isSending" class="pi pi-spinner pi-spin"></i>
+          {{ isSending ? 'Broadcasting...' : 'Confirm Transfer' }}
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Header -->
+  <header class="db-header">
+    <div class="db-title-grp">
+      <h1 class="db-title">Wallet Management</h1>
+      <p class="db-subtitle">Manage your digital assets and execute rapid conversions.</p>
+    </div>
+    <div class="db-actions">
+      <div class="risk-badge" [class.risk-low]="fraudRisk === 'LOW'" [class.risk-high]="fraudRisk !== 'LOW'">
+        <span class="risk-dot"></span>
+        Security: {{ fraudRisk }}
+      </div>
+      <button class="btn-icon" (click)="refreshData()" [class.spin]="isRefreshing" title="Actualiser"><i class="pi pi-refresh"></i></button>
+      <button class="btn-icon"><i class="pi pi-bell"></i></button>
+      <div class="user-avatar">
+        <img src="https://ui-avatars.com/api/?name=Safwen&background=FFD700&color=0a0a12" alt="Safwen">
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Grid -->
+  <div class="db-grid">
+    
+    <!-- Balance Card -->
+    <div class="db-card balance-main wallet-card-anim">
+      <div class="card-bg-glow"></div>
+      <div class="balance-content">
+        <div class="top-row">
+          <span class="lbl">TOTAL BALANCE</span>
+          <div class="wallet-chip"><i class="pi pi-microchip"></i></div>
+        </div>
+        
+        <ng-container *ngIf="loading">
+          <div class="skeleton-block" style="width: 250px; height: 60px; margin: 0.5rem 0;"></div>
+          <div class="skeleton-block" style="width: 150px; height: 20px; margin-top: 0.5rem;"></div>
+          <div class="action-buttons" style="margin-top: 2rem;">
+            <div class="skeleton-block" style="width: 100px; height: 40px; border-radius: 12px;"></div>
+            <div class="skeleton-block" style="width: 100px; height: 40px; border-radius: 12px;"></div>
+          </div>
+        </ng-container>
+
+        <ng-container *ngIf="!loading">
+          <ng-container *ngIf="equaWallet; else noEquaWallet">
+            <h2 class="val">{{ equaWallet.equaAmount || 0 | number:'1.0-4' }} <span class="unit">EQUA</span></h2>
+            <div class="delta positive"><i class="pi pi-arrow-up-right"></i> +12.4% vs last month</div>
+            
+            <div class="action-buttons">
+              <button class="btn-action" (click)="openModal('receive')"><i class="pi pi-arrow-down"></i> Receive</button>
+              <button class="btn-action" (click)="openModal('send')"><i class="pi pi-arrow-up"></i> Send</button>
+              <button class="btn-action highlight" (click)="scrollToConvert()"><i class="pi pi-sync"></i> Swap</button>
+            </div>
+          </ng-container>
+
+          <ng-template #noEquaWallet>
+            <div class="empty-wallet-state">
+              <h2 class="val">0.0000 <span class="unit">EQUA</span></h2>
+              <p style="color: #a0a0a0; margin-bottom: 1.5rem; font-size: 0.95rem;">Activate your EQUA wallet to participate in the ecosystem.</p>
+              <button class="btn-primary-gold" (click)="createEquaWallet()" [disabled]="isCreatingEqua">
+                <i class="pi" [ngClass]="isCreatingEqua ? 'pi-spinner pi-spin' : 'pi-plus'"></i> 
+                {{ isCreatingEqua ? 'Activating...' : 'Activate EQUA Wallet' }}
+              </button>
+            </div>
+          </ng-template>
+        </ng-container>
+      </div>
+      <div class="mini-chart-container">
+        <p-chart type="line" [data]="chartData" [options]="chartOptions" height="100%"></p-chart>
+      </div>
+    </div>
+
+    <!-- Quick Convert -->
+    <div class="db-card convert-card wallet-card-anim">
+      <div class="card-header">
+        <h3 class="sect-title">Token Conversion</h3>
+        <button class="btn-icon-small"><i class="pi pi-sliders-h"></i></button>
+      </div>
+      <div class="conv-form">
+        <div class="input-grp" [class.error-grp]="isInsufficientBalance()">
+          <div class="input-header">
+            <span class="label">You Pay</span>
+            <span class="balance" *ngIf="dinarWallet">Balance: {{ dinarWallet.balance | number:'1.2-2' }} TND</span>
+            <span class="balance" *ngIf="!dinarWallet">Balance: 0.00 TND</span>
+          </div>
+          <div class="input-row">
+            <input type="number" placeholder="0" [(ngModel)]="payAmount" (ngModelChange)="onPayChange()">
+            <div class="curr-selector">
+              <img src="https://flagcdn.com/w20/tn.png" alt="TND" class="flag-icon"> TND <i class="pi pi-angle-down"></i>
+            </div>
+          </div>
+          <div class="error-msg" *ngIf="isInsufficientBalance()">Solde insuffisant</div>
+        </div>
+
+        <div class="conv-divider">
+          <div class="line"></div>
+          <button class="btn-swap-icon"><i class="pi pi-arrow-down-up"></i></button>
+          <div class="line"></div>
+        </div>
+
+        <div class="input-grp res">
+          <div class="input-header">
+            <span class="label">You Receive (Est.)</span>
+            <span class="balance">Balance: {{ equaWallet?.equaAmount || 0 | number:'1.2-2' }} EQUA</span>
+          </div>
+          <div class="input-row">
+            <input type="number" readonly placeholder="0.00" [value]="receiveAmount | number:'1.4-4'">
+            <div class="curr-selector">
+              <div class="equa-logo-small">E</div> EQUA <i class="pi pi-angle-down"></i>
+            </div>
+          </div>
+        </div>
+
+        <div class="exchange-rate">
+          <span>Fee (0.5%)</span>
+          <span class="rate-val">{{ (payAmount || 0) * 0.005 | number:'1.2-2' }} TND</span>
+        </div>
+        
+        <ng-container *ngIf="!dinarWallet; else canConvert">
+           <button class="btn-primary-gold w-100" (click)="createDinarWallet()" [disabled]="isCreatingDinar">
+              <i class="pi" [ngClass]="isCreatingDinar ? 'pi-spinner pi-spin' : 'pi-plus'"></i>
+              {{ isCreatingDinar ? 'Creating TND Wallet...' : 'Activate TND Wallet' }}
+           </button>
+        </ng-container>
+        
+        <ng-template #canConvert>
+          <button class="btn-primary-gold w-100" 
+                  [class.btn-disabled]="isInsufficientBalance() || !payAmount"
+                  (click)="convertDinars()" 
+                  [disabled]="isConverting || isInsufficientBalance()">
+            <i *ngIf="isConverting" class="pi pi-spinner pi-spin" style="margin-right: 8px;"></i>
+            {{ isInsufficientBalance() ? 'Insufficient Balance' : (isConverting ? 'Processing...' : 'Confirm Conversion') }}
+          </button>
+        </ng-template>
+        
+      </div>
+    </div>
+
+    <!-- Transaction History -->
+    <div class="db-card transactions-card wallet-card-anim">
+      <div class="card-header">
+        <h3 class="sect-title">Recent Transactions</h3>
+        <a href="#" class="view-all">View All</a>
+      </div>
+      <div class="tx-list">
+        <div class="tx-item" *ngFor="let tx of recentTransactions">
+          <div class="tx-icon" [ngClass]="tx.type">
+            <i class="pi" [ngClass]="getTxIcon(tx.type)"></i>
+          </div>
+          <div class="tx-details">
+            <span class="tx-title">{{ tx.title }}</span>
+            <span class="tx-date">{{ tx.date }}</span>
+          </div>
+          <div class="tx-amount" [ngClass]="tx.type">
+            {{ tx.amount }}
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Analytics & Loyalty -->
+    <div class="kpi-group wallet-card-anim">
+      <div class="db-card kpi-item">
+        <div class="kpi-icon"><i class="pi pi-star" [style.color]="getTierColor()" [style.textShadow]="'0 0 10px ' + getTierColor()"></i></div>
+        <div class="kpi-info">
+          <span class="kpi-lbl">Loyalty Tier</span>
+          <span class="kpi-val" [style.color]="getTierColor()">{{ equaWallet?.loyaltyTier || 'BRONZE' }}</span>
+        </div>
+      </div>
+      <div class="db-card kpi-item">
+        <div class="kpi-icon blue"><i class="pi pi-gift"></i></div>
+        <div class="kpi-info">
+          <span class="kpi-lbl">Loyalty Points</span>
+          <span class="kpi-val">{{ equaWallet?.loyaltyPoints || 0 }} pts</span>
+        </div>
+      </div>
+      <div class="db-card kpi-item">
+        <div class="kpi-icon green" [class.red]="fraudRisk !== 'LOW'"><i class="pi pi-shield"></i></div>
+        <div class="kpi-info">
+          <span class="kpi-lbl">Fraud Risk Level</span>
+          <span class="kpi-val">{{ fraudRisk }}</span>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
