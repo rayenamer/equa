@@ -1,16 +1,17 @@
 <div class="kyc-container">
     <header class="page-header">
-        <h1>Centre KYC</h1>
-        <p class="subtitle">Complétez votre profil pour débloquer toutes les fonctionnalités financières.</p>
+        <h1>KYC Center</h1>
+        <p class="subtitle">Complete your profile to unlock all financial features.</p>
     </header>
 
-    <div *ngIf="loading" class="state-message">Chargement du profil KYC...</div>
+    <div *ngIf="loading" class="state-message">Loading KYC profile...</div>
     <div *ngIf="errorMessage && !loading" class="state-message error">{{ errorMessage }}</div>
     <div *ngIf="successMessage" class="state-message success">{{ successMessage }}</div>
 
     <div class="kyc-content" *ngIf="!loading">
         <aside class="kyc-steps">
-            <div class="step-item" *ngFor="let step of kycSteps; let i = index" [class.active]="step.status === 'current'" [class.completed]="step.status === 'completed'">
+            <div class="step-item" *ngFor="let step of kycSteps; let i = index"
+                [class.active]="step.status === 'current'" [class.completed]="step.status === 'completed'">
                 <div class="step-number">
                     <span *ngIf="step.status !== 'completed'">{{ i + 1 }}</span>
                     <i *ngIf="step.status === 'completed'" class="check-icon">✓</i>
@@ -25,59 +26,39 @@
         <main class="kyc-form-container">
             <!-- Step 1: Personal Info -->
             <div class="form-card" *ngIf="currentStepIndex === 0">
-                <h2>Informations Personnelles</h2>
-                <p>Veuillez renseigner vos informations de base telles qu'elles apparaissent sur vos documents officiels.</p>
-                
+                <h2>Personal Information</h2>
+                <p>Please enter your basic information as it appears on your official documents.</p>
+
                 <form (submit)="$event.preventDefault()" class="kyc-form">
                     <div class="form-grid">
                         <div class="form-group">
-                            <label>Numéro de pièce d'identité</label>
-                            <app-ui-input 
-                                type="text" 
-                                name="nationalIdNumber" 
-                                placeholder="Ex: 01234567" 
-                                [(value)]="kycProfile.nationalIdNumber"
-                                [required]="true">
+                            <label>National ID Number</label>
+                            <app-ui-input type="text" name="nationalIdNumber" placeholder="Ex: 01234567"
+                                [(value)]="kycProfile.nationalIdNumber" [required]="true">
                             </app-ui-input>
                         </div>
                         <div class="form-group">
-                            <label>Date de naissance</label>
-                            <app-ui-input 
-                                type="text" 
-                                name="dateOfBirth" 
-                                placeholder="AAAA-MM-JJ ou JJ/MM/AAAA" 
-                                [(value)]="kycProfile.dateOfBirth"
-                                [required]="true">
+                            <label>Date of Birth</label>
+                            <app-ui-input type="text" name="dateOfBirth" placeholder="YYYY-MM-DD or DD/MM/YYYY"
+                                [(value)]="kycProfile.dateOfBirth" [required]="true">
                             </app-ui-input>
                         </div>
                         <div class="form-group full-width">
-                            <label>Adresse complète</label>
-                            <app-ui-input 
-                                type="text" 
-                                name="address" 
-                                placeholder="Rue, Ville, Code Postal" 
-                                [(value)]="kycProfile.address"
-                                [required]="true">
+                            <label>Full Address</label>
+                            <app-ui-input type="text" name="address" placeholder="Street, City, Zip Code"
+                                [(value)]="kycProfile.address" [required]="true">
                             </app-ui-input>
                         </div>
                         <div class="form-group">
-                            <label>Numéro de téléphone</label>
-                            <app-ui-input 
-                                type="text" 
-                                name="phoneNumber" 
-                                placeholder="+216 -- --- ---" 
-                                [(value)]="kycProfile.phoneNumber"
-                                [required]="true">
+                            <label>Phone Number</label>
+                            <app-ui-input type="text" name="phoneNumber" placeholder="+216 -- --- ---"
+                                [(value)]="kycProfile.phoneNumber" [required]="true">
                             </app-ui-input>
                         </div>
                     </div>
 
                     <div class="form-actions">
-                        <app-ui-button 
-                            label="Suivant"
-                            (clicked)="nextStep()" 
-                            variant="primary" 
-                            size="lg">
+                        <app-ui-button label="Next" (clicked)="nextStep()" variant="primary" size="lg">
                         </app-ui-button>
                     </div>
                 </form>
@@ -85,29 +66,21 @@
 
             <!-- Step 2: Identity Verification (Upload) -->
             <div class="form-card" *ngIf="currentStepIndex === 1">
-                <h2>Vérification d'Identité</h2>
-                <p>Veuillez télécharger une copie recto-verso de votre pièce d'identité (CNI, Passeport ou Permis).</p>
-                
+                <h2>Identity Verification</h2>
+                <p>Please upload a double-sided copy of your ID (National ID, Passport, or Driver's License).</p>
+
                 <div class="upload-zone">
                     <div class="upload-placeholder">
                         <div class="upload-icon">↑</div>
-                        <p>Glissez-déposez vos fichiers ici ou <span>parcourez</span></p>
-                        <span class="upload-limit">Format PDF, JPG ou PNG (Max. 5Mo)</span>
+                        <p>Drag and drop your files here or <span>browse</span></p>
+                        <span class="upload-limit">PDF, JPG, or PNG format (Max. 5MB)</span>
                     </div>
                 </div>
 
                 <div class="form-actions">
-                    <app-ui-button 
-                        label="Précédent" 
-                        (clicked)="prevStep()" 
-                        variant="secondary" 
-                        size="lg">
+                    <app-ui-button label="Previous" (clicked)="prevStep()" variant="secondary" size="lg">
                     </app-ui-button>
-                    <app-ui-button 
-                        label="Suivant" 
-                        (clicked)="nextStep()" 
-                        variant="primary" 
-                        size="lg">
+                    <app-ui-button label="Next" (clicked)="nextStep()" variant="primary" size="lg">
                     </app-ui-button>
                 </div>
             </div>
@@ -115,28 +88,16 @@
             <!-- Other steps placeholders -->
             <div class="form-card" *ngIf="currentStepIndex > 1">
                 <h2>{{ kycSteps[currentStepIndex].title }}</h2>
-                <p>Contenu en cours de développement pour cette étape.</p>
-                
+                <p>Content under development for this step.</p>
+
                 <div class="form-actions">
-                    <app-ui-button 
-                        label="Précédent" 
-                        (clicked)="prevStep()" 
-                        variant="secondary" 
-                        size="lg">
+                    <app-ui-button label="Previous" (clicked)="prevStep()" variant="secondary" size="lg">
                     </app-ui-button>
-                    <app-ui-button 
-                        *ngIf="currentStepIndex < kycSteps.length - 1"
-                        label="Suivant" 
-                        (clicked)="nextStep()" 
-                        variant="primary" 
-                        size="lg">
+                    <app-ui-button *ngIf="currentStepIndex < kycSteps.length - 1" label="Next" (clicked)="nextStep()"
+                        variant="primary" size="lg">
                     </app-ui-button>
-                    <app-ui-button 
-                        *ngIf="currentStepIndex === kycSteps.length - 1"
-                        [label]="saving ? 'Soumission...' : 'Soumettre'" 
-                        (clicked)="onSubmit()" 
-                        variant="primary" 
-                        size="lg"
+                    <app-ui-button *ngIf="currentStepIndex === kycSteps.length - 1"
+                        [label]="saving ? 'Submitting...' : 'Submit'" (clicked)="onSubmit()" variant="primary" size="lg"
                         [disabled]="saving">
                     </app-ui-button>
                 </div>

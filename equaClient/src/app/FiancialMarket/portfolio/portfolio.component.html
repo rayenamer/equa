@@ -1,7 +1,7 @@
 <div class="portfolio-container" *ngIf="portfolio">
     <header class="header">
-        <h1>Mon Portefeuille</h1>
-        <p>Gérez vos investissements et suivez vos performances.</p>
+        <h1>My Portfolio</h1>
+        <p>Manage your investments and track your performance.</p>
     </header>
 
     <div class="stats-row">
@@ -15,7 +15,7 @@
     </div>
 
     <div class="assets-section card-container">
-        <h2>Mes Actifs</h2>
+        <h2>My Assets</h2>
         <div class="assets-list">
             <div class="asset-item" *ngFor="let asset of portfolio.items">
                 <div class="asset-info">
@@ -33,22 +33,22 @@
                 </div>
             </div>
             <div *ngIf="portfolio.items.length === 0" class="empty-state">
-                Vous n'avez pas encore d'actifs. <a routerLink="/financial-market/assets">Explorez le marché</a>.
+                You don't have any assets yet. <a routerLink="/financial-market/assets">Explore the market</a>.
             </div>
         </div>
     </div>
 
     <div class="history-preview card-container">
         <div class="header-row">
-            <h2>Derniers Mouvements</h2>
+            <h2>Latest Movements</h2>
         </div>
 
         <div class="tx-table" *ngIf="transactions.length > 0">
             <div class="tx-header">
                 <span>Type</span>
-                <span>Actif</span>
-                <span>Quantité</span>
-                <span>Prix unit.</span>
+                <span>Asset</span>
+                <span>Quantity</span>
+                <span>Unit Price</span>
                 <span>Total</span>
                 <span>Date</span>
             </div>
@@ -63,10 +63,10 @@
         </div>
 
         <div *ngIf="transactions.length === 0" class="empty-state">
-            Aucune transaction récente.
+            No recent transactions.
         </div>
     </div>
 </div>
 <div class="loading-state" *ngIf="!portfolio">
-    <p>Chargement du portefeuille...</p>
+    <p>Loading portfolio...</p>
 </div>

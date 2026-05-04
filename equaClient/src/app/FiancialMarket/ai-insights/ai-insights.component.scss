@@ -1,0 +1,257 @@
+.ai-insights-page {
+    padding: 2rem;
+    max-width: 1400px;
+    margin: 0 auto;
+}
+
+.section-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 2.5rem;
+
+    .header-content {
+        h1 {
+            font-size: 2.5rem;
+            font-weight: 800;
+            color: #fff;
+            margin-bottom: 0.5rem;
+        }
+
+        p {
+            font-size: 1.1rem;
+            color: rgba(255, 255, 255, 0.5);
+            margin: 0;
+        }
+    }
+}
+
+.analyze-btn {
+    background: linear-gradient(135deg, #a855f7 0%, #3b82f6 100%);
+    color: #fff;
+    border: none;
+    border-radius: 12px;
+    padding: 1rem 2rem;
+    font-size: 1.1rem;
+    font-weight: 600;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow: 0 10px 20px rgba(59, 130, 246, 0.2);
+
+    &:hover:not(:disabled) {
+        transform: translateY(-2px);
+        box-shadow: 0 15px 30px rgba(59, 130, 246, 0.3);
+        filter: brightness(1.1);
+    }
+
+    &:disabled {
+        opacity: 0.6;
+        cursor: not-allowed;
+        filter: grayscale(0.2);
+    }
+}
+
+.metrics-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1.5rem;
+    margin-bottom: 2rem;
+}
+
+.metric-card {
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    border-radius: 16px;
+    padding: 1.5rem;
+    display: flex;
+    align-items: center;
+    gap: 1.25rem;
+    backdrop-filter: blur(10px);
+    transition: transform 0.2s ease;
+
+    &:hover {
+        transform: translateY(-2px);
+        background: rgba(255, 255, 255, 0.04);
+    }
+
+    .icon {
+        width: 48px;
+        height: 48px;
+        border-radius: 12px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.5rem;
+    }
+
+    &.health-card .icon {
+        background: rgba(74, 222, 128, 0.1);
+        color: #4ade80;
+    }
+
+    &.sentiment-card .icon {
+        background: rgba(59, 130, 246, 0.1);
+        color: #3b82f6;
+    }
+
+    &.risk-card .icon {
+        background: rgba(245, 158, 11, 0.1);
+        color: #f59e0b;
+    }
+
+    &.pick-card .icon {
+        background: rgba(168, 85, 247, 0.1);
+        color: #a855f7;
+    }
+
+    .info {
+        h4 {
+            font-size: 0.9rem;
+            color: rgba(255, 255, 255, 0.5);
+            margin: 0 0 0.5rem 0;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .value {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #fff;
+
+            .total {
+                font-size: 1rem;
+                color: rgba(255, 255, 255, 0.4);
+            }
+        }
+    }
+}
+
+.card-container {
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    border-radius: 20px;
+    padding: 2.5rem;
+    backdrop-filter: blur(20px);
+}
+
+.insight-header {
+    display: flex;
+    align-items: center;
+    gap: 1.2rem;
+    margin-bottom: 2rem;
+    padding-bottom: 1.5rem;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+
+    .glow-orb {
+        width: 16px;
+        height: 16px;
+        border-radius: 50%;
+        background: #a855f7;
+        box-shadow: 0 0 20px #a855f7, 0 0 40px #a855f7;
+        animation: pulse 2s infinite ease-in-out;
+    }
+
+    h2 {
+        font-size: 1.5rem;
+        font-weight: 600;
+        color: #fff;
+        margin: 0;
+    }
+}
+
+@keyframes pulse {
+    0% {
+        transform: scale(0.95);
+        box-shadow: 0 0 10px #a855f7;
+    }
+
+    50% {
+        transform: scale(1.05);
+        box-shadow: 0 0 25px #3b82f6, 0 0 10px #a855f7;
+    }
+
+    100% {
+        transform: scale(0.95);
+        box-shadow: 0 0 10px #a855f7;
+    }
+}
+
+.insight-content {
+    min-height: 250px;
+    display: flex;
+    flex-direction: column;
+
+    &.loading {
+        align-items: center;
+        justify-content: center;
+    }
+
+    .spinner {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 1.5rem;
+        color: rgba(255, 255, 255, 0.6);
+        font-size: 1.1rem;
+
+        i {
+            font-size: 2.5rem;
+            background: linear-gradient(135deg, #a855f7 0%, #3b82f6 100%);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+    }
+
+    .error-text {
+        background: rgba(239, 68, 68, 0.1);
+        color: #ef4444;
+        padding: 1.5rem;
+        border-radius: 12px;
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+        font-weight: 500;
+        border: 1px solid rgba(239, 68, 68, 0.2);
+    }
+
+    ::ng-deep .text-content {
+        line-height: 1.8;
+        font-size: 1.1rem;
+        color: rgba(255, 255, 255, 0.85);
+        white-space: pre-wrap;
+
+        strong {
+            color: #fff;
+        }
+
+        &.empty-state {
+            color: rgba(255, 255, 255, 0.4);
+            text-align: center;
+            font-style: italic;
+            font-size: 1.05rem;
+            padding-top: 2rem;
+        }
+    }
+}
+
+@media (max-width: 1024px) {
+    .metrics-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (max-width: 768px) {
+    .section-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 1.5rem;
+    }
+
+    .metrics-grid {
+        grid-template-columns: 1fr;
+    }
+}

@@ -1,8 +1,8 @@
 <div class="consensus-page">
     <header class="page-header">
         <div class="container">
-            <h1>Comment fonctionne ce système Blockchain</h1>
-            <p class="subtitle">Un consensus simplifié à travers des courses de devinettes entre nœuds.</p>
+            <h1>How this Blockchain system works</h1>
+            <p class="subtitle">Simplified consensus through guessing races between nodes.</p>
             <div class="controls">
                 <button (click)="toggleSimulation()" [class.active]="isRaceActive">
                     <span class="icon">{{ isRaceActive ? '󰓛' : '󰐊' }}</span>
@@ -17,24 +17,24 @@
         <section class="explanation-step" id="step-tx">
             <div class="step-info">
                 <div class="step-number">01</div>
-                <h3>Création de Transaction</h3>
-                <p>Chaque transaction est un objet sécurisé contenant des adresses, un montant et une <strong>lettre
-                        cible</strong> que le réseau doit valider.</p>
+                <h3>Transaction Creation</h3>
+                <p>Each transaction is a secure object containing addresses, an amount, and a <strong>target
+                        letter</strong> that the network must validate.</p>
             </div>
             <div class="step-visual">
                 <div class="tx-card-premium pulse" *ngIf="pendingTransactions.length > 0">
                     <div class="tx-header">
-                        <span class="chip">TRANSFERT</span>
+                        <span class="chip">TRANSFER</span>
                         <span class="tx-id-badge">ID: {{ pendingTransactions[0].id }}</span>
                     </div>
                     <div class="tx-body">
                         <div class="data-group">
                             <div class="data-row">
-                                <span class="label">EXPÉDITEUR:</span>
+                                <span class="label">SENDER:</span>
                                 <span class="val">equa...772x</span>
                             </div>
                             <div class="data-row">
-                                <span class="label">DESTINATAIRE:</span>
+                                <span class="label">RECIPIENT:</span>
                                 <span class="val">equa...910z</span>
                             </div>
                         </div>
@@ -42,17 +42,17 @@
                             <div class="scan-line"></div>
                             <div class="target-box">
                                 <span class="t-placeholder">?</span>
-                                <span class="t-real">Cible: {{ targetLetter }}</span>
+                                <span class="t-real">Target: {{ targetLetter }}</span>
                             </div>
                         </div>
                     </div>
                     <div class="tx-footer">
                         <div class="status-indicator"></div>
-                        <span class="status-text">EN ATTENTE DE CONSENSUS</span>
+                        <span class="status-text">WAITING FOR CONSENSUS</span>
                     </div>
                 </div>
                 <div class="tx-placeholder" *ngIf="pendingTransactions.length === 0">
-                    Génération d'un nouvel objet transaction...
+                    Generating a new transaction object...
                 </div>
             </div>
         </section>
@@ -61,9 +61,9 @@
         <section class="explanation-step" id="step-race">
             <div class="step-info">
                 <div class="step-number">02</div>
-                <h3>Course aux Devinettes</h3>
-                <p>Plusieurs validateurs (nœuds) s'affrontent pour deviner la lettre correcte. C'est le cœur du
-                    consensus.</p>
+                <h3>Guessing Race</h3>
+                <p>Several validators (nodes) compete to guess the correct letter. This is the heart of the consensus.
+                </p>
             </div>
             <div class="step-visual">
                 <div class="nodes-grid">
@@ -76,9 +76,9 @@
                             <div class="fill" [style.width.%]="(node.cooldown / node.maxCooldown) * 100"></div>
                         </div>
                         <div class="node-status">
-                            <span *ngIf="node.cooldown > 0">Refroidissement...</span>
-                            <span *ngIf="node.isGuessing">Devine...</span>
-                            <span *ngIf="node.isWinner">GAGNÉ!</span>
+                            <span *ngIf="node.cooldown > 0">Cooling down...</span>
+                            <span *ngIf="node.isGuessing">Guessing...</span>
+                            <span *ngIf="node.isWinner">WON!</span>
                         </div>
                     </div>
                 </div>
@@ -89,9 +89,9 @@
         <section class="explanation-step" id="step-rewards">
             <div class="step-info">
                 <div class="step-number">03</div>
-                <h3>Système de Récompense</h3>
-                <p>Le gagnant reçoit une récompense et son <strong>temps de refroidissement diminue</strong>, le rendant
-                    plus efficace pour la course suivante.</p>
+                <h3>Reward System</h3>
+                <p>The winner receives a reward and their <strong>cooldown decreases</strong>, making them more
+                    efficient for the next race.</p>
             </div>
             <div class="step-visual">
                 <div class="scoreboard">
@@ -100,7 +100,7 @@
                         <div class="s-bar-container">
                             <div class="s-bar" [style.width.%]="(node.wins / 10) * 100"></div>
                         </div>
-                        <span class="s-val">{{ node.wins }} victoires</span>
+                        <span class="s-val">{{ node.wins }} wins</span>
                     </div>
                 </div>
             </div>
@@ -110,13 +110,13 @@
         <section class="explanation-step" id="step-block">
             <div class="step-info">
                 <div class="step-number">04</div>
-                <h3>Formation du Bloc</h3>
-                <p>Les transactions validées remplissent un bloc. Une fois la capacité atteinte ({{ blockCapacity }}),
-                    le bloc est scellé.</p>
+                <h3>Block Formation</h3>
+                <p>Validated transactions fill a block. Once capacity is reached ({{ blockCapacity }}), the block is
+                    sealed.</p>
             </div>
             <div class="step-visual">
                 <div class="block-container" [class.full]="currentBlock.length === blockCapacity">
-                    <div class="block-header">Bloc Actuel</div>
+                    <div class="block-header">Current Block</div>
                     <div class="block-slots"
                         [style.grid-template-columns]="'repeat(' + (blockCapacity > 5 ? 5 : blockCapacity) + ', 1fr)'">
                         <div class="slot" *ngFor="let slot of blockCapacityList" [class.filled]="currentBlock[slot]">
@@ -134,15 +134,15 @@
         <section class="explanation-step" id="step-chain">
             <div class="step-info">
                 <div class="step-number">05</div>
-                <h3>Mise à jour du Registre</h3>
-                <p>Chaque nouveau bloc est lié mathématiquement au précédent via son hash. Cela crée une chaîne de
-                    données immuable et transparente.</p>
+                <h3>Ledger Update</h3>
+                <p>Each new block is mathematically linked to the previous one via its hash. This creates an immutable
+                    and transparent chain of data.</p>
             </div>
             <div class="step-visual">
                 <div class="simple-chain">
                     <div class="block-unit" *ngFor="let block of finalizedBlocks; let i = index">
                         <div class="block-meta">
-                            <span class="b-index">BLOC #{{ finalizedBlocks.length - i }}</span>
+                            <span class="b-index">BLOCK #{{ finalizedBlocks.length - i }}</span>
                             <span class="b-hash-top">{{ block.hash }}</span>
                         </div>
                         <div class="block-data-list">
@@ -152,13 +152,13 @@
                         </div>
                         <div class="block-link-line" *ngIf="i < finalizedBlocks.length - 1">
                             <div class="connector">
-                                <span class="hash-transfer">Lien: {{ finalizedBlocks[i+1].hash.substring(0, 6)
+                                <span class="hash-transfer">Link: {{ finalizedBlocks[i+1].hash.substring(0, 6)
                                     }}...</span>
                             </div>
                         </div>
                     </div>
                     <div class="chain-empty" *ngIf="finalizedBlocks.length === 0">
-                        Initialisation de la genèse...
+                        Initializing genesis...
                     </div>
                 </div>
             </div>
@@ -168,11 +168,9 @@
         <section class="explanation-step" id="step-security">
             <div class="step-info">
                 <div class="step-number">06</div>
-                <h3>La Force du Réseau</h3>
-                <p>Chaque nœud du réseau détient une **copie exacte** de la blockchain complète. Pour pirater le
-                    système, il
-                    faudrait modifier les données sur la majorité des nœuds simultanément, ce qui est pratiquement
-                    impossible.</p>
+                <h3>Network Strength</h3>
+                <p>Each network node holds an **exact copy** of the complete blockchain. To hack the system, one would
+                    need to modify data on a majority of nodes simultaneously, which is practically impossible.</p>
             </div>
             <div class="step-visual">
                 <div class="sync-grid">
@@ -187,7 +185,7 @@
                             <div class="dot active"></div>
                             <div class="dot pulse"></div>
                         </div>
-                        <div class="sync-status">SYNCHRONISÉ</div>
+                        <div class="sync-status">SYNCHRONIZED</div>
                     </div>
                 </div>
             </div>

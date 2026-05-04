@@ -13,14 +13,14 @@ import { BlockchainSidebarComponent } from '../../components/organisms/blockchai
   styleUrl: './homepage.component.scss'
 })
 export class HomepageComponent {
-  constructor(public authService: AuthService) {}
+  constructor(public authService: AuthService) { }
   navItems: NavMenuItem[] = [
-    { label: 'Tableau de bord', sectionId: '/user/dashboard' },
-    { label: 'Profil', sectionId: '/user/profile' },
-    { label: 'Centre KYC', sectionId: '/user/kyc' },
-    { label: 'Gestion KYC', sectionId: '/user/kyc-management' },
-    { label: 'Activité', sectionId: '/user/audit-logs' },
-    { label: 'Sécurité', sectionId: '/user/security' }
+    { label: 'DashBoard', sectionId: '/user/dashboard' },
+    { label: 'Profile', sectionId: '/user/profile' },
+    { label: 'KYC Center', sectionId: '/user/kyc' },
+    { label: 'KYC Management', sectionId: '/user/kyc-management' },
+    { label: 'Activity', sectionId: '/user/audit-logs' },
+    { label: 'Security', sectionId: '/user/security' }
   ];
 
 

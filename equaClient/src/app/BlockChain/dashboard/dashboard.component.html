@@ -1,18 +1,18 @@
 <div class="dashboard-page">
 
     <div class="wallet-stats-grid">
-        <app-compact-balance label="Solde Dinar" [amount]="dinarWallet()?.balance || 0" currency="TND" symbol="DT"
+        <app-compact-balance label="Dinar Balance" [amount]="dinarWallet()?.balance || 0" currency="TND" symbol="DT"
             gradient="linear-gradient(135deg, #2ecc71 0%, #27ae60 100%)">
         </app-compact-balance>
 
-        <app-compact-balance label="Solde EQUA" [amount]="equaWallet()?.equaAmount || 0" currency="EQUA" symbol="EQ"
+        <app-compact-balance label="EQUA Balance" [amount]="equaWallet()?.equaAmount || 0" currency="EQUA" symbol="EQ"
             gradient="linear-gradient(135deg, #627eea 0%, #3d5afe 100%)">
         </app-compact-balance>
     </div>
 
     <div class="chart-section card-container">
         <div class="card-header">
-            <h2>Évolution du Prix (Real-time)</h2>
+            <h2>Price Evolution (Real-time)</h2>
             <div class="rate-badge">
                 <span class="rate-main">1 EQUA = {{ currentRate() | number:'1.4-4' }} TND</span>
                 <span class="rate-divider">|</span>
@@ -26,9 +26,9 @@
 
     <div class="table-section card-container">
         <div class="card-header">
-            <h2>Transactions Récentes</h2>
+            <h2>Recent Transactions</h2>
             <app-ui-button variant="secondary" size="md" routerLink="/blockchain/transactions">
-                Voir tout
+                View all
             </app-ui-button>
         </div>
         <app-transactions-table [transactions]="recentTransactions()"></app-transactions-table>

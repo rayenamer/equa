@@ -1,31 +1,28 @@
 <div class="wallet-page fade-in">
   <header class="section-header">
-    <h1>Mes Portefeuilles</h1>
-    <p>Gérez vos actifs numériques en toute sécurité sur le réseau EQUA.</p>
+    <h1>My Wallets</h1>
+    <p>Manage your digital assets securely on the EQUA network.</p>
   </header>
 
   <div class="wallet-grid">
 
     <!-- Dinar Wallet Section -->
-    <app-wallet-card title="Portefeuille Dinar" [exists]="dinarWalletExists && !!dinarWallet"
-      emptyTitle="Aucun portefeuille Dinar"
-      emptyDesc="Créez votre portefeuille Dinar pour commencer à alimenter votre compte."
-      btnText="Initialiser mon Portefeuille" [balance]="dinarWallet?.balance || 0"
-      [walletId]="dinarWallet?.walletId || ''" [subValue]="dinarWallet?.balance || 0" currency="Dinar"
-      subLabel="Unités en main" (create)="createDinarWallet()">
+    <app-wallet-card title="Dinar Wallet" [exists]="dinarWalletExists && !!dinarWallet" emptyTitle="No Dinar wallet"
+      emptyDesc="Create your Dinar wallet to start funding your account." btnText="Initialize my Wallet"
+      [balance]="dinarWallet?.balance || 0" [walletId]="dinarWallet?.walletId || ''"
+      [subValue]="dinarWallet?.balance || 0" currency="Dinar" subLabel="Units on hand" (create)="createDinarWallet()">
       <app-dinar-actions (action)="handleWalletAction($event)"></app-dinar-actions>
     </app-wallet-card>
 
     <!-- Equa Wallet Section -->
-    <app-wallet-card title="Portefeuille EQUA" [exists]="equaWalletExists && !!equaWallet"
-      emptyTitle="Aucun portefeuille EQUA"
-      emptyDesc="Activez votre portefeuille EQUA pour participer à l'économie du réseau." btnText="Activer EQUA"
+    <app-wallet-card title="EQUA Wallet" [exists]="equaWalletExists && !!equaWallet" emptyTitle="No EQUA wallet"
+      emptyDesc="Activate your EQUA wallet to participate in the network economy." btnText="Activate EQUA"
       [balance]="equaWallet?.equaAmount || 0" [walletId]="equaWallet?.id?.toString() || ''"
-      [subValue]="equaWallet?.equaAmount || 0" currency="EQUA" subLabel="Points EQUA" (create)="createEquaWallet()">
+      [subValue]="equaWallet?.equaAmount || 0" currency="EQUA" subLabel="EQUA Points" (create)="createEquaWallet()">
       @if (dinarWalletExists) {
       <div class="simple-converter">
-        <input type="number" [(ngModel)]="convertAmount" placeholder="Montant en Dinars..." class="conv-input">
-        <button (click)="convertDinars()" class="conv-btn">Convertir en EQUA</button>
+        <input type="number" [(ngModel)]="convertAmount" placeholder="Amount in Dinars..." class="conv-input">
+        <button (click)="convertDinars()" class="conv-btn">Convert to EQUA</button>
       </div>
       }
     </app-wallet-card>

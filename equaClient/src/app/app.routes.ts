@@ -76,6 +76,7 @@ export const routes: Routes = [
             { path: 'assets/create', loadComponent: () => import('./FiancialMarket/asset-creation/asset-creation.component').then(m => m.AssetCreationComponent) },
             { path: 'assets/:id', loadComponent: () => import('./FiancialMarket/asset-trade/asset-trade.component').then(m => m.AssetTradeComponent) },
             { path: 'portfolio', loadComponent: () => import('./FiancialMarket/portfolio/portfolio.component').then(m => m.PortfolioComponent) },
+            { path: 'ai-insights', loadComponent: () => import('./FiancialMarket/ai-insights/ai-insights.component').then(m => m.AiInsightsComponent) },
             { path: 'explanation', loadComponent: () => import('./FiancialMarket/market-explanation/market-explanation.component').then(m => m.MarketExplanationComponent) }
         ]
     },

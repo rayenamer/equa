@@ -12,6 +12,15 @@ import {
     AssetMarketSummaryResponse
 } from './models/financial-market.models';
 
+// AI Insights
+export interface AiMarketInsights {
+    insight: string;
+    marketHealthScore: number;
+    marketSentiment: string;
+    riskLevel: string;
+    topAssetPick: string;
+}
+
 @Injectable({
     providedIn: 'root'
 })
@@ -61,5 +70,10 @@ export class FinancialMarketService {
 
     sellAsset(req: TradeRequestFinancial): Observable<TradeResponseFinancial> {
         return this.http.post<TradeResponseFinancial>(`${this.apiUrl}/trade/sell`, req);
+    }
+
+    // AI Insights
+    getMarketInsights(): Observable<AiMarketInsights> {
+        return this.http.get<AiMarketInsights>(`${this.apiUrl}/ai-insights`);
     }
 }

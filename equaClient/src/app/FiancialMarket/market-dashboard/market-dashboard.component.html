@@ -1,7 +1,7 @@
 <div class="market-dashboard">
     <header class="dashboard-header">
-        <h1>Marché Financier Virtual</h1>
-        <p>Explorez, analysez et investissez dans les actifs de l'écosystème EQUA.</p>
+        <h1>Virtual Financial Market</h1>
+        <p>Explore, analyze and invest in assets of the EQUA ecosystem.</p>
     </header>
 
     <div class="stats-grid">
@@ -17,8 +17,8 @@
     <div class="main-content">
         <div class="chart-container card-container">
             <div class="card-header">
-                <h2>Activité du Marché</h2>
-                <div class="chart-period">7 derniers jours</div>
+                <h2>Market Activity</h2>
+                <div class="chart-period">Last 7 days</div>
             </div>
             <div class="canvas-wrapper">
                 <p-chart type="line" [data]="chartData" [options]="chartOptions"></p-chart>
@@ -27,7 +27,7 @@
 
         <div class="trending-section card-container">
             <div class="card-header">
-                <h2>Tendances</h2>
+                <h2>Trending</h2>
             </div>
             <div class="trending-list">
                 <div class="trending-item" *ngFor="let asset of trendingAssets"
@@ -47,7 +47,7 @@
                     </div>
                 </div>
             </div>
-            <button class="view-all" routerLink="/financial-market/assets">Voir tous les actifs</button>
+            <button class="view-all" routerLink="/financial-market/assets">View all assets</button>
         </div>
     </div>
 </div>

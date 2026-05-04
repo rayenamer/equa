@@ -1,7 +1,7 @@
 <div class="dashboard-container">
     <header class="page-header">
-        <h1>Tableau de Bord Utilisateurs</h1>
-        <p class="subtitle">Vue d'ensemble de la communauté et gestion des membres.</p>
+        <h1>Users Dashboard</h1>
+        <p class="subtitle">Overview of the community and member management.</p>
     </header>
 
     <!-- Stats Grid -->
@@ -9,14 +9,14 @@
         <div class="stat-card">
             <div class="stat-icon total">👤</div>
             <div class="stat-info">
-                <span class="label">Total Utilisateurs</span>
+                <span class="label">Total Users</span>
                 <p class="value">{{ stats.total }}</p>
             </div>
         </div>
         <div class="stat-card">
             <div class="stat-icon observers">👁️</div>
             <div class="stat-info">
-                <span class="label">Observateurs</span>
+                <span class="label">Observers</span>
                 <p class="value">{{ stats.observers }}</p>
             </div>
         </div>
@@ -30,7 +30,7 @@
         <div class="stat-card">
             <div class="stat-icon active">⚡</div>
             <div class="stat-info">
-                <span class="label">Actifs (24h)</span>
+                <span class="label">Active (24h)</span>
                 <p class="value">{{ stats.activeToday }}</p>
             </div>
         </div>
@@ -39,26 +39,26 @@
     <!-- Users Table Section -->
     <div class="content-card">
         <div class="card-header">
-            <h2>Liste des Utilisateurs</h2>
+            <h2>Users List</h2>
             <div class="header-actions">
-                <button class="btn btn-outline">Filtrer</button>
-                <button class="btn btn-primary" (click)="exportUsers()" [disabled]="!users.length">Exporter</button>
+                <button class="btn btn-outline">Filter</button>
+                <button class="btn btn-primary" (click)="exportUsers()" [disabled]="!users.length">Export</button>
             </div>
         </div>
 
-        <div *ngIf="loading" class="table-message">Chargement des utilisateurs...</div>
+        <div *ngIf="loading" class="table-message">Loading users...</div>
         <div *ngIf="!loading && errorMessage" class="table-message error">{{ errorMessage }}</div>
-        <div *ngIf="!loading && !errorMessage && !users.length" class="table-message">Aucun utilisateur trouvé.</div>
+        <div *ngIf="!loading && !errorMessage && !users.length" class="table-message">No users found.</div>
 
         <div class="table-container" *ngIf="!loading && !errorMessage && users.length">
             <table class="users-table">
                 <thead>
                     <tr>
-                        <th>Utilisateur</th>
+                        <th>User</th>
                         <th>Email</th>
                         <th>Type</th>
-                        <th>Date d'inscription</th>
-                        <th>Statut</th>
+                        <th>Join Date</th>
+                        <th>Status</th>
                         <th>Actions</th>
                     </tr>
                 </thead>
@@ -72,14 +72,15 @@
                         </td>
                         <td>{{ user.email }}</td>
                         <td>
-                            <span class="badge" [class.badge-assistant]="user.userType === 'ASSISTANT'" [class.badge-observer]="user.userType === 'OBSERVER'">
+                            <span class="badge" [class.badge-assistant]="user.userType === 'ASSISTANT'"
+                                [class.badge-observer]="user.userType === 'OBSERVER'">
                                 {{ user.userType }}
                             </span>
                         </td>
                         <td>{{ user.createdAt | date:'shortDate' }}</td>
                         <td>
                             <span class="status-indicator active"></span>
-                            Actif
+                            Active
                         </td>
                         <td>
                             <button class="action-btn">•••</button>

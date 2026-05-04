@@ -1,0 +1,64 @@
+<div class="ai-insights-page">
+    <header class="section-header">
+        <div class="header-content">
+            <h1>Market AI Insights</h1>
+            <p>Get real-time, AI-driven investment recommendations and metrics based on current EQUA market data.</p>
+        </div>
+        <button class="analyze-btn" (click)="runAnalysis()" [disabled]="isAnalyzing">
+            <span class="icon" *ngIf="!isAnalyzing">🤖</span>
+            <i class="pi pi-spin pi-spinner icon" *ngIf="isAnalyzing"></i>
+            {{ isAnalyzing ? 'Analyzing...' : 'Generate Insights' }}
+        </button>
+    </header>
+
+    <div class="metrics-grid" *ngIf="insights && !isAnalyzing">
+        <div class="metric-card health-card">
+            <div class="icon"><i class="pi pi-heart-fill"></i></div>
+            <div class="info">
+                <h4>Market Health</h4>
+                <div class="value">{{ insights.marketHealthScore }}<span class="total">/100</span></div>
+            </div>
+        </div>
+        <div class="metric-card sentiment-card">
+            <div class="icon"><i class="pi pi-chart-line"></i></div>
+            <div class="info">
+                <h4>Sentiment</h4>
+                <div class="value">{{ insights.marketSentiment }}</div>
+            </div>
+        </div>
+        <div class="metric-card risk-card">
+            <div class="icon"><i class="pi pi-shield"></i></div>
+            <div class="info">
+                <h4>Risk Level</h4>
+                <div class="value">{{ insights.riskLevel }}</div>
+            </div>
+        </div>
+        <div class="metric-card pick-card">
+            <div class="icon"><i class="pi pi-star-fill"></i></div>
+            <div class="info">
+                <h4>Top AI Pick</h4>
+                <div class="value">{{ insights.topAssetPick }}</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="insight-container card-container">
+        <div class="insight-header">
+            <div class="glow-orb"></div>
+            <h2>Gemini Detailed Analysis</h2>
+        </div>
+        <div class="insight-content" [class.loading]="isAnalyzing">
+            <div class="spinner" *ngIf="isAnalyzing">
+                <i class="pi pi-spin pi-spinner"></i>
+                <span>Processing multi-variable market data...</span>
+            </div>
+            <div class="error-text" *ngIf="errorText">
+                <i class="pi pi-exclamation-triangle"></i> {{ errorText }}
+            </div>
+            <div class="text-content" *ngIf="!isAnalyzing && insights" [innerHTML]="formatText(insights.insight)"></div>
+            <div class="text-content empty-state" *ngIf="!isAnalyzing && !insights && !errorText">
+                Dashboard is waiting. Click the generate button above to fetch live market health and AI advice.
+            </div>
+        </div>
+    </div>
+</div>

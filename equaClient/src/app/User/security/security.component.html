@@ -1,28 +1,31 @@
 <div class="security-container">
     <header class="page-header">
-        <h1>Sécurité du Compte</h1>
-        <p class="subtitle">Protégez votre compte avec des mesures de sécurité avancées.</p>
+        <h1>Account Security</h1>
+        <p class="subtitle">Protect your account with advanced security measures.</p>
     </header>
 
     <div class="security-grid">
         <section class="security-card">
-            <h2>Changer le mot de passe</h2>
+            <h2>Change password</h2>
             <form class="security-form" (submit)="$event.preventDefault(); updatePassword()">
                 <div class="form-group">
-                    <label>Mot de passe actuel</label>
-                    <input type="password" placeholder="••••••••" [(ngModel)]="passwordForm.currentPassword" name="currentPassword">
+                    <label>Current password</label>
+                    <input type="password" placeholder="••••••••" [(ngModel)]="passwordForm.currentPassword"
+                        name="currentPassword">
                 </div>
                 <div class="form-group">
-                    <label>Nouveau mot de passe</label>
-                    <input type="password" placeholder="••••••••" [(ngModel)]="passwordForm.newPassword" name="newPassword">
+                    <label>New password</label>
+                    <input type="password" placeholder="••••••••" [(ngModel)]="passwordForm.newPassword"
+                        name="newPassword">
                 </div>
                 <div class="form-group">
-                    <label>Confirmer le nouveau mot de passe</label>
-                    <input type="password" placeholder="••••••••" [(ngModel)]="passwordForm.confirmPassword" name="confirmPassword">
+                    <label>Confirm new password</label>
+                    <input type="password" placeholder="••••••••" [(ngModel)]="passwordForm.confirmPassword"
+                        name="confirmPassword">
                 </div>
                 <button class="btn btn-primary" [disabled]="passwordLoading">
-                    <span *ngIf="!passwordLoading">Mettre à jour le mot de passe</span>
-                    <span *ngIf="passwordLoading">Mise à jour...</span>
+                    <span *ngIf="!passwordLoading">Update password</span>
+                    <span *ngIf="passwordLoading">Updating...</span>
                 </button>
                 <p *ngIf="passwordSuccessMessage" class="status-message success">{{ passwordSuccessMessage }}</p>
                 <p *ngIf="passwordErrorMessage" class="status-message error">{{ passwordErrorMessage }}</p>
@@ -33,8 +36,8 @@
             <section class="security-card compact">
                 <div class="option-header">
                     <div class="option-info">
-                        <h3>Authentification à deux facteurs</h3>
-                        <p>Ajoutez une couche de sécurité supplémentaire.</p>
+                        <h3>Two-factor authentication</h3>
+                        <p>Add an extra layer of security.</p>
                     </div>
                     <div class="toggle" [class.on]="twoFactorEnabled" (click)="twoFactorEnabled = !twoFactorEnabled">
                         <div class="toggle-handle"></div>
@@ -43,11 +46,11 @@
             </section>
 
             <section class="security-card compact danger-zone">
-                <h3>Désactiver le compte</h3>
-                <p>Cette action est irréversible. Toutes vos données seront inaccessibles.</p>
+                <h3>Disable account</h3>
+                <p>This action is irreversible. All your data will become inaccessible.</p>
                 <button class="btn btn-danger" (click)="disableAccount()" [disabled]="disableLoading">
-                    <span *ngIf="!disableLoading">Désactiver mon compte</span>
-                    <span *ngIf="disableLoading">Désactivation...</span>
+                    <span *ngIf="!disableLoading">Disable my account</span>
+                    <span *ngIf="disableLoading">Disabling...</span>
                 </button>
                 <p *ngIf="disableSuccessMessage" class="status-message success">{{ disableSuccessMessage }}</p>
                 <p *ngIf="disableErrorMessage" class="status-message error">{{ disableErrorMessage }}</p>
