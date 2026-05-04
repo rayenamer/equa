@@ -23,6 +23,7 @@ import { NavMenuItem } from '../../components/molecules/nav-menu/nav-menu.compon
 export class HomepageComponent {
   navItems: NavMenuItem[] = [
     { label: 'Dashboard', sectionId: '/financial-market/dashboard' },
+    { label: 'AI Insights', sectionId: '/financial-market/ai-insights' },
 
     { label: 'Invest', type: 'header' },
     { label: 'Market', sectionId: '/financial-market/assets' },
