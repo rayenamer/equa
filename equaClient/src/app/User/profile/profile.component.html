@@ -1,10 +1,10 @@
 <div class="profile-container">
     <header class="page-header">
-        <h1>Mon Profil</h1>
-        <p class="subtitle">Gérez vos informations personnelles et configurez vos accès.</p>
+        <h1>My Profile</h1>
+        <p class="subtitle">Manage your personal information and configure your access.</p>
     </header>
 
-    <div *ngIf="loading" class="state-message">Chargement du profil...</div>
+    <div *ngIf="loading" class="state-message">Loading profile...</div>
     <div *ngIf="errorMessage && !loading" class="state-message error">{{ errorMessage }}</div>
     <div *ngIf="successMessage" class="state-message success">{{ successMessage }}</div>
 
@@ -27,24 +27,17 @@
 
                 <!-- Coordonnées Section -->
                 <div class="form-section">
-                    <h3>Coordonnées</h3>
+                    <h3>Contact Information</h3>
                     <div class="form-grid">
                         <div class="form-group">
-                            <label>Nom d'utilisateur</label>
-                            <app-ui-input 
-                                type="text" 
-                                name="username" 
-                                [(value)]="user.username"
+                            <label>Username</label>
+                            <app-ui-input type="text" name="username" [(value)]="user.username"
                                 [placeholder]="user.username">
                             </app-ui-input>
                         </div>
                         <div class="form-group">
-                            <label>Adresse Email</label>
-                            <app-ui-input 
-                                type="email" 
-                                name="email" 
-                                [(value)]="user.email"
-                                [placeholder]="user.email">
+                            <label>Email Address</label>
+                            <app-ui-input type="email" name="email" [(value)]="user.email" [placeholder]="user.email">
                             </app-ui-input>
                         </div>
                     </div>
@@ -55,25 +48,25 @@
                 <!-- Roles & Permissions Section -->
                 <div class="form-section">
                     <div class="section-header">
-                        <h3>Rôles et Permissions</h3>
+                        <h3>Roles and Permissions</h3>
                         <div class="user-type-toggle">
-                            <button [class.active]="user.userType === 'OBSERVER'" (click)="user.userType = 'OBSERVER'">Observateur</button>
-                            <button [class.active]="user.userType === 'ASSISTANT'" (click)="user.userType = 'ASSISTANT'">Assistant</button>
+                            <button [class.active]="user.userType === 'OBSERVER'"
+                                (click)="user.userType = 'OBSERVER'">Observer</button>
+                            <button [class.active]="user.userType === 'ASSISTANT'"
+                                (click)="user.userType = 'ASSISTANT'">Assistant</button>
                         </div>
                     </div>
-                    
+
                     <p class="section-hint" *ngIf="user.userType === 'OBSERVER'">
-                        En tant qu'observateur, vous pouvez sélectionner vos permissions spécifiques.
+                        As an observer, you can select your specific permissions.
                     </p>
                     <p class="section-hint" *ngIf="user.userType === 'ASSISTANT'">
-                        Les assistants ont des permissions prédéfinies par le système.
+                        Assistants have predefined permissions from the system.
                     </p>
 
                     <div class="permissions-grid" *ngIf="user.userType === 'OBSERVER'">
-                        <div class="permission-item" 
-                             *ngFor="let perm of availablePermissions"
-                             [class.selected]="hasPermission(perm.id)"
-                             (click)="togglePermission(perm.id)">
+                        <div class="permission-item" *ngFor="let perm of availablePermissions"
+                            [class.selected]="hasPermission(perm.id)" (click)="togglePermission(perm.id)">
                             <div class="perm-checkbox">
                                 <span *ngIf="hasPermission(perm.id)">✓</span>
                             </div>
@@ -83,12 +76,8 @@
                 </div>
 
                 <div class="card-footer">
-                    <app-ui-button 
-                        [label]="saving ? 'Enregistrement...' : 'Enregistrer les modifications'" 
-                        (clicked)="saveProfile()" 
-                        variant="primary" 
-                        size="md"
-                        [disabled]="saving">
+                    <app-ui-button [label]="saving ? 'Saving...' : 'Save changes'" (clicked)="saveProfile()"
+                        variant="primary" size="md" [disabled]="saving">
                     </app-ui-button>
                 </div>
             </div>
@@ -97,15 +86,16 @@
         <!-- Sidebar Info -->
         <aside class="profile-sidebar">
             <div class="status-card">
-                <label>Niveau de Risque</label>
+                <label>Risk Level</label>
                 <div class="risk-meter">
-                    <div class="meter-bar" [style.width.%]="user.riskLevel === 'LOW' ? 33 : 100" [class.low]="user.riskLevel === 'LOW'"></div>
+                    <div class="meter-bar" [style.width.%]="user.riskLevel === 'LOW' ? 33 : 100"
+                        [class.low]="user.riskLevel === 'LOW'"></div>
                 </div>
                 <p class="risk-value">{{ user.riskLevel }}</p>
             </div>
 
             <div class="status-card">
-                <label>Statut KYC</label>
+                <label>KYC Status</label>
                 <div class="kyc-badge-container">
                     <span class="kyc-dot" [class.approved]="user.kycStatus === 'APPROVED'"></span>
                     <span class="kyc-text">{{ user.kycStatus }}</span>

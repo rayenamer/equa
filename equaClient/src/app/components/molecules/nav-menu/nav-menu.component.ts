@@ -63,21 +63,21 @@ export class NavMenuComponent implements OnDestroy {
   get userMenuOptions() {
     if (this.isBusinessMode) {
       return [
-        { label: 'Mode Individuel', action: () => { this.businessModeService.setMode('individual'); this.router.navigate(['/user/dashboard']); this.isUserMenuOpen = false; } },
+        { label: 'Individual Mode', action: () => { this.businessModeService.setMode('individual'); this.router.navigate(['/user/dashboard']); this.isUserMenuOpen = false; } },
         { label: 'Profile', action: () => { this.router.navigate(['/user']); this.isUserMenuOpen = false; } },
-        { label: 'Déconnexion', action: () => { this.logout(); this.isUserMenuOpen = false; } }
+        { label: 'Logout', action: () => { this.logout(); this.isUserMenuOpen = false; } }
       ];
     } else {
       return [
-        { label: 'Mode Business', action: () => { this.businessModeService.setMode('business'); this.router.navigate(['/business/mouvements']); this.isUserMenuOpen = false; } },
+        { label: 'Business Mode', action: () => { this.businessModeService.setMode('business'); this.router.navigate(['/business/mouvements']); this.isUserMenuOpen = false; } },
         { label: 'Profile', action: () => { this.router.navigate(['/user']); this.isUserMenuOpen = false; } },
-        { label: 'Déconnexion', action: () => { this.logout(); this.isUserMenuOpen = false; } }
+        { label: 'Logout', action: () => { this.logout(); this.isUserMenuOpen = false; } }
       ];
     }
   }
 
   private readonly anonymousActionItems: NavMenuItem[] = [
-    { label: 'Connexion', route: '/user/login', styleType: 'link' },
+    { label: 'Login', route: '/user/login', styleType: 'link' },
   ];
 
   private readonly authenticatedBusinessItems: NavMenuItem[] = [];

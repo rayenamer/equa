@@ -5,21 +5,21 @@
     <div class="page-header">
         <div class="header-left">
             <h1 class="page-title">
-                Mouvements Comptables
+                Accounting Entries
             </h1>
-            <p class="page-sub">Comptabilité analytique & gestion des opérations</p>
+            <p class="page-sub">Analytical accounting & operations management</p>
         </div>
         <div class="header-right">
             <div class="kpi-chip entrant">
-                <span class="kpi-label">Total Entrant</span>
+                <span class="kpi-label">Total Inflow</span>
                 <span class="kpi-val">{{ formatAmount(totalCredit) }}</span>
             </div>
             <div class="kpi-chip sortant">
-                <span class="kpi-label">Total Sortant</span>
+                <span class="kpi-label">Total Outflow</span>
                 <span class="kpi-val">{{ formatAmount(totalDebit) }}</span>
             </div>
             <div class="kpi-chip solde" [class.neg]="solde < 0">
-                <span class="kpi-label">Solde</span>
+                <span class="kpi-label">Balance</span>
                 <span class="kpi-val">{{ formatAmount(solde) }}</span>
             </div>
         </div>
@@ -28,13 +28,13 @@
     <!-- Tabs -->
     <div class="tabs">
         <button class="tab" [class.active]="activeTab === 'comptabilite'" (click)="setTab('comptabilite')">
-            Comptabilité Analytique
+            Analytical Accounting
         </button>
         <button class="tab" [class.active]="activeTab === 'nouveau'" (click)="setTab('nouveau')">
-            Nouveau Mouvement
+            New Entry
         </button>
         <button class="tab" [class.active]="activeTab === 'transactions'" (click)="setTab('transactions')">
-            Importer Transactions
+            Import Transactions
         </button>
     </div>
 
@@ -52,16 +52,15 @@
                         <path d="M21 21l-4.35-4.35"></path>
                     </svg>
                 </span>
-                <input type="text" [(ngModel)]="searchTerm" placeholder="Rechercher un mouvement..."
-                    class="search-input" />
+                <input type="text" [(ngModel)]="searchTerm" placeholder="Search an entry..." class="search-input" />
             </div>
             <div class="type-filters">
                 <button class="filter-btn" [class.active]="filterType === 'all'"
-                    (click)="filterType = 'all'">Tous</button>
+                    (click)="filterType = 'all'">All</button>
                 <button class="filter-btn entrant" [class.active]="filterType === 'entrant'"
-                    (click)="filterType = 'entrant'">Entrant</button>
+                    (click)="filterType = 'entrant'">Inflow</button>
                 <button class="filter-btn sortant" [class.active]="filterType === 'sortant'"
-                    (click)="filterType = 'sortant'">Sortant</button>
+                    (click)="filterType = 'sortant'">Outflow</button>
             </div>
         </div>
 
@@ -77,9 +76,9 @@
                             <polyline points="12 6 12 12 16 14"></polyline>
                         </svg>
                     </span>
-                    Mouvements en attente (À classifier)
+                    Pending Entries (To classify)
                 </h3>
-                <span class="pending-count">{{ pendingMouvements.length }} mouvement(s) requiert votre attention</span>
+                <span class="pending-count">{{ pendingMouvements.length }} entry(ies) require your attention</span>
             </div>
             <div class="pending-list">
                 @for (p of pendingMouvements; track p.id) {
@@ -89,7 +88,7 @@
                         <div class="p-libelle">{{ p.libelle }}</div>
                         <div class="p-type" [class.p-entrant]="p.type === 'entrant'"
                             [class.p-sortant]="p.type === 'sortant'">
-                            {{ p.type === 'entrant' ? 'Entrant' : 'Sortant' }} • {{ formatAmount(p.montant) }}
+                            {{ p.type === 'entrant' ? 'Inflow' : 'Outflow' }} • {{ formatAmount(p.montant) }}
                         </div>
                     </div>
                     <div class="p-action">
@@ -98,7 +97,7 @@
                                 stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
                                 <polyline points="20 6 9 17 4 12"></polyline>
                             </svg>
-                            Classifier
+                            Classify
                         </button>
                     </div>
                 </div>
@@ -111,12 +110,12 @@
         <div class="journal-container">
             <div class="journal-header">
                 <span class="col-date">Date</span>
-                <span class="col-libelle">Libellé</span>
-                <span class="col-compte">Compte</span>
-                <span class="col-categorie">Catégorie</span>
+                <span class="col-libelle">Label</span>
+                <span class="col-compte">Account</span>
+                <span class="col-categorie">Category</span>
                 <span class="col-type">Type</span>
-                <span class="col-montant">Montant</span>
-                <span class="col-statut">Statut</span>
+                <span class="col-montant">Amount</span>
+                <span class="col-statut">Status</span>
             </div>
 
             <div class="journal-body">
@@ -132,7 +131,7 @@
                     <span class="col-type">
                         <span class="type-badge" [class.entrant]="m.type === 'entrant'"
                             [class.sortant]="m.type === 'sortant'">
-                            {{ m.type === 'entrant' ? 'Entrant' : 'Sortant' }}
+                            {{ m.type === 'entrant' ? 'Inflow' : 'Outflow' }}
                         </span>
                     </span>
                     <span class="col-montant" [class.entrant-amt]="m.type === 'entrant'"
@@ -141,8 +140,8 @@
                     </span>
                     <span class="col-statut">
                         <span class="statut-badge" [class]="'s-' + m.statut">
-                            {{ m.statut === 'valide' ? 'Validé' : m.statut === 'en_attente' ? 'En attente' : '✕
-                            Annulé' }}
+                            {{ m.statut === 'valide' ? 'Validated' : m.statut === 'en_attente' ? 'Pending' : '✕
+                            Cancelled' }}
                         </span>
                     </span>
                 </div>
@@ -158,23 +157,23 @@
                         <polyline points="3.27 6.96 12 12.01 20.73 6.96"></polyline>
                         <line x1="12" y1="22.08" x2="12" y2="12"></line>
                     </svg>
-                    <p>Aucun mouvement trouvé</p>
+                    <p>No entry found</p>
                 </div>
                 }
             </div>
         </div>
 
         <!-- Analytical summary by category -->
-        <div class="section-title">Répartition par catégorie</div>
+        <div class="section-title">Breakdown by category</div>
         <div class="analytics-grid">
             @for (cat of categories; track cat) {
             <div class="analytic-card">
                 <div class="ana-label">{{ cat }}</div>
                 <div class="ana-entrant">
-                    Entrant : <strong>{{ formatAmount(getCatCredit(cat)) }}</strong>
+                    Inflow : <strong>{{ formatAmount(getCatCredit(cat)) }}</strong>
                 </div>
                 <div class="ana-sortant">
-                    Sortant : <strong>{{ formatAmount(getCatDebit(cat)) }}</strong>
+                    Outflow : <strong>{{ formatAmount(getCatDebit(cat)) }}</strong>
                 </div>
             </div>
             }
@@ -188,14 +187,14 @@
 
         @if (showSuccess) {
         <div class="success-banner">
-            Mouvement enregistré avec succès !
+            Entry saved successfully!
         </div>
         }
 
         <div class="form-card">
             <div class="form-card-header">
-                <h2>Ajouter un nouveau mouvement</h2>
-                <p>Renseignez les informations du mouvement comptable à enregistrer.</p>
+                <h2>Add a new entry</h2>
+                <p>Fill in the accounting entry information to register.</p>
             </div>
 
             <form class="mouvement-form" (ngSubmit)="submitMouvement()" #form="ngForm">
@@ -207,85 +206,84 @@
                     </div>
 
                     <div class="form-group">
-                        <label>Type de mouvement *</label>
+                        <label>Entry Type *</label>
                         <div class="type-toggle">
                             <button type="button" class="type-btn" [class.active]="newMouvement.type === 'entrant'"
                                 (click)="newMouvement.type = 'entrant'">
-                                Entrant
+                                Inflow
                             </button>
                             <button type="button" class="type-btn sortant"
                                 [class.active]="newMouvement.type === 'sortant'"
                                 (click)="newMouvement.type = 'sortant'">
-                                Sortant
+                                Outflow
                             </button>
                         </div>
                     </div>
 
                     <div class="form-group full">
-                        <label>Libellé *</label>
+                        <label>Label *</label>
                         <input type="text" [(ngModel)]="newMouvement.libelle" name="libelle" class="form-control"
-                            placeholder="Ex: Vente produit, Achat fournitures..." required />
+                            placeholder="Ex: Product sale, Office supplies..." required />
                         @if (formSubmitted && !newMouvement.libelle) {
-                        <span class="field-error">Le libellé est requis</span>
+                        <span class="field-error">Label is required</span>
                         }
                     </div>
 
                     <div class="form-group">
-                        <label>Compte comptable *</label>
+                        <label>Accounting Account *</label>
                         <select [(ngModel)]="newMouvement.compte" name="compte" class="form-control" required>
-                            <option value="" disabled selected>Sélectionner un compte</option>
+                            <option value="" disabled selected>Select an account</option>
                             @for (c of comptes; track c) {
                             <option [value]="c">{{ c }}</option>
                             }
                         </select>
                         @if (formSubmitted && !newMouvement.compte) {
-                        <span class="field-error">Le compte est requis</span>
+                        <span class="field-error">Account is required</span>
                         }
                     </div>
 
                     <div class="form-group">
-                        <label>Catégorie analytique *</label>
+                        <label>Analytical Category *</label>
                         <select [(ngModel)]="newMouvement.categorie" name="categorie" class="form-control" required>
-                            <option value="" disabled selected>Sélectionner une catégorie</option>
+                            <option value="" disabled selected>Select a category</option>
                             @for (c of categories; track c) {
                             <option [value]="c">{{ c }}</option>
                             }
                         </select>
                         @if (formSubmitted && !newMouvement.categorie) {
-                        <span class="field-error">La catégorie est requise</span>
+                        <span class="field-error">Category is required</span>
                         }
                     </div>
 
                     <div class="form-group">
-                        <label>Montant (EQUA) *</label>
+                        <label>Amount (EQUA) *</label>
                         <input type="number" [(ngModel)]="newMouvement.montant" name="montant" class="form-control"
                             placeholder="0.00" min="1" required />
                         @if (formSubmitted && !newMouvement.montant) {
-                        <span class="field-error">Le montant est requis</span>
+                        <span class="field-error">Amount is required</span>
                         }
                     </div>
 
                     <div class="form-group">
-                        <label>Statut</label>
+                        <label>Status</label>
                         <select [(ngModel)]="newMouvement.statut" name="statut" class="form-control">
-                            <option value="en_attente">En attente</option>
-                            <option value="valide">Validé</option>
-                            <option value="annule">Annulé</option>
+                            <option value="en_attente">Pending</option>
+                            <option value="valide">Validated</option>
+                            <option value="annule">Cancelled</option>
                         </select>
                     </div>
 
                     <div class="form-group full">
-                        <label>Description / Pièce justificative</label>
+                        <label>Description / Supporting Document</label>
                         <textarea [(ngModel)]="newMouvement.description" name="description"
-                            class="form-control textarea"
-                            placeholder="Notes, numéro de facture, références..."></textarea>
+                            class="form-control textarea" placeholder="Notes, invoice number, references..."></textarea>
                     </div>
 
                 </div>
 
                 <!-- Form actions -->
                 <div class="form-actions">
-                    <button type="button" class="btn-secondary" (click)="resetForm()">Réinitialiser</button>
+                    <button type="button" class="btn-secondary" (click)="resetForm()">Reset</button>
                     <button type="submit" class="btn-primary">
                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="none" stroke="currentColor"
                             stroke-width="2" viewBox="0 0 24 24">
@@ -293,7 +291,7 @@
                             <polyline points="17 21 17 13 7 13 7 21"></polyline>
                             <polyline points="7 3 7 8 15 8"></polyline>
                         </svg>
-                        Enregistrer le mouvement
+                        Save Entry
                     </button>
                 </div>
             </form>
@@ -307,21 +305,21 @@
 
         @if (showSuccess) {
         <div class="success-banner">
-            Transaction importée en attente avec succès !
+            Transaction imported and pending successfully!
         </div>
         }
 
         <div class="form-card-header" style="margin-bottom: 2rem;">
-            <h2>Transactions de votre Wallet</h2>
-            <p>Sélectionnez les transactions blockchain à importer en tant que mouvements comptables.</p>
+            <h2>Wallet Transactions</h2>
+            <p>Select the blockchain transactions to import as accounting entries.</p>
         </div>
 
         <div class="journal-container">
             <div class="journal-header">
                 <span class="col-date">Date</span>
-                <span class="col-libelle">Hash de Transaction</span>
-                <span class="col-type">Sens</span>
-                <span class="col-montant">Montant</span>
+                <span class="col-libelle">Transaction Hash</span>
+                <span class="col-type">Direction</span>
+                <span class="col-montant">Amount</span>
                 <span class="col-statut">Action</span>
             </div>
 
@@ -332,7 +330,7 @@
                     <span class="col-libelle small" style="word-break: break-all;">{{ tx.transactionHash }}</span>
                     <span class="col-type">
                         <span class="type-badge" [class.entrant]="!isSortant(tx)" [class.sortant]="isSortant(tx)">
-                            {{ !isSortant(tx) ? 'Entrante' : 'Sortante' }}
+                            {{ !isSortant(tx) ? 'Inflow' : 'Outflow' }}
                         </span>
                     </span>
                     <span class="col-montant" [class.entrant-amt]="!isSortant(tx)" [class.sortant-amt]="isSortant(tx)">
@@ -341,7 +339,7 @@
                     <span class="col-statut">
                         <button class="btn-primary" style="padding: 0.5rem 1rem; font-size: 0.85rem;"
                             (click)="importTransaction(tx)">
-                            Ajouter
+                            Add
                         </button>
                     </span>
                 </div>
@@ -355,7 +353,7 @@
                             d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z">
                         </path>
                     </svg>
-                    <p>Aucune transaction trouvée sur ce wallet</p>
+                    <p>No transaction found on this wallet</p>
                 </div>
                 }
             </div>
@@ -368,7 +366,7 @@
     <div class="modal-overlay" (click)="cancelClassification()">
         <div class="modal-content animate-in" (click)="$event.stopPropagation()">
             <div class="modal-header">
-                <h2>Classifier le mouvement</h2>
+                <h2>Classify Entry</h2>
                 <button type="button" class="btn-close" (click)="cancelClassification()">
                     <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="none" stroke="currentColor"
                         stroke-width="2" viewBox="0 0 24 24">
@@ -383,15 +381,15 @@
                     <div class="prev-libelle">{{ selectedMovementToClassify.libelle }}</div>
                     <div class="prev-montant" [class.p-entrant]="selectedMovementToClassify.type === 'entrant'"
                         [class.p-sortant]="selectedMovementToClassify.type === 'sortant'">
-                        {{ selectedMovementToClassify.type === 'entrant' ? 'Entrant' : 'Sortant' }} • {{
+                        {{ selectedMovementToClassify.type === 'entrant' ? 'Inflow' : 'Outflow' }} • {{
                         formatAmount(selectedMovementToClassify.montant) }}
                     </div>
                 </div>
 
                 <div class="form-group">
-                    <label>Compte comptable *</label>
+                    <label>Accounting Account *</label>
                     <select [(ngModel)]="classificationForm.compte" class="form-control" required>
-                        <option value="" disabled selected>Sélectionner un compte</option>
+                        <option value="" disabled selected>Select an account</option>
                         @for (c of comptes; track c) {
                         <option [value]="c">{{ c }}</option>
                         }
@@ -399,9 +397,9 @@
                 </div>
 
                 <div class="form-group" style="margin-top: 1rem;">
-                    <label>Catégorie analytique *</label>
+                    <label>Analytical Category *</label>
                     <select [(ngModel)]="classificationForm.categorie" class="form-control" required>
-                        <option value="" disabled selected>Sélectionner une catégorie</option>
+                        <option value="" disabled selected>Select a category</option>
                         @for (c of categories; track c) {
                         <option [value]="c">{{ c }}</option>
                         }
@@ -410,11 +408,11 @@
             </div>
 
             <div class="modal-footer">
-                <button type="button" class="btn-secondary" (click)="cancelClassification()">Annuler</button>
+                <button type="button" class="btn-secondary" (click)="cancelClassification()">Cancel</button>
                 <button type="button" class="btn-primary"
                     [disabled]="!classificationForm.compte || !classificationForm.categorie"
                     (click)="confirmClassification()">
-                    Confirmer la classification
+                    Confirm Classification
                 </button>
             </div>
         </div>

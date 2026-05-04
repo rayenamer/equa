@@ -1,10 +1,10 @@
 <div class="management-container">
     <header class="page-header">
-        <h1>Gestion des KYC</h1>
-        <p class="subtitle">Examinez les profils des observateurs et validez leurs identités.</p>
+        <h1>KYC Management</h1>
+        <p class="subtitle">Review observer profiles and validate their identities.</p>
     </header>
 
-    <div *ngIf="loading" class="table-message">Chargement des demandes KYC...</div>
+    <div *ngIf="loading" class="table-message">Loading KYC requests...</div>
     <div *ngIf="errorMessage && !loading" class="table-message error">{{ errorMessage }}</div>
     <div *ngIf="successMessage" class="table-message success">{{ successMessage }}</div>
 
@@ -13,10 +13,10 @@
             <table class="kyc-table">
                 <thead>
                     <tr>
-                        <th>Utilisateur</th>
+                        <th>User</th>
                         <th>Email</th>
-                        <th>Dernière Soumission</th>
-                        <th>Statut Actuel</th>
+                        <th>Last Submitted</th>
+                        <th>Current Status</th>
                         <th>Actions</th>
                     </tr>
                 </thead>
@@ -36,60 +36,45 @@
                             </span>
                         </td>
                         <td>
-                            <app-ui-button 
-                                *ngIf="user.displayStatus !== 'APPROVED'"
-                                label="Valider" 
-                                (clicked)="openReview(user)" 
-                                variant="primary" 
-                                size="md">
+                            <app-ui-button *ngIf="user.displayStatus !== 'APPROVED'" label="Validate"
+                                (clicked)="openReview(user)" variant="primary" size="md">
                             </app-ui-button>
                             <span *ngIf="user.displayStatus === 'APPROVED'" class="validated-label">
-                                ✓ Validé
+                                ✓ Validated
                             </span>
                         </td>
                     </tr>
                 </tbody>
             </table>
         </div>
-        <div *ngIf="!loading && !users.length" class="table-message">Aucun utilisateur OBSERVER à traiter.</div>
+        <div *ngIf="!loading && !users.length" class="table-message">No OBSERVER users to process.</div>
     </div>
 
     <!-- Review Modal Overlay -->
     <div class="modal-overlay" *ngIf="selectedUser">
         <div class="review-modal">
             <header>
-                <h2>Valider le KYC : {{ selectedUser.username }}</h2>
+                <h2>Validate KYC: {{ selectedUser.username }}</h2>
                 <button class="close-btn" (click)="selectedUser = null">×</button>
             </header>
-            
+
             <div class="modal-body">
-                <p>Voulez-vous approuver ou rejeter la demande de cet utilisateur ?</p>
-                
+                <p>Do you want to approve or reject this user's request?</p>
+
                 <div class="form-group">
-                    <label>Note de révision (optionnel)</label>
-                    <app-ui-input 
-                        type="text" 
-                        name="reviewNote" 
-                        placeholder="Ex: Documents conformes" 
+                    <label>Review Note (optional)</label>
+                    <app-ui-input type="text" name="reviewNote" placeholder="Ex: Documents compliant"
                         [(value)]="reviewNote">
                     </app-ui-input>
                 </div>
             </div>
 
             <footer class="modal-footer">
-                <app-ui-button 
-                    [label]="actionLoading ? 'Traitement...' : 'Rejeter'" 
-                    (clicked)="updateStatus('REJECTED')" 
-                    variant="secondary" 
-                    size="md"
-                    [disabled]="actionLoading">
+                <app-ui-button [label]="actionLoading ? 'Processing...' : 'Reject'" (clicked)="updateStatus('REJECTED')"
+                    variant="secondary" size="md" [disabled]="actionLoading">
                 </app-ui-button>
-                <app-ui-button 
-                    [label]="actionLoading ? 'Traitement...' : 'Approuver'" 
-                    (clicked)="updateStatus('APPROVED')" 
-                    variant="primary" 
-                    size="md"
-                    [disabled]="actionLoading">
+                <app-ui-button [label]="actionLoading ? 'Processing...' : 'Approve'"
+                    (clicked)="updateStatus('APPROVED')" variant="primary" size="md" [disabled]="actionLoading">
                 </app-ui-button>
             </footer>
         </div>

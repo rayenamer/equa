@@ -22,17 +22,17 @@ import { NavMenuItem } from '../../components/molecules/nav-menu/nav-menu.compon
 })
 export class HomepageComponent {
   navItems: NavMenuItem[] = [
-    { label: 'Vue d\'ensemble', sectionId: '/financial-market/dashboard' },
+    { label: 'Dashboard', sectionId: '/financial-market/dashboard' },
 
-    { label: 'Investir', type: 'header' },
-    { label: 'Marché des Actifs', sectionId: '/financial-market/assets' },
-    { label: 'Mon Portefeuille', sectionId: '/financial-market/portfolio' },
+    { label: 'Invest', type: 'header' },
+    { label: 'Market', sectionId: '/financial-market/assets' },
+    { label: 'My Portfolio', sectionId: '/financial-market/portfolio' },
 
-    { label: 'Gérer', type: 'header' },
-    { label: 'Créer un Actif', sectionId: '/financial-market/assets/create' },
+    { label: 'Manage', type: 'header' },
+    { label: 'Create', sectionId: '/financial-market/assets/create' },
 
-    { label: 'Aide', type: 'header' },
-    { label: 'Comment ça marche', sectionId: '/financial-market/explanation' }
+    { label: 'Help', type: 'header' },
+    { label: 'How does this work', sectionId: '/financial-market/explanation' }
   ];
 
 

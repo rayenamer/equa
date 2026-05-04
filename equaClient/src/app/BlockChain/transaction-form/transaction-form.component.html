@@ -1,17 +1,17 @@
 <div class="form-container">
     <div class="form-header">
-        <h2>Nouvelle Transaction</h2>
-        <p>Saisissez les détails pour envoyer des fonds sur la blockchain EQUA.</p>
+        <h2>New Transaction</h2>
+        <p>Enter the details to send funds on the EQUA blockchain.</p>
     </div>
 
     <!-- Wallet Info Section -->
     <div class="wallet-info" *ngIf="myWallet">
         <div class="info-card">
-            <span class="label">Votre Portefeuille</span>
+            <span class="label">Your Wallet</span>
             <span class="value">{{ myWallet.publicKey || 'ID: ' + myWallet.id }}</span>
         </div>
         <div class="info-card">
-            <span class="label">Solde Disponible</span>
+            <span class="label">Available Balance</span>
             <span class="value spotlight">{{ myWallet.equaAmount | number:'1.2-8' }} EQUA</span>
         </div>
     </div>
@@ -20,7 +20,7 @@
         <div class="form-grid">
             <!-- To Wallet -->
             <div class="form-field full-width">
-                <label for="toWallet">Adresse Destinataire (To)</label>
+                <label for="toWallet">Recipient Address (To)</label>
                 <div class="input-wrapper">
                     <span class="icon">󰀚</span>
                     <input type="text" id="toWallet" formControlName="toWallet" placeholder="0x..."
@@ -28,17 +28,17 @@
                 </div>
                 <div class="error-msg"
                     *ngIf="transactionForm.get('toWallet')?.touched && transactionForm.get('toWallet')?.errors?.['required']">
-                    L'adresse destinataire est requise.
+                    Recipient address is required.
                 </div>
                 <div class="error-msg"
                     *ngIf="transactionForm.get('toWallet')?.touched && transactionForm.get('toWallet')?.errors?.['pattern']">
-                    Format d'adresse invalide (0x...).
+                    Invalid address format (0x...).
                 </div>
             </div>
 
             <!-- Amount -->
             <div class="form-field full-width">
-                <label for="amount">Montant (EQUA)</label>
+                <label for="amount">Amount (EQUA)</label>
                 <div class="input-wrapper">
                     <span class="icon">󰈗</span>
                     <input type="number" id="amount" formControlName="amount" placeholder="0.00"
@@ -46,7 +46,7 @@
                 </div>
                 <div class="error-msg"
                     *ngIf="transactionForm.get('amount')?.touched && transactionForm.get('amount')?.invalid">
-                    Veuillez saisir un montant valide (> 0).
+                    Please enter a valid amount (> 0).
                 </div>
             </div>
         </div>
@@ -64,7 +64,7 @@
 
         <div class="form-actions">
             <button type="submit" class="submit-btn" [disabled]="isSubmitting">
-                <span *ngIf="!isSubmitting">Confirmer la Transaction</span>
+                <span *ngIf="!isSubmitting">Confirm Transaction</span>
                 <span *ngIf="isSubmitting" class="loader"></span>
             </button>
         </div>

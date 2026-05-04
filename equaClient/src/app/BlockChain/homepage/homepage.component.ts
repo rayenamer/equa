@@ -23,19 +23,19 @@ import { BlockchainSidebarComponent } from '../../components/organisms/blockchai
 })
 export class HomepageComponent {
   navItems: NavMenuItem[] = [
-    { label: 'Tableau de bord', sectionId: '/blockchain/dashboard' },
+    { label: 'Dashboard', sectionId: '/blockchain/dashboard' },
 
-    { label: 'Envoi / Réception', type: 'header' },
-    { label: 'Portefeuilles', sectionId: '/blockchain/wallet' },
+    { label: 'Send/Receive', type: 'header' },
+    { label: 'Wallets', sectionId: '/blockchain/wallet' },
     { label: 'Transactions', sectionId: '/blockchain/transactions' },
-    { label: 'Envoyer des fonds', sectionId: '/blockchain/transactions/create' },
+    { label: 'Send', sectionId: '/blockchain/transactions/create' },
 
-    { label: 'Système', type: 'header' },
+    { label: 'System', type: 'header' },
     { label: 'Blocs', sectionId: '/blockchain/blocks' },
-    { label: 'Nœuds', sectionId: '/blockchain/nodes' },
-    { label: 'IA Insights', sectionId: '/blockchain/ai-insights' },
-    { label: 'AIDE', type: 'header' },
-    { label: 'Comment ça marche', sectionId: '/blockchain/explanation' }
+    { label: 'Nodes', sectionId: '/blockchain/nodes' },
+    { label: 'AI Insights', sectionId: '/blockchain/ai-insights' },
+    { label: 'Help', type: 'header' },
+    { label: 'How does this work', sectionId: '/blockchain/explanation' }
   ];
 
 

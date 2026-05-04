@@ -3,22 +3,22 @@
     <!-- Header -->
     <div class="page-header">
         <div>
-            <h1 class="page-title"><span class="title-icon">💹</span> Analyse Financière</h1>
-            <p class="page-sub">Ratios financiers & états financiers de l'entreprise</p>
+            <h1 class="page-title"><span class="title-icon">💹</span> Financial Analysis</h1>
+            <p class="page-sub">Financial ratios & company financial statements</p>
         </div>
         <div class="header-note">
             <!-- TODO: add period selector (month/quarter/year) when connected to API -->
-            <span class="data-badge">Données : Exercice 2025–2026</span>
+            <span class="data-badge">Data: Fiscal Year 2025–2026</span>
         </div>
     </div>
 
     <!-- Tabs -->
     <div class="tabs">
         <button class="tab" [class.active]="activeTab === 'ratios'" (click)="setTab('ratios')">
-            Ratios Financiers
+            Financial Ratios
         </button>
         <button class="tab" [class.active]="activeTab === 'etats'" (click)="setTab('etats')">
-            États Financiers
+            Financial Statements
         </button>
     </div>
 
@@ -29,21 +29,21 @@
 
             <!-- Liquidity -->
             <div class="section-block">
-                <div class="section-label">Ratios de Liquidité</div>
+                <div class="section-label">Liquidity Ratios</div>
                 <div class="ratios-grid">
                     @for (r of ratiosLiquidite; track r.nom) {
                     <div class="ratio-card" [class]="'s-' + r.statut">
                         <div class="ratio-top">
                             <span class="ratio-icon">{{ r.icon }}</span>
                             <span class="ratio-statut" [class]="'st-' + r.statut">
-                                {{ r.statut === 'bon' ? 'Bon' : r.statut === 'moyen' ? 'Moyen' : 'Risque' }}
+                                {{ r.statut === 'bon' ? 'Good' : r.statut === 'moyen' ? 'Average' : 'Risk' }}
                             </span>
                         </div>
                         <div class="ratio-value">{{ r.valeur }}</div>
                         <div class="ratio-name">{{ r.nom }}</div>
                         <div class="ratio-formule">{{ r.formule }}</div>
                         @if (r.seuil) {
-                        <div class="ratio-seuil">Seuil : <strong>{{ r.seuil }}</strong></div>
+                        <div class="ratio-seuil">Threshold: <strong>{{ r.seuil }}</strong></div>
                         }
                         <div class="ratio-desc">{{ r.description }}</div>
                     </div>
@@ -53,21 +53,21 @@
 
             <!-- Solvability -->
             <div class="section-block">
-                <div class="section-label">Ratios de Solvabilité</div>
+                <div class="section-label">Solvency Ratios</div>
                 <div class="ratios-grid">
                     @for (r of ratiosSolvabilite; track r.nom) {
                     <div class="ratio-card" [class]="'s-' + r.statut">
                         <div class="ratio-top">
                             <span class="ratio-icon">{{ r.icon }}</span>
                             <span class="ratio-statut" [class]="'st-' + r.statut">
-                                {{ r.statut === 'bon' ? 'Bon' : r.statut === 'moyen' ? 'Moyen' : 'Risque' }}
+                                {{ r.statut === 'bon' ? 'Good' : r.statut === 'moyen' ? 'Average' : 'Risk' }}
                             </span>
                         </div>
                         <div class="ratio-value">{{ r.valeur }}</div>
                         <div class="ratio-name">{{ r.nom }}</div>
                         <div class="ratio-formule">{{ r.formule }}</div>
                         @if (r.seuil) {
-                        <div class="ratio-seuil">Seuil : <strong>{{ r.seuil }}</strong></div>
+                        <div class="ratio-seuil">Threshold: <strong>{{ r.seuil }}</strong></div>
                         }
                         <div class="ratio-desc">{{ r.description }}</div>
                     </div>
@@ -77,14 +77,14 @@
 
             <!-- Profitability -->
             <div class="section-block">
-                <div class="section-label">Ratios de Rentabilité</div>
+                <div class="section-label">Profitability Ratios</div>
                 <div class="ratios-grid four">
                     @for (r of ratiosProfitabilite; track r.nom) {
                     <div class="ratio-card" [class]="'s-' + r.statut">
                         <div class="ratio-top">
                             <span class="ratio-icon">{{ r.icon }}</span>
                             <span class="ratio-statut" [class]="'st-' + r.statut">
-                                {{ r.statut === 'bon' ? 'Bon' : 'Moyen' }}
+                                {{ r.statut === 'bon' ? 'Good' : 'Average' }}
                             </span>
                         </div>
                         <div class="ratio-value pct">{{ r.valeur }}</div>
@@ -111,36 +111,36 @@
                 <div class="etat-header">
                     <span class="etat-icon"></span>
                     <div>
-                        <h3>Compte de Résultat</h3>
-                        <p>Produits · Charges · Résultat</p>
+                        <h3>Income Statement</h3>
+                        <p>Revenues · Expenses · Net Income</p>
                     </div>
                     <span class="todo-badge">Template</span>
                 </div>
                 <div class="cr-body">
                     <div class="cr-section">
-                        <div class="cr-section-title entrant">PRODUITS D'EXPLOITATION (Classe 7)</div>
-                        <div class="cr-row"><span>Chiffre d'affaires</span><span class="c">{{ caTotal | number }}</span>
+                        <div class="cr-section-title entrant">OPERATING REVENUES (Class 7)</div>
+                        <div class="cr-row"><span>Revenue</span><span class="c">{{ caTotal | number }}</span>
                         </div>
-                        <div class="cr-row"><span>Subventions d'exploitation</span><span class="c">{{ subventions |
+                        <div class="cr-row"><span>Operating Subsidies</span><span class="c">{{ subventions |
                                 number }}</span></div>
-                        <div class="cr-subtotal"><span>Sous-total produits</span><strong class="c">{{ caTotal +
+                        <div class="cr-subtotal"><span>Subtotal revenues</span><strong class="c">{{ caTotal +
                                 subventions | number }}</strong>
                         </div>
                     </div>
                     <div class="cr-section">
-                        <div class="cr-section-title sortant">CHARGES D'EXPLOITATION (Classe 6)</div>
-                        <div class="cr-row"><span>Achats & variations stocks</span><span class="d">{{ achatsTotal |
+                        <div class="cr-section-title sortant">OPERATING EXPENSES (Class 6)</div>
+                        <div class="cr-row"><span>Purchases & inventory changes</span><span class="d">{{ achatsTotal |
                                 number }}</span></div>
-                        <div class="cr-row"><span>Charges de personnel</span><span class="d">{{ chargesPersonnel |
+                        <div class="cr-row"><span>Personnel expenses</span><span class="d">{{ chargesPersonnel |
                                 number }}</span></div>
-                        <div class="cr-row"><span>Autres charges</span><span class="d">{{ autresCharges | number
+                        <div class="cr-row"><span>Other expenses</span><span class="d">{{ autresCharges | number
                                 }}</span></div>
-                        <div class="cr-subtotal"><span>Sous-total charges</span><strong class="d">{{ achatsTotal +
+                        <div class="cr-subtotal"><span>Subtotal expenses</span><strong class="d">{{ achatsTotal +
                                 chargesPersonnel + autresCharges | number }}</strong>
                         </div>
                     </div>
                     <div class="cr-result">
-                        <span>Résultat d'exploitation</span>
+                        <span>Operating Income</span>
                         <strong>{{ (caTotal + subventions) - (achatsTotal + chargesPersonnel + autresCharges) | number
                             }} EQUA</strong>
                     </div>
