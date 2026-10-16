@@ -84,25 +84,6 @@ sequenceDiagram
     SC-->>U: Transaction response
 ```
 
-<details>
-<summary><b>Under the hood</b></summary>
-
-| Piece | Behaviour | Source |
-|---|---|
-| Charging card | `charging_cards` row with `card_code`, `dinar_amount`, `consumed` flag | `ChargingCardService` |
-| Deposit | Creates one `TND-<uuid>` Dinar unit per dinar, each on a random node, then recomputes the rate | `DinarWalletService.deposit` |
-| Conversion | `EQUA = dinars / rate`, logged as a `Conversion` record | `WalletService.convertDinarsToEqua` |
-| Rate | `1 + totalConverted / 10000`, small jitter added, kept between 1 and 1000 | `EquaValuationEngine` |
-| Consensus | One thread per node; nodes wait out their reputation score and the first right guess wins | `SmartContract.validateTransaction` |
-| Blocks | Each block hashes the previous block's hash with SHA-256 and holds 2–6 transactions. The genesis block's previous hash is `000…0` | `BlockService` |
-| Replication | The whole chain is serialised to JSON and saved on every node | `SmartContract.updateNodes` |
-
-</details>
-
----
-
-
-
 ---
 
 ## Architecture
@@ -214,10 +195,6 @@ CI (`.github/workflows/main.yml`) runs `mvn clean verify` against Postgres and b
 | AI endpoints fail | Set `GEMINI_API_KEY` in `equaServer/.env` |
 
 ---
-
-
-
-## Acknowledgment
 
 <div align="center">
 <br>
