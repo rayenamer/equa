@@ -25,39 +25,39 @@
 
 ---
 
-## ✨ Features
+## Features
 
-| | Feature | What it does |
-|---|---|---|
-| 💳 | **Charging cards** | Redeem a one-time card code to fund your Dinar wallet. Each card can only be used once (`CARD_ALREADY_USED`) |
-| 🪙 | **Dinar → EQUA conversion** | Swap TND for EQUA at the live rate set by the valuation engine |
-| 📈 | **Live EQUA rate** | Rate rises as more Dinars get converted, stays between 1 and 1000, and streams over SSE (`/api/v1/rates/stream`) |
-| ⛓️ | **On-chain transfers** | Every EQUA transfer goes through the smart contract: nodes validate it, it lands in a SHA-256 block, and every node gets a copy of the ledger |
-| 🌐 | **Node network** | Nodes store your Dinar units, compete to validate transactions and build up reputation |
-| 🤖 | **AI blockchain insights** | Gemini handles chain analysis, health score, validator prediction and chat |
-| 🏦 | **Micro-loans & insurance** | Loan requests, credit scoring, automated decisions, amortization schedules, repayments and micro-insurance |
-| 📊 | **Financial market** | Buy and sell assets, track portfolios and price history, with AI market insights |
-| 👛 | **Smart wallets** | Multi-currency transfers, loyalty rewards, achievements, challenges, analytics and fraud checks |
-| 🔐 | **Secure accounts** | JWT, Google OAuth2, reCAPTCHA, lockout after failed logins, KYC and roles |
-| 💬 | **Community forum** | Topics and messages, with reporting, moderation and a profanity filter |
+| Feature | What it does |
+|---|---|
+| **Charging cards** | Redeem a one-time card code to fund your Dinar wallet. Each card can only be used once (`CARD_ALREADY_USED`) |
+| **Dinar → EQUA conversion** | Swap TND for EQUA at the live rate set by the valuation engine |
+| **Live EQUA rate** | Rate rises as more Dinars get converted, stays between 1 and 1000, and streams over SSE (`/api/v1/rates/stream`) |
+| **On-chain transfers** | Every EQUA transfer goes through the smart contract: nodes validate it, it lands in a SHA-256 block, and every node gets a copy of the ledger |
+| **Node network** | Nodes store your Dinar units, compete to validate transactions and build up reputation |
+| **AI blockchain insights** | Gemini handles chain analysis, health score, validator prediction and chat |
+| **Micro-loans & insurance** | Loan requests, credit scoring, automated decisions, amortization schedules, repayments and micro-insurance |
+| **Financial market** | Buy and sell assets, track portfolios and price history, with AI market insights |
+| **Smart wallets** | Multi-currency transfers, loyalty rewards, achievements, challenges, analytics and fraud checks |
+| **Secure accounts** | JWT, Google OAuth2, reCAPTCHA, lockout after failed logins, KYC and roles |
+| **Community forum** | Topics and messages, with reporting, moderation and a profanity filter |
 
 ---
 
-## ⛓️ How it works
+## How it works
 
 ### The EQUA journey
 
 ```mermaid
 flowchart LR
-    A["💳 Charging card<br/>(one-time code)"] -->|deposit| B["👛 Dinar wallet<br/>TND units"]
-    B -->|convert @ live rate| C["🪙 EQUA wallet"]
-    C -->|transfer| D["📜 Smart contract"]
-    D --> E["⛏️ Node race<br/>validation"]
-    E --> F["🧱 SHA-256 block"]
-    F --> G["🌐 Ledger copied<br/>to every node"]
+    A["Charging card<br/>(one-time code)"] -->|deposit| B["Dinar wallet<br/>TND units"]
+    B -->|convert @ live rate| C["EQUA wallet"]
+    C -->|transfer| D["Smart contract"]
+    D --> E["Node race<br/>validation"]
+    E --> F["SHA-256 block"]
+    F --> G["Ledger copied<br/>to every node"]
 
-    B -. "each dinar stored on<br/>a random node" .-> N[("🖥️ Nodes")]
-    B -. "new Dinars → recompute" .-> R["📈 Valuation engine"]
+    B -. "each dinar stored on<br/>a random node" .-> N[("Nodes")]
+    B -. "new Dinars → recompute" .-> R["Valuation engine"]
     R -. "rate" .-> C
 ```
 
@@ -85,10 +85,10 @@ sequenceDiagram
 ```
 
 <details>
-<summary><b>🔬 Under the hood</b></summary>
+<summary><b>Under the hood</b></summary>
 
 | Piece | Behaviour | Source |
-|---|---|---|
+|---|---|
 | Charging card | `charging_cards` row with `card_code`, `dinar_amount`, `consumed` flag | `ChargingCardService` |
 | Deposit | Creates one `TND-<uuid>` Dinar unit per dinar, each on a random node, then recomputes the rate | `DinarWalletService.deposit` |
 | Conversion | `EQUA = dinars / rate`, logged as a `Conversion` record | `WalletService.convertDinarsToEqua` |
@@ -101,60 +101,37 @@ sequenceDiagram
 
 ---
 
-## 🔌 API at a glance
 
-Full docs: **http://localhost:8081/swagger-ui.html**
-
-| Step | Endpoint | Purpose |
-|---|---|---|
-| 1 | `POST /api/dinar-wallets/create` | Open your Dinar wallet |
-| 2 | `POST /api/dinar-wallets/{walletId}/deposit?cardCode=…` | Redeem a charging card |
-| 3 | `GET  /api/v1/rates/current` · `GET /api/v1/rates/stream` | Get the EQUA rate once, or stream it live |
-| 4 | `POST /api/v1/wallets/convert?amount=…` | Convert Dinars → EQUA |
-| 5 | `POST /api/v1/smartContract/process` | Send EQUA through the smart contract |
-| 6 | `GET  /api/v1/blocks` · `/latest` · `/genesis` · `/stats` | Browse blocks |
-| 7 | `GET  /api/v1/transactions/wallet/{wallet}` | Your on-chain history |
-| 🤖 | `GET /api/v1/smartContract/analyze` · `/health` · `/predict` · `POST /chat` | AI insights on the chain |
-
-| Module | Base path |
-|---|---|
-| Auth & users | `/api/auth`, `/api/users` |
-| Blockchain | `/api/v1/blocks`, `/api/v1/transactions`, `/api/v1/nodes`, `/api/v1/smartContract`, `/api/v1/rates` |
-| Wallets | `/api/v1/wallets`, `/api/dinar-wallets` |
-| Business | `/api/v1/business`, `/api/v1/mouvements` |
-| Loans | `/api/loans`, `/api/repayments`, `/credit-score`, `/micro-insurance`, `/api/dashboard` |
-| Financial market | `/api/financial` |
-| Forum | `/api/forum` |
 
 ---
 
-## 🏗️ Architecture
+## Architecture
 
 ```mermaid
 flowchart LR
-    UI["🅰️ Angular 19<br/>equaClient"] <-->|REST + SSE| API["🍃 Spring Boot<br/>equaServer :8081"]
-    API <--> DB[("🐘 PostgreSQL 16<br/>:5433")]
-    API <--> AI["✨ Gemini API"]
-    API <--> G["🔑 Google OAuth2<br/>+ reCAPTCHA"]
-    API --> M["📧 SMTP"]
+    UI["Angular 19<br/>equaClient"] <-->|REST + SSE| API["Spring Boot<br/>equaServer :8081"]
+    API <--> DB[("PostgreSQL 16<br/>:5433")]
+    API <--> AI["Gemini API"]
+    API <--> G["Google OAuth2<br/>+ reCAPTCHA"]
+    API --> M["SMTP"]
 ```
 
 The project is a **modular monolith**: separate modules in one Spring Boot app, all using the same database.
 
 | Module | Package |
 |---|---|
-| ⛓️ Blockchain, nodes, Dinar wallet, rate, business | `blockChainManagement` |
-| 👛 EQUA and multi-currency wallets | `walletManagement` |
-| 🏦 Loans, credit score, insurance | `loanManagement` |
-| 📊 Assets, trades, portfolio | `financialMarketManagement` |
-| 👤 Auth, OAuth2, KYC | `userManaement` |
-| 💬 Forum | `forumManagement` |
+| Blockchain, nodes, Dinar wallet, rate, business | `blockChainManagement` |
+| EQUA and multi-currency wallets | `walletManagement` |
+| Loans, credit score, insurance | `loanManagement` |
+| Assets, trades, portfolio | `financialMarketManagement` |
+| Auth, OAuth2, KYC | `userManaement` |
+| Forum | `forumManagement` |
 
 Inside each module: `controller → service → repository → entity`, plus `model`/`dto`.
 
 ---
 
-## 🚀 Quick start
+## Quick start
 
 **Requires:** Java 21 · Maven 3.8+ · Node 18+ · Docker
 
@@ -165,14 +142,14 @@ cd equaServer && mvn spring-boot:run                   # API on :8081
 cd equaClient && npm install && npm start              # (2nd terminal, from repo root) UI on :4200
 ```
 
-> ⚠️ Charging cards have no public creation endpoint. Add rows to the `charging_cards` table before trying a deposit.
+> **Note:** Charging cards have no public creation endpoint. Add rows to the `charging_cards` table before trying a deposit.
 
 ---
 
-## ⚙️ Configuration
+## Configuration
 
 | File | What goes in it | When it applies |
-|---|---|---|
+|---|---|
 | `equaServer/.env` | Secrets and DB overrides, loaded by `spring-dotenv` | Every backend run (ask Rayen for the team file) |
 | `equaServer/src/main/resources/application.properties` | Port, JPA, mail, forum thresholds, login lockout | Defaults for every run |
 | `docker-compose.yml` | Postgres DB/user/password and port | `docker-compose up` |
@@ -192,7 +169,7 @@ PASSWORD_RESET_BASE_URL=http://localhost:8081/swagger-ui.html
 
 ---
 
-## 🗂️ Project structure
+## Project structure
 
 ```
 equa/
@@ -211,7 +188,7 @@ equa/
 
 ---
 
-## 🛠️ Development
+## Development
 
 | You changed… | Do this |
 |---|---|
@@ -225,7 +202,7 @@ CI (`.github/workflows/main.yml`) runs `mvn clean verify` against Postgres and b
 
 ---
 
-## 🧯 Troubleshooting
+## Troubleshooting
 
 | Symptom | Fix |
 |---|---|
@@ -238,25 +215,9 @@ CI (`.github/workflows/main.yml`) runs `mvn clean verify` against Postgres and b
 
 ---
 
-## 👥 Contributors
 
-| | |
-|---|---|
-| **Rayen Ameur** | **Nadhmi Rouissi** |
-| **Chahine Saadellaoui** | **Semer Rebhi** |
-| **Safwen Haboubi** | |
 
-## 📚 Project resources
-
-<p>
-  <a href="https://miro.com/app/board/uXjVGGvURDc=/?share_link_id=969033901344"><img src="https://img.shields.io/badge/Miro-FFC900?style=for-the-badge&logo=miro&logoColor=black" alt="Miro Board"></a>
-  <a href="https://www.canva.com/design/DAG__gdQ8Zk/Pnvcg-baYSi5G3TQ7o7i-g/edit?utm_content=DAG__gdQ8Zk&utm_campaign=designshare&utm_medium=link2&utm_source=sharebutton"><img src="https://img.shields.io/badge/Canva%20Presentation-00C4CC?style=for-the-badge&logo=canva&logoColor=white" alt="Canva Presentation"></a>
-  <a href="https://docs.google.com/document/d/1SJ-QzxcbxZDwQ7bfMLdtrK59frejipB1qcXVu3yWqw8/edit?usp=sharing"><img src="https://img.shields.io/badge/Google%20Docs-4285F4?style=for-the-badge&logo=googledocs&logoColor=white" alt="Google Docs Report"></a>
-</p>
-
-## 🙏 Acknowledgment
-
-Thanks to **Esprit School of Engineering** and our mentors **Mr. Aymen Esselmi**, **Mr. Mohamed Rjab** and **Mr. Saadaoui Skander** for their guidance and support.
+## Acknowledgment
 
 <div align="center">
 <br>
